@@ -72,7 +72,7 @@ export async function uploadPublicAsset(file: File, token: string): Promise<stri
   if (!file.type.startsWith('image/')) throw new Error('Please choose an image file.')
   if (file.size > 12 * 1024 * 1024) throw new Error('Image must be smaller than 12 MB.')
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-')
-  const path = 'characters/' + Date.now() + '-' + safeName
+  const path = 'uploads/' + Date.now() + '-' + safeName
   const response = await fetch(SUPABASE_URL + '/storage/v1/object/portfolio-assets/' + path, {
     method: 'POST',
     headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + token, 'Content-Type': file.type, 'x-upsert': 'true' },
