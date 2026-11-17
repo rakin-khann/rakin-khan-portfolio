@@ -30,7 +30,10 @@ const SAKURA_PETALS: CSSProperties[] = Array.from({ length: 30 }, (_, i) => {
     opacity: 0.35 + ((i * 17) % 45) / 100,
     animationDuration: `${12 + ((i * 13) % 12)}s`,
     animationDelay: `-${(i * 7) % 22}s`,
-    ['--sakura-direction' as string]: fromLeft ? '1' : '-1',
+    ['--sakura-start' as string]: fromLeft ? '-2vw' : '2vw',
+    ['--sakura-mid' as string]: fromLeft ? '19vw' : '-19vw',
+    ['--sakura-late' as string]: fromLeft ? '27vw' : '-27vw',
+    ['--sakura-end' as string]: fromLeft ? '34vw' : '-34vw',
   } as CSSProperties
 })
 
@@ -169,7 +172,7 @@ export default function HeroSection() {
           {Array.from({length: 9},(_,i)=><g key={i} className="sakura-flower" transform={`translate(${34+(i*31)%250} ${110+(i*73)%620})`}>{Array.from({length:5},(_,j)=><ellipse key={j} cx="0" cy="-7" rx="4.5" ry="8" transform={`rotate(${j*72})`} />)}<circle r="3" /></g>)}
         </svg>
         <svg className="sakura-branch sakura-branch-right" viewBox="0 0 320 820" preserveAspectRatio="none">
-          <path d="-24 820 C72 660 42 540 126 410 S214 188 314 18" />
+          <path d="M-24 820 C72 660 42 540 126 410 S214 188 314 18" />
           <path d="M52 680 C-4 596 10 530 34 468 M126 410 C66 368 48 304 58 256 M212 214 C160 190 144 134 154 92 M168 336 C232 328 264 284 280 238" />
           {Array.from({length: 22},(_,i)=><circle key={i} cx={28+((i*47)%270)} cy={55+((i*83)%700)} r={3+(i%4)} className="sakura-blossom" />)}
           {Array.from({length: 9},(_,i)=><g key={i} className="sakura-flower" transform={`translate(${34+(i*31)%250} ${110+(i*73)%620})`}>{Array.from({length:5},(_,j)=><ellipse key={j} cx="0" cy="-7" rx="4.5" ry="8" transform={`rotate(${j*72})`} />)}<circle r="3" /></g>)}
