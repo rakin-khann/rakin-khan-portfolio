@@ -313,3 +313,114 @@
   .work-title,.work-cat{opacity:1;transform:none}
   .work-overlay{background:linear-gradient(180deg,transparent 22%,rgba(0,0,0,.92))}
 }
+
+
+/* ============================================================
+   MOBILE: preserve the actual desktop art direction.
+   The phone uses a 1024px desktop canvas and pans horizontally;
+   it does not reflow the Samurai hero or stack desktop sections.
+   ============================================================ */
+@media (max-width: 768px) {
+  html, body, #root { min-width: 1024px; width: 1024px; }
+  body { font-size: 17px; overflow-x: auto; }
+  .container { width: min(1400px, 92vw); }
+
+  /* Keep the same desktop hero composition and typography. */
+  .hero { min-height: 620px; height: 100vh; height: 100svh; }
+  .hero-title {
+    top: clamp(84px, 15vh, 170px);
+    left: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: initial;
+    gap: .28em;
+    font-size: 15.5rem;
+    line-height: .94;
+    white-space: nowrap;
+    text-align: left;
+  }
+  .hero-samurai {
+    left: 50%;
+    bottom: 0;
+    height: 82%;
+    aspect-ratio: 1349 / 1024;
+    max-width: none;
+  }
+  .hero-intro {
+    left: 46px;
+    right: auto;
+    bottom: 13%;
+    max-width: 540px;
+    padding: 0;
+    background: none;
+  }
+  .hero-role { font-size: 1.06rem; }
+  .hero-name { font-size: 4.1rem; line-height: 1.02; }
+  .hero-tagline { font-size: 1.12rem; }
+  .hero-intro .btn { margin-top: 26px; padding: 13px 30px; font-size: .98rem; }
+  .hero-social {
+    top: 50%;
+    right: 24px;
+    bottom: auto;
+    transform: translateY(-50%);
+    gap: 12px;
+  }
+  .hero-social a { width: 44px; height: 44px; }
+  .hero-scroll { display: flex; }
+
+  /* Keep the desktop grid structures in every section. */
+  .section { padding: clamp(84px, 9.5vw, 136px) 0; }
+  .split {
+    grid-template-columns: minmax(300px, 400px) minmax(0, 1fr);
+    gap: clamp(36px, 4.5vw, 76px);
+  }
+  .about-grid {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr) minmax(0, .8fr);
+    gap: clamp(30px, 3.6vw, 60px);
+  }
+  .about-stats { grid-column: auto; flex-direction: column; flex-wrap: nowrap; }
+  .about-stats .stat-card { flex: none; }
+  .portrait-frame { width: auto; }
+  .service-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .service-card { padding: 26px; gap: 16px; }
+  .service-icon { width: 52px; height: 52px; }
+  .service-name { font-size: 1.06rem; }
+  .service-desc { font-size: .93rem; }
+  .work-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+  .work-card { aspect-ratio: 1 / 1.14; }
+  .work-overlay { padding: 20px; }
+  .work-title { font-size: 1.08rem; }
+  .work-cat { font-size: .86rem; }
+  .work-title, .work-cat { opacity: 0; transform: translateY(10px); }
+  .work-card:hover .work-title, .work-card:hover .work-cat { opacity: 1; transform: none; }
+  .work-description, .work-project-link { opacity: 0; transform: translateY(8px); }
+  .work-card:hover .work-description, .work-card:hover .work-project-link { opacity: 1; transform: none; }
+  .skills-rings { grid-template-columns: repeat(4, auto); justify-content: space-between; gap: 26px; max-width: none; margin: 0; width: auto; }
+  .ring-wrap { width: 152px; height: 152px; }
+  .contact-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(40px, 5vw, 80px); }
+  .contact-card { padding: 22px 26px; }
+  .contact-card-value { font-size: 1.16rem; word-break: normal; }
+  .footer-inner { flex-direction: row; text-align: left; }
+  .footer-bottom { justify-content: space-between; text-align: left; }
+  .back-top { right: 22px; bottom: 22px; width: 50px; height: 50px; }
+}
+
+/* Small-phone rules above are intentionally neutralized as well. */
+@media (max-width: 560px) {
+  .header-cta { display: inline-flex; }
+  .header-logo img { height: 42px; }
+  .service-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .service-card { padding: 26px; gap: 16px; }
+  .service-icon { width: 52px; height: 52px; }
+  .service-name { font-size: 1.06rem; }
+  .service-desc { font-size: .93rem; }
+  .work-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+  .work-card { aspect-ratio: 1 / 1.14; }
+  .work-overlay { padding: 20px; }
+  .work-title { font-size: 1.08rem; }
+  .work-cat { font-size: .86rem; }
+  .ring-wrap { width: 152px; height: 152px; }
+  .ring-value { font-size: 1.55rem; }
+  .contact-card { padding: 22px 26px; }
+  .contact-card-value { font-size: 1.16rem; word-break: normal; }
+}
