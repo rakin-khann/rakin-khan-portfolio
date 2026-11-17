@@ -154,7 +154,7 @@ async function optimizePortfolioImage(file: File): Promise<File> {
     context.drawImage(bitmap, 0, 0, width, height)
     const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/webp', 0.82))
     if (!blob || blob.size >= file.size) return file
-    const name = file.name.replace(/\\.[^.]+$/, '') + '.webp'
+    const name = file.name.replace(/\.[^.]+$/, '') + '.webp'
     return new File([blob], name, { type: 'image/webp', lastModified: file.lastModified })
   } finally { bitmap.close() }
 }
