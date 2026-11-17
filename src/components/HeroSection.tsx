@@ -49,7 +49,7 @@ export default function HeroSection() {
   const legacyScene = (settingsRows.find(row => row.key === 'hero_scene')?.value || {}) as Record<string, unknown>
   const configuredScenes = settingsRows.find(row => row.key === 'hero_scenes')?.value
   const scenes = (Array.isArray(configuredScenes) ? configuredScenes : [legacyScene])
-    .filter((scene: Record<string, unknown>) => Boolean(scene.character_url) && (scene.background_mode !== 'image' || Boolean(scene.background_url)))
+    .filter((scene: Record<string, unknown>) => scene.is_published !== false && Boolean(scene.character_url) && (scene.background_mode !== 'image' || Boolean(scene.background_url)))
     .slice(0, 10) as Record<string, unknown>[]
   const [sceneIndex, setSceneIndex] = useState(0)
   const rotationInitialized = useRef(false)
