@@ -4,6 +4,7 @@ import { SKILLS } from '../data/content'
 import { usePublicRows } from '../hooks/usePublicRows'
 import { useReveal } from '../hooks/useScrollAnimation'
 import { IconArrowRight } from './icons'
+import SectionBackground from './SectionBackground'
 
 const RADIUS = 64
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS
@@ -80,6 +81,7 @@ export default function SkillsSection() {
 
   return (
     <section ref={ref} id="skills" className="section skills" aria-label="Skills">
+      <SectionBackground section='skills' />
       <div className="bg-art left" aria-hidden="true">
         <img src="/assets/bg-torii.webp" alt="" />
       </div>
