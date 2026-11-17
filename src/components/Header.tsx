@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react'
 import { NAV_LINKS, PROFILE, SOCIALS } from '../data/content'
+import { usePublicRows } from '../hooks/usePublicRows'
 import { IconArrowRight, IconClose, IconMenu, SiteIcon } from './icons'
 
 export default function Header() {
+  const profileRow = usePublicRows('profiles')[0]
+  const socialRows = usePublicRows('social_links')
+  const profileName = String(profileRow?.name || profileName)
+  const socials = socialRows.length ? socialRows.map(row => ({ label: String(row.platform || ''), icon: String(row.icon || 'link'), href: String(row.url || '#') })) : SOCIALS
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<string>('#home')
@@ -98,7 +103,7 @@ export default function Header() {
           ))}
         </ul>
         <div className="mobile-menu-social">
-          {SOCIALS.map((s) => (
+          {socials.map((s) => (
             <a
               key={s.label}
               href={s.href}
