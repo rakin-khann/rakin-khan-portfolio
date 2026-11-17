@@ -39,7 +39,7 @@ const SECTIONS: Section[] = [
     { key: 'start_date', label: 'Start date', type: 'date' }, { key: 'end_date', label: 'End date', type: 'date' }, { key: 'description', label: 'Description', type: 'textarea' }, ...common,
   ] },
   { id: 'social_links', label: 'Social links', icon: '◎', key: 'id', fields: [
-    { key: 'platform', label: 'Platform name', required: true, hint: 'যেমন: Facebook, Instagram, YouTube, Behance, X' }, { key: 'url', label: 'Your real profile URL', type: 'url', required: true, hint: 'https:// দিয়ে শুরু হওয়া সম্পূর্ণ profile link দাও' }, { key: 'icon', label: 'Choose social icon', type: 'select', required: true, options: [{ label: 'Facebook', value: 'facebook' }, { label: 'Instagram', value: 'instagram' }, { label: 'YouTube', value: 'youtube' }, { label: 'Behance', value: 'behance' }, { label: 'X / Twitter', value: 'x' }] }, ...common,
+    { key: 'platform', label: 'Platform name', required: true, hint: 'যেমন: Facebook, Instagram, LinkedIn, YouTube, Behance, X' }, { key: 'url', label: 'Your real profile URL', type: 'url', required: true, hint: 'https:// দিয়ে শুরু হওয়া সম্পূর্ণ profile link দাও' }, { key: 'icon', label: 'Choose social icon', type: 'select', required: true, options: [{ label: 'Facebook', value: 'facebook' }, { label: 'LinkedIn', value: 'linkedin' }, { label: 'Instagram', value: 'instagram' }, { label: 'YouTube', value: 'youtube' }, { label: 'Behance', value: 'behance' }, { label: 'X / Twitter', value: 'x' }] }, ...common,
   ] },
   { id: 'testimonials', label: 'Testimonials', icon: '❝', key: 'id', fields: [
     { key: 'client_name', label: 'Client name', required: true }, { key: 'client_role', label: 'Client role' }, { key: 'company', label: 'Company' },
