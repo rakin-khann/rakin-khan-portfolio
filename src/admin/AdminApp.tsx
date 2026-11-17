@@ -118,7 +118,6 @@ export default function AdminApp() {
   }
   function openEditor(row?: Record<string, unknown>) {
     const value = row ? { ...row } : { ...(EXAMPLES[section] || {}) }
-    if (Array.isArray(value.gallery)) value.gallery = (value.gallery as string[]).join('\n')
     setEditing(row || null); setDraft(value); setError(''); setNotice('')
   }
   function update(key: string, value: unknown) { setDraft(current => ({ ...current, [key]: value })) }
@@ -133,7 +132,7 @@ export default function AdminApp() {
     if (!files?.length || !session) return
     setUploading('gallery'); setError('')
     try {
-      const existing = Array.isArray(draft.gallery) ? draft.gallery as string[] : String(draft.gallery || '').split(/\\r?\\n/).map(x => x.trim()).filter(Boolean)
+      const existing = Array.isArray(draft.gallery) ? draft.gallery as string[] : String(draft.gallery || '').split(/\r?\n/).map(x => x.trim()).filter(Boolean)
       const selected = Array.from(files)
       const uploaded = new Array<string>(selected.length)
       let cursor = 0
