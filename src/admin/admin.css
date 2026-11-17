@@ -96,3 +96,5 @@
 .project-gallery-preview img{width:100%;height:100%;display:block;object-fit:cover}
 .project-gallery-preview button{position:absolute;top:6px;right:6px;width:28px;height:28px;border:1px solid #ffffff55;background:#17090bdc;color:#fff;font-size:20px;line-height:1;cursor:pointer}
 .project-gallery-preview button:hover{background:#c52b35}
+
+.section-custom-background{position:absolute;inset:0;z-index:0;pointer-events:none;background-repeat:no-repeat;background-size:cover;background-position:center}.section.about,.section.services,.section.portfolio,.section.skills{isolation:isolate}.section.about>.bg-art,.section.services>.bg-art,.section.portfolio>.bg-art,.section.skills>.bg-art{z-index:1}.section-custom-background~.container{position:relative;z-index:2}
