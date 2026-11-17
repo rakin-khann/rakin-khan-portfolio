@@ -11,9 +11,8 @@ import BackToTop from './components/BackToTop'
 import AdminApp from './admin/AdminApp'
 
 export default function App() {
-  if (window.location.pathname.replace(/\\/+$/, '') === '/admin') {
-    return <AdminApp />
-  }
+  const path = window.location.pathname.replace(/\/$/, '')
+  if (path === '/admin') return <AdminApp />
 
   return (
     <>
