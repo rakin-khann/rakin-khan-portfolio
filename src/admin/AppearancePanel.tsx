@@ -39,7 +39,7 @@ export default function AppearancePanel({ session, rows, reload, setError }: Pro
     catch (e) { setError(e instanceof Error ? e.message : 'Image upload failed') }
     finally { setUploading(null) }
   }
-  function updateSectionBg(key: string, field: keyof SectionBg, value: string | number) {
+  function updateSectionBg<K extends keyof SectionBg>(key: string, field: K, value: SectionBg[K]) {
     setSectionBackgrounds(current => ({ ...current, [key]: { ...current[key], [field]: value } }))
   }
   async function uploadSectionBg(key: string, file?: File) {
