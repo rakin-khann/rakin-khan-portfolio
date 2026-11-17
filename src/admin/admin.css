@@ -98,3 +98,73 @@
 .project-gallery-preview button:hover{background:#c52b35}
 
 .section-custom-background{position:absolute;inset:0;z-index:0;pointer-events:none;background-repeat:no-repeat;background-size:cover;background-position:center}.section.about,.section.services,.section.portfolio,.section.skills{isolation:isolate}.section.about>.bg-art,.section.services>.bg-art,.section.portfolio>.bg-art,.section.skills>.bg-art{z-index:1}.section-custom-background~.container{position:relative;z-index:2}
+
+
+/* Mobile-first admin usability: touch targets, fluid layouts and safe-area spacing */
+.admin-shell,.admin-main,.admin-content,.appearance-editor,.appearance-card,.admin-editor,.visual-editor{min-width:0;max-width:100%}
+.admin-record>div:first-child{min-width:0;overflow-wrap:anywhere}
+.admin-record-actions button,.admin-editor-head button,.admin-toolbar button,.admin-primary,.admin-secondary{min-height:42px;touch-action:manipulation}
+.admin-editor input,.admin-editor textarea,.admin-editor select,.admin-toolbar input,.appearance-card input:not([type=checkbox]):not([type=color]):not([type=range]){font-size:16px}
+.admin-editor textarea{max-width:100%}
+.admin-content img{max-width:100%}
+@media(max-width:800px){
+  .admin-shell{display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom)}
+  .admin-sidebar{position:sticky;top:0;z-index:30;width:100%;height:auto;min-height:0;padding:10px 12px 9px;background:#080707f5;border-right:0;border-bottom:1px solid #382326;backdrop-filter:blur(14px)}
+  .admin-brand{font-size:22px;margin:0 4px 9px;display:block}
+  .admin-side-label{display:none}
+  .admin-sidebar nav{display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding:2px 0 8px;scrollbar-width:thin;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+  .admin-sidebar nav button{flex:0 0 auto;min-height:42px;white-space:nowrap;padding:9px 12px;border:1px solid #332326;border-radius:4px;font-size:14px;scroll-snap-align:start}
+  .admin-sidebar nav button span{width:auto;font-size:16px}
+  .admin-side-bottom{display:flex;align-items:center;gap:14px;margin:0;padding:7px 3px 0;border-top:1px solid #302426}
+  .admin-side-bottom small{display:none}
+  .admin-side-bottom strong{font-size:11px;max-width:42%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-right:auto}
+  .admin-side-bottom button,.admin-side-bottom a{font-size:12px;white-space:nowrap;padding:7px 4px}
+  .admin-main{width:100%;min-width:0}
+  .admin-topbar{position:relative;padding:17px 16px 14px;gap:10px}
+  .admin-topbar h1{font-size:clamp(25px,7vw,32px);line-height:1.08;overflow-wrap:anywhere}
+  .admin-topbar .admin-eyebrow{font-size:9px}
+  .admin-status{display:block;font-size:8px;white-space:nowrap}
+  .admin-content{padding:16px 12px 28px}
+  .admin-toolbar{gap:10px;margin-bottom:16px}
+  .admin-toolbar>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+  .admin-toolbar>div button{width:100%;padding:10px 8px;font-size:12px}
+  .admin-record{padding:15px;gap:12px}
+  .admin-record-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+  .admin-record-actions button{width:100%;min-height:44px}
+  .admin-editor{padding:16px}
+  .admin-editor-head{gap:10px;align-items:flex-start}
+  .editor-actions{position:sticky;bottom:0;z-index:5;background:#100e0f;padding:12px 0 max(12px,env(safe-area-inset-bottom));border-top:1px solid #38272b}
+  .appearance-editor{gap:14px}
+  .appearance-card{padding:16px;gap:13px}
+  .appearance-card h2{font-size:22px;line-height:1.15}
+  .appearance-card p{line-height:1.45}
+  .appearance-colours{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .character-preview{height:190px}
+  .rotation-media-grid{grid-template-columns:1fr}
+  .rotation-scene-head{align-items:flex-start;gap:10px;flex-wrap:wrap}
+  .rotation-actions{display:flex;gap:6px;flex-wrap:wrap}
+  .rotation-actions button{min-height:40px}
+  .background-mode-switch button{flex:1 1 120px;min-height:44px;padding:10px}
+  .hero-bg-upload{width:100%;justify-content:center;min-height:44px;align-items:center}
+  .glow-control{font-size:14px}
+  .glow-control input{min-height:28px}
+  .appearance-save,.rotation-add{width:100%;min-height:48px;line-height:1.4;padding:13px}
+  .theme-preview{padding:18px;min-height:130px}
+  .theme-preview h3{font-size:27px}
+}
+@media(max-width:420px){
+  .admin-sidebar{padding-left:9px;padding-right:9px}
+  .admin-brand{font-size:20px}
+  .admin-sidebar nav button{font-size:12px;padding:8px 10px;gap:7px}
+  .admin-side-bottom{gap:9px}
+  .admin-side-bottom strong{max-width:34%;font-size:10px}
+  .admin-side-bottom button,.admin-side-bottom a{font-size:11px}
+  .admin-topbar{padding-left:12px;padding-right:12px}
+  .admin-status{font-size:7px;letter-spacing:.05em}
+  .admin-content{padding-left:9px;padding-right:9px}
+  .appearance-colours{grid-template-columns:1fr 1fr}
+  .project-gallery-previews{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(hover:none){
+  .admin-sidebar nav button,.admin-primary,.admin-secondary,.admin-record-actions button{ -webkit-tap-highlight-color:transparent }
+}
