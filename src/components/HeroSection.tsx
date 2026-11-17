@@ -134,11 +134,11 @@ export default function HeroSection() {
       </div>
 
       <div ref={introRef} className="hero-intro">
-        <p className="hero-role">{PROFILE.title}</p>
+        <p className="hero-role">{profile.title}</p>
         <p className="hero-name">
           Rakin <span>Khan</span>
         </p>
-        <p className="hero-tagline">{PROFILE.tagline}</p>
+        <p className="hero-tagline">{profile.tagline}</p>
         <a href="#portfolio" className="btn">
           Explore My Work <IconArrowRight />
         </a>
