@@ -25,13 +25,13 @@ export default function ContactSection() {
           <p className="section-sub">
             Have a project in mind? Let&apos;s create something amazing!
           </p>
-          <a href={`mailto:${PROFILE.email}`} className="btn">
+          <a href={`mailto:${profile.email}`} className="btn">
             Contact Me <IconArrowRight />
           </a>
         </div>
 
         <div className="contact-panel">
-          <a className="contact-card" href={`mailto:${PROFILE.email}`} data-reveal data-reveal-delay="0.1">
+          <a className="contact-card" href={`mailto:${profile.email}`} data-reveal data-reveal-delay="0.1">
             <span className="contact-icon">
               <IconMail />
             </span>
@@ -43,19 +43,19 @@ export default function ContactSection() {
 
           <a
             className="contact-card"
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(PROFILE.location)}`}
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(profile.location)}`}
             target="_blank"
             rel="noreferrer"
             data-reveal
             data-reveal-delay="0.2"
-            aria-label={`View location on Google Maps: ${PROFILE.location}`}
+            aria-label={`View location on Google Maps: ${profile.location}`}
           >
             <span className="contact-icon">
               <IconMapPin />
             </span>
             <span>
               <span className="contact-card-label">Location</span>
-              <span className="contact-card-value">{PROFILE.location}</span>
+              <span className="contact-card-value">{profile.location}</span>
             </span>
           </a>
 
