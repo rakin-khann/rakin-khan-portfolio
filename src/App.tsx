@@ -20,6 +20,9 @@ export default function App() {
     const root = document.documentElement
     const primary = theme.primary || '#ff101a'
     const secondary = theme.secondary || '#850000'
+    const toRgb = (hex: string) => [1, 3, 5].map(index => parseInt(hex.slice(index, index + 2), 16)).join(', ')
+    root.style.setProperty('--red-rgb', toRgb(primary))
+    root.style.setProperty('--red-deep-rgb', toRgb(secondary))
     root.style.setProperty('--red', primary)
     root.style.setProperty('--red-deep', secondary)
     root.style.setProperty('--bg', theme.background || '#050505')
