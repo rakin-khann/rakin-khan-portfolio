@@ -1560,3 +1560,8 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .sakura-branch-left, .sakura-branch-right { animation: none; }
 }
+
+
+/* User-requested cleanup: remove the decorative branch and moon overlays. */
+.hero-moon,
+.hero-sakura-branches { display: none !important; }
