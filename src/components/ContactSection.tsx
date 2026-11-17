@@ -6,7 +6,7 @@ import { IconArrowRight, IconMail, IconMapPin, SiteIcon } from './icons'
 export default function ContactSection() {
   const profileRow = usePublicRows('profiles')[0]
   const socialRows = usePublicRows('social_links')
-  const profile = { ...PROFILE, email: String(profileRow?.email || profile.email), location: String(profileRow?.location || profile.location) }
+  const profile = { ...PROFILE, email: String(profileRow?.email || PROFILE.email), location: String(profileRow?.location || PROFILE.location) }
   const socials = socialRows.length ? socialRows.map(row => ({ label: String(row.platform || ''), icon: String(row.icon || 'link'), href: String(row.url || '#') })) : SOCIALS
   const ref = useReveal<HTMLElement>()
 
