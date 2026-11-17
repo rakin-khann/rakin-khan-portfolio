@@ -83,3 +83,102 @@ export async function uploadPublicAsset(file: File, token: string): Promise<stri
   if (!response.ok) throw new Error(result.message || result.error || 'Image upload failed')
   return SUPABASE_URL + '/storage/v1/object/public/portfolio-assets/' + path
 }
+
+export async function uploadPortfolioVideo(file: File, token: string, quality: string): Promise<string> {
+  const allowed = ['video/mp4', 'video/webm']
+  if (!allowed.includes(file.type)) throw new Error('Video format must be MP4 or WebM.')
+  if (file.size > 500 * 1024 * 1024) throw new Error('Each video version must be 500 MB or smaller.')
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-')
+  const path = 'videos/' + Date.now() + '-' + quality + 'p-' + safeName
+  const projectRef = new URL(SUPABASE_URL).hostname.split('.')[0]
+  const endpoint = 'https://' + projectRef + '.storage.supabase.co/storage/v1/upload/resumable'
+  const metadata = (key: string, value: string) => key + ' ' + btoa(unescape(encodeURIComponent(value)))
+  const created = await fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: 'Bearer ' + token,
+      'Tus-Resumable': '1.0.0',
+      'Upload-Length': String(file.size),
+      'Upload-Metadata': [
+        metadata('bucketName', 'portfolio-media'),
+        metadata('objectName', path),
+        metadata('contentType', file.type),
+        metadata('cacheControl', '31536000'),
+      ].join(','),
+      'x-upsert': 'true',
+    },
+  })
+  if (!created.ok) {
+    const detail = await created.text()
+    throw new Error(detail || 'Could not start resumable video upload.')
+  }
+  const location = created.headers.get('Location')
+  if (!location) throw new Error('Storage did not return a resumable upload URL.')
+  let offset = 0
+  const chunkSize = 6 * 1024 * 1024
+  while (offset < file.size) {
+    const chunk = file.slice(offset, Math.min(offset + chunkSize, file.size))
+    let uploaded = false
+    let lastError = 'Video upload interrupted.'
+    for (let attempt = 0; attempt < 4 && !uploaded; attempt++) {
+      try {
+        const response = await fetch(new URL(location, endpoint).toString(), {
+          method: 'PATCH',
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: 'Bearer ' + token,
+            'Tus-Resumable': '1.0.0',
+            'Upload-Offset': String(offset),
+            'Content-Type': 'application/offset+octet-stream',
+          },
+          body: chunk,
+        })
+        if (!response.ok) {
+          lastError = await response.text()
+          if (response.status === 409) throw new Error(lastError || 'Upload offset conflict.')
+          throw new Error(lastError || 'Video chunk upload failed.')
+        }
+        const nextOffset = Number(response.headers.get('Upload-Offset'))
+        if (!Number.isFinite(nextOffset) || nextOffset <= offset) throw new Error('Storage returned an invalid upload offset.')
+        offset = nextOffset
+        uploaded = true
+      } catch (error) {
+        lastError = error instanceof Error ? error.message : lastError
+        if (attempt < 3) await new Promise(resolve => setTimeout(resolve, 1200 * (attempt + 1)))
+      }
+    }
+    if (!uploaded) throw new Error(lastError)
+  }
+  return SUPABASE_URL + '/storage/v1/object/public/portfolio-media/' + path
+}
+export async function selectPortfolioMedia(token: string) {
+  return request('/rest/v1/portfolio_media?select=*&order=sort_order.asc,created_at.desc&limit=200', {}, token) as Promise<Record<string, unknown>[]>
+}
+export async function savePortfolioMedia(row: Record<string, unknown>, token: string) {
+  const id = row.id
+  const result = await request(id ? '/rest/v1/portfolio_media?id=eq.' + encodeURIComponent(String(id)) : '/rest/v1/portfolio_media', {
+    method: id ? 'PATCH' : 'POST',
+    headers: { Prefer: 'return=representation' },
+    body: JSON.stringify(row),
+  }, token) as unknown[]
+  if (!result.length) throw new Error('Could not save video project. Check admin permissions.')
+  return result[0]
+}
+export async function deletePortfolioMedia(id: string, token: string) {
+  await request('/rest/v1/portfolio_media?id=eq.' + encodeURIComponent(id), { method: 'DELETE' }, token)
+}
+export async function recordAnalyticsEvent(event: {
+  session_id: string; event_name: string; page_path: string; target?: string | null; referrer_host?: string | null
+}) {
+  const response = await fetch(SUPABASE_URL + '/rest/v1/site_analytics_events', {
+    method: 'POST',
+    headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+    body: JSON.stringify(event),
+  })
+  if (!response.ok) throw new Error('Analytics event could not be recorded')
+}
+export async function selectAnalyticsEvents(token: string, days: number) {
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
+  return request('/rest/v1/site_analytics_events?select=id,session_id,event_name,page_path,target,created_at&created_at=gte.' + encodeURIComponent(since) + '&order=created_at.desc&limit=5000', {}, token) as Promise<Array<{id:number;session_id:string;event_name:string;page_path:string;target?:string;created_at:string}>>
+}

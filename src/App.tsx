@@ -13,9 +13,11 @@ import BackToTop from './components/BackToTop'
 import AdminApp from './admin/AdminApp'
 import { useEffect } from 'react'
 import { usePublicRows } from './hooks/usePublicRows'
+import { startAnalytics } from './lib/analytics'
 
 export default function App() {
   const settings = usePublicRows('site_settings')
+  useEffect(() => startAnalytics(), [])
   useEffect(() => {
     const record = settings.find(row => row.key === 'global_theme')
     const theme = (record?.value || {}) as Record<string, string>
