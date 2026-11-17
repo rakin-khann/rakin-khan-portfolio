@@ -66,3 +66,19 @@ export async function deleteRow(table: string, row: Record<string, unknown>, tok
 export async function selectPublicRows(table: string) {
   return request(`/rest/v1/${table}?select=*&limit=100`) as Promise<Record<string, unknown>[]>
 }
+
+
+export async function uploadPublicAsset(file: File, token: string): Promise<string> {
+  if (!file.type.startsWith('image/')) throw new Error('Please choose an image file.')
+  if (file.size > 12 * 1024 * 1024) throw new Error('Image must be smaller than 12 MB.')
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-')
+  const path = 'characters/' + Date.now() + '-' + safeName
+  const response = await fetch(SUPABASE_URL + '/storage/v1/object/portfolio-assets/' + path, {
+    method: 'POST',
+    headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + token, 'Content-Type': file.type, 'x-upsert': 'true' },
+    body: file,
+  })
+  const result = await response.json().catch(() => ({}))
+  if (!response.ok) throw new Error(result.message || result.error || 'Image upload failed')
+  return SUPABASE_URL + '/storage/v1/object/public/portfolio-assets/' + path
+}
