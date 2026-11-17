@@ -118,6 +118,7 @@ export default function AdminApp() {
       }
       if (typeof value.gallery === 'string') value.gallery = value.gallery.split('\n').map((item: string) => item.trim()).filter(Boolean)
       if (['skills'].includes(section) && value.proficiency !== '') value.proficiency = Number(value.proficiency)
+      for (const dateField of ['start_date', 'end_date']) if (value[dateField] === '') value[dateField] = null
       if (value.sort_order !== undefined && value.sort_order !== '') value.sort_order = Number(value.sort_order)
       await saveRow(section, value, session.access_token, active.key)
       setEditing(null); setDraft({}); setNotice('সফলভাবে Save হয়েছে। Live website-এ পরিবর্তন দেখা যাবে।'); await loadRows()
