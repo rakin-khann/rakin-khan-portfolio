@@ -2,13 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/assets/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#090909" />
-    <meta name="description" content="Rakin Khan — independent graphic designer creating distinctive visual identities and digital experiences." />
-    <title>Rakin Khan — Portfolio</title>
+    <meta
+      name="description"
+      content="Rakin Khan — Creative Director & Digital Artist. Turning ideas into impact through design, creativity & innovation."
+    />
+    <meta name="theme-color" content="#050505" />
+    <!-- LCP-critical hero assets: start fetching before the JS bundle executes -->
+    <link rel="preload" as="image" href="/assets/bg-hero.webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/assets/samurai.webp" fetchpriority="high" />
+    <title>Rakin Khan — Creative Director & Digital Artist</title>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

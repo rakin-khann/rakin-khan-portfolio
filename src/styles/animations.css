@@ -1,0 +1,128 @@
+/* ============================================================
+   Ambient & decorative animations (non-scroll-driven)
+   The signature samurai reveal itself is scroll-scrubbed via
+   GSAP ScrollTrigger inside HeroSection.tsx — never looping.
+   ============================================================ */
+
+/* Falling red maple petals in the hero */
+.hero-petals span {
+  position: absolute;
+  top: -5%;
+  background: radial-gradient(circle at 32% 30%, #ff5a60, var(--red-deep) 78%);
+  border-radius: 62% 38% 60% 40%;
+  box-shadow: 0 0 8px rgba(255, 16, 26, 0.45);
+  animation-name: petal-fall;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  will-change: transform;
+}
+
+@keyframes petal-fall {
+  0% {
+    transform: translate3d(0, -6vh, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(3.4vw, 26vh, 0) rotate(150deg);
+  }
+  50% {
+    transform: translate3d(-2.4vw, 52vh, 0) rotate(285deg);
+  }
+  75% {
+    transform: translate3d(2.6vw, 78vh, 0) rotate(410deg);
+  }
+  100% {
+    transform: translate3d(-1vw, 108vh, 0) rotate(530deg);
+  }
+}
+
+/* Scroll indicator dot */
+.hero-mouse span {
+  animation: scroll-dot 1.9s ease-in-out infinite;
+}
+
+@keyframes scroll-dot {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(13px);
+    opacity: 0;
+  }
+}
+
+/* Slow pulse for the red floor glow behind the samurai.
+   Uses compositor-friendly transform only (never filter/box-shadow). */
+.hero-flare {
+  animation: flare-pulse 5.5s ease-in-out infinite alternate;
+}
+
+@keyframes flare-pulse {
+  from {
+    transform: translateX(-50%) scale(1);
+  }
+  to {
+    transform: translateX(-50%) scale(1.07);
+  }
+}
+
+/* Button glow breathe — pseudo-element opacity pulse (no box-shadow repaints) */
+.btn {
+  position: relative;
+  isolation: isolate;
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: 0 0 26px rgba(255, 16, 26, 0.55);
+  opacity: 0.35;
+  animation: btn-glow 4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes btn-glow {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+
+/* ------------------------------------------------------------
+   Reduced motion: calm everything down. The hero switch to a
+   static, fully-visible composition is handled in JS.
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero-petals {
+    display: none;
+  }
+
+  .hero-mouse span,
+  .hero-flare,
+  .btn,
+  .btn::after {
+    animation: none;
+  }
+
+  .hero-title {
+    opacity: 1;
+  }
+
+  .service-card,
+  .work-card,
+  .stat-card,
+  .contact-card,
+  .portrait-frame img {
+    transition: none;
+  }
+}
