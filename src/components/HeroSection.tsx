@@ -126,7 +126,7 @@ export default function HeroSection() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           ['--hero-red-glow' as string]: heroRedGlow,
-        }}
+        } as CSSProperties}
       />
 
       <h1 ref={titleRef} className="hero-title">
