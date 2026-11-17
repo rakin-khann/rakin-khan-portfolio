@@ -4,6 +4,7 @@ import EdgeDivider from './components/EdgeDivider'
 import AboutSection from './components/AboutSection'
 import ServicesSection from './components/ServicesSection'
 import PortfolioSection from './components/PortfolioSection'
+import ProjectDetail from './components/ProjectDetail'
 import SkillsSection from './components/SkillsSection'
 import JourneySection from './components/JourneySection'
 import TestimonialsSection from './components/TestimonialsSection'
@@ -37,6 +38,7 @@ export default function App() {
   }, [settings])
   const path = window.location.pathname.replace(/\/$/, '')
   if (path === '/admin') return <AdminApp />
+  if (path.startsWith('/projects/')) return <ProjectDetail slug={decodeURIComponent(path.slice('/projects/'.length))} />
 
   return (
     <>
