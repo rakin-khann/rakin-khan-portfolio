@@ -18,7 +18,7 @@ async function request(path: string, init: RequestInit = {}, token?: string) {
     headers: {
       apikey: SUPABASE_KEY,
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : { Authorization: `Bearer ${SUPABASE_KEY}` }),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(init.headers || {}),
     },
   })
@@ -62,4 +62,7 @@ export async function deleteRow(table: string, row: Record<string, unknown>, tok
   const key = row[primaryKey]
   if (!key) throw new Error('This record has no primary key')
   await request(`/rest/v1/${table}?${primaryKey}=eq.${encodeURIComponent(String(key))}`, { method: 'DELETE' }, token)
+}
+export async function selectPublicRows(table: string) {
+  return request(`/rest/v1/${table}?select=*&order=sort_order.asc&limit=100`) as Promise<Record<string, unknown>[]>
 }
