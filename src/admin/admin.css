@@ -44,3 +44,23 @@
 .appearance-card small{color:#9e898b}
 .appearance-save{justify-self:start}
 @media(max-width:640px){.appearance-colours{grid-template-columns:1fr}.appearance-card{padding:18px}.character-preview{height:210px}}
+/* Friendly, code-free content editor */
+.admin-success{color:#9ee3b1;background:#102318;border:1px solid #285a3a;padding:12px 16px}
+.visual-editor{max-width:1100px}
+.editor-help{padding:12px 14px;background:#171315;border:1px solid #38272b;border-radius:6px}
+.editor-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.editor-field{display:grid;align-content:start;gap:8px;color:#e6dfe0;font-weight:700;font-size:15px;min-width:0}
+.editor-field.full{grid-column:1/-1}
+.editor-field>span:first-child b{color:#ff777e}
+.editor-field input:not([type=checkbox]),.editor-field textarea{width:100%;min-width:0;background:#080708;border:1px solid #403034;color:#fff;padding:12px 14px;font:600 16px Rajdhani,sans-serif;outline:none;border-radius:4px}
+.editor-field input:focus,.editor-field textarea:focus{border-color:#d34a51;box-shadow:0 0 0 2px #d34a5122}
+.editor-field textarea{resize:vertical;line-height:1.55}
+.editor-field small{color:#a99598;font-size:12px;font-weight:500}
+.editor-toggle{display:flex;align-items:center;gap:10px;padding:12px;background:#171315;border:1px solid #38272b}
+.editor-toggle input{width:18px;height:18px;accent-color:#c52b35}
+.editor-toggle small{color:#eee}
+.editor-field .editor-file{padding:10px;background:#171315;border:1px dashed #75434a}
+.editor-image-preview{width:auto;max-width:100%;max-height:180px;object-fit:contain;justify-self:start;background:#080708;border:1px solid #403034;padding:5px}
+.editor-actions{display:flex;justify-content:flex-end;gap:10px;padding-top:8px}
+.editor-actions .admin-primary,.editor-actions .admin-secondary{min-width:150px}
+@media(max-width:700px){.editor-fields{grid-template-columns:1fr}.editor-field.full{grid-column:auto}.visual-editor{padding:16px}.editor-actions{flex-direction:column-reverse}.editor-actions button{width:100%}}
