@@ -251,3 +251,14 @@ export async function selectAnalyticsEvents(token: string, days: number) {
   const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
   return request('/rest/v1/site_analytics_events?select=id,session_id,event_name,page_path,target,created_at&created_at=gte.' + encodeURIComponent(since) + '&order=created_at.desc&limit=5000', {}, token) as Promise<Array<{id:number;session_id:string;event_name:string;page_path:string;target?:string;created_at:string}>>
 }
+
+export async function selectAppointmentRequests(token: string) {
+  return request('/rest/v1/appointment_requests?select=*&order=created_at.desc&limit=500', {}, token) as Promise<Record<string, unknown>[]>
+}
+export async function updateAppointmentRequest(id: string, status: string, token: string) {
+  const rows = await request('/rest/v1/appointment_requests?id=eq.' + encodeURIComponent(id), {
+    method: 'PATCH', headers: { Prefer: 'return=representation' }, body: JSON.stringify({ status }),
+  }, token) as Record<string, unknown>[]
+  if (!rows.length) throw new Error('Booking was not updated. Check admin permissions.')
+  return rows[0]
+}
