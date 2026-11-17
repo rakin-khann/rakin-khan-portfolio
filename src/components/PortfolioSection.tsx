@@ -5,7 +5,7 @@ import { IconArrowRight } from './icons'
 
 export default function PortfolioSection() {
   const projectRows = usePublicRows('projects')
-  const projects = projectRows.length ? projectRows.map(row => ({ title: String(row.title || ''), category: String(row.category || ''), image: String(row.cover_image_url || '/assets/work-neon.webp'), placeholder: false })) : PROJECTS
+  const projects = projectRows.length ? projectRows.map(row => ({ title: String(row.title || ''), category: String(row.category || ''), image: String(row.cover_image_url || '/assets/work-neon.webp'), description: String(row.description || ''), url: String(row.project_url || ''), placeholder: false })) : PROJECTS
   const ref = useReveal<HTMLElement>()
 
   return (
@@ -35,6 +35,8 @@ export default function PortfolioSection() {
               <div className="work-overlay">
                 <h3 className="work-title">{project.title}</h3>
                 <p className="work-cat">{project.category}</p>
+                {"description" in project && project.description && <p className="work-description">{project.description}</p>}
+                {"url" in project && project.url && <a className="work-project-link" href={project.url} target="_blank" rel="noreferrer">View project ↗</a>}
               </div>
             </article>
           ))}
