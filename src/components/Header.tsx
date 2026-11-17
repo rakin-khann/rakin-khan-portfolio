@@ -6,7 +6,7 @@ import { IconArrowRight, IconClose, IconMenu, SiteIcon } from './icons'
 export default function Header() {
   const profileRow = usePublicRows('profiles')[0]
   const socialRows = usePublicRows('social_links')
-  const profileName = String(profileRow?.name || profileName)
+  const profileName = String(profileRow?.name || PROFILE.name)
   const socials = socialRows.length ? socialRows.map(row => ({ label: String(row.platform || ''), icon: String(row.icon || 'link'), href: String(row.url || '#') })) : SOCIALS
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
