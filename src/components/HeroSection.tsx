@@ -148,6 +148,8 @@ export default function HeroSection() {
         } as CSSProperties}
       />
 
+      <div className="hero-moon" aria-hidden="true" />
+
       <h1 ref={titleRef} className="hero-title">
         <span>{firstName.toUpperCase()}</span>
         <span>{lastName.toUpperCase()}</span>
