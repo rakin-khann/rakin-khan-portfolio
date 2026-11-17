@@ -6,7 +6,7 @@ import AnalyticsPanel from './AnalyticsPanel'
 import MediaPanel from './MediaPanel'
 import './media-analytics.css'
 
-type Field = { key: string; label: string; type?: 'text' | 'textarea' | 'url' | 'number' | 'image' | 'date' | 'boolean' | 'gallery'; hint?: string; required?: boolean }
+type Field = { key: string; label: string; type?: 'text' | 'textarea' | 'url' | 'number' | 'image' | 'date' | 'boolean' | 'gallery' | 'select'; hint?: string; required?: boolean; options?: { label: string; value: string }[] }
 type Section = { id: string; label: string; icon: string; key: string; readOnly?: boolean; fields?: Field[] }
 const common: Field[] = [{ key: 'sort_order', label: 'Display order', type: 'number' }, { key: 'is_published', label: 'Show on website', type: 'boolean' }]
 const SECTIONS: Section[] = [
@@ -39,7 +39,7 @@ const SECTIONS: Section[] = [
     { key: 'start_date', label: 'Start date', type: 'date' }, { key: 'end_date', label: 'End date', type: 'date' }, { key: 'description', label: 'Description', type: 'textarea' }, ...common,
   ] },
   { id: 'social_links', label: 'Social links', icon: '◎', key: 'id', fields: [
-    { key: 'platform', label: 'Platform name', required: true }, { key: 'url', label: 'Profile URL', type: 'url', required: true }, { key: 'icon', label: 'Icon name', hint: 'Example: instagram, facebook, youtube, behance' }, ...common,
+    { key: 'platform', label: 'Platform name', required: true, hint: 'যেমন: Facebook, Instagram, YouTube, Behance, X' }, { key: 'url', label: 'Your real profile URL', type: 'url', required: true, hint: 'https:// দিয়ে শুরু হওয়া সম্পূর্ণ profile link দাও' }, { key: 'icon', label: 'Choose social icon', type: 'select', required: true, options: [{ label: 'Facebook', value: 'facebook' }, { label: 'Instagram', value: 'instagram' }, { label: 'YouTube', value: 'youtube' }, { label: 'Behance', value: 'behance' }, { label: 'X / Twitter', value: 'x' }] }, ...common,
   ] },
   { id: 'testimonials', label: 'Testimonials', icon: '❝', key: 'id', fields: [
     { key: 'client_name', label: 'Client name', required: true }, { key: 'client_role', label: 'Client role' }, { key: 'company', label: 'Company' },
@@ -167,6 +167,7 @@ export default function AdminApp() {
               <span>{field.label}{field.required && <b> *</b>}</span>
               {field.type === 'textarea' || field.type === 'gallery' ? <textarea required={field.required} rows={field.type === 'gallery' ? 4 : 5} value={String(draft[field.key] ?? '')} onChange={e => update(field.key, e.target.value)} placeholder={field.hint || 'এখানে লিখো…'} /> :
               field.type === 'boolean' ? <span className="editor-toggle"><input type="checkbox" checked={Boolean(draft[field.key])} onChange={e => update(field.key, e.target.checked)} /> <small>{draft[field.key] ? 'Published / Visible' : 'Hidden / Draft'}</small></span> :
+              field.type === 'select' ? <select required={field.required} value={String(draft[field.key] ?? '')} onChange={e => update(field.key, e.target.value)}>{(field.options || []).map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select> :
               field.type === 'image' ? <><input type="url" value={String(draft[field.key] || '')} onChange={e => update(field.key, e.target.value)} placeholder="Image URL অথবা নিচে Upload করো" /><input className="editor-file" type="file" accept="image/jpeg,image/png,image/webp,image/avif,.jpg,.jpeg,.png,.webp,.avif" disabled={uploading === field.key} onChange={e => void uploadField(field.key, e.target.files?.[0])} /><small>{uploading === field.key ? 'Uploading image…' : field.hint || 'ছবি Upload করো অথবা URL paste করো।'}</small>{Boolean(draft[field.key]) && <img className="editor-image-preview" src={String(draft[field.key])} alt="Upload preview" />}</> :
               <input type={field.type || 'text'} required={field.required} value={String(draft[field.key] ?? '')} onChange={e => update(field.key, field.type === 'number' ? e.target.value : e.target.value)} placeholder={field.hint || 'এখানে লিখো…'} />}
               {field.hint && field.type !== 'gallery' && field.type !== 'image' && <small>{field.hint}</small>}
