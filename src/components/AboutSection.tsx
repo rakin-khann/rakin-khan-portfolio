@@ -2,6 +2,7 @@ import { PROFILE, STATS } from '../data/content'
 import { usePublicRows } from '../hooks/usePublicRows'
 import { useReveal } from '../hooks/useScrollAnimation'
 import { IconArrowRight, SiteIcon } from './icons'
+import SectionBackground from './SectionBackground'
 
 export default function AboutSection() {
   const profileRow = usePublicRows('profiles')[0]
@@ -13,6 +14,7 @@ export default function AboutSection() {
 
   return (
     <section ref={ref} id="about" className="section about" aria-label="About Rakin Khan">
+      <SectionBackground section='about' />
       <div className="bg-art right" aria-hidden="true">
         <img src="/assets/bg-hero.webp" alt="" />
       </div>
