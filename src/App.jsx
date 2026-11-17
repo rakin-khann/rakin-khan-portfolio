@@ -1,115 +1,32 @@
-import { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, MeshDistortMaterial, OrbitControls } from '@react-three/drei';
-import { ArrowDownRight, ArrowUpRight, Menu } from 'lucide-react';
-
-function Orb() {
-  const mesh = useRef(null);
-  useFrame((_, delta) => {
-    if (mesh.current) {
-      mesh.current.rotation.x += delta * 0.12;
-      mesh.current.rotation.y += delta * 0.2;
-    }
-  });
-
-  return (
-    <Float speed={1.4} rotationIntensity={0.22} floatIntensity={0.45}>
-      <mesh ref={mesh} scale={1.55}>
-        <icosahedronGeometry args={[1, 5]} />
-        <MeshDistortMaterial
-          color="#b8a47a"
-          roughness={0.22}
-          metalness={0.78}
-          distort={0.28}
-          speed={1.5}
-        />
-      </mesh>
-    </Float>
-  );
+import {useEffect,useMemo,useRef,useState} from 'react';
+import {Canvas,useFrame} from '@react-three/fiber';
+import {Environment,Float,MeshDistortMaterial,OrbitControls,useGLTF} from '@react-three/drei';
+import {ArrowUpRight,ArrowDownRight,Menu,X,Sun,Moon,Lock,LogOut,Save,Upload,Plus,Trash2,Settings2} from 'lucide-react';
+import {supabase} from './lib/supabase';
+const defaults={model_type:'orb',model_url:null,color:'#a78bfa',scale:1,position:[0,0,0],rotation:[0,0,0],auto_rotate:true,auto_rotate_speed:.35};
+const fallback={name:'Rakin Khan',headline:'Independent Graphic Designer & Digital Creative',bio:'I create thoughtful visual identities and purposeful digital experiences that help brands make a lasting impression.',location:'Dhaka, Bangladesh',email:'rakinfiverr@gmail.com'};
+function SceneContent({config}){const ref=useRef(null);useFrame((_,d)=>{if(ref.current&&config.auto_rotate){ref.current.rotation.x+=d*config.auto_rotate_speed*.5;ref.current.rotation.y+=d*config.auto_rotate_speed;}});return <><ambientLight intensity={1.2}/><directionalLight position={[3,4,4]} intensity={2.8}/><pointLight position={[-3,-2,2]} intensity={14} color={config.color}/><Float speed={1.2} floatIntensity={.3}><group ref={ref}>{config.model_url?<Model url={config.model_url} config={config}/>:<mesh scale={config.scale}><icosahedronGeometry args={[1,5]}/><MeshDistortMaterial color={config.color} roughness={.2} metalness={.75} distort={.28} speed={1.5}/></mesh>}</group></Float><Environment preset="city"/><OrbitControls enableZoom={false} enablePan={false}/></>}
+function Scene({config}){return <Canvas camera={{position:[0,0,4.8],fov:42}} dpr={[1,1.5]}><SceneContent config={config}/></Canvas>}
+function Model({url,config}){const {scene}=useGLTF(url);const clone=useMemo(()=>scene.clone(),[scene]);return <primitive object={clone} scale={config.scale} position={config.position} rotation={config.rotation}/>}
+function Admin({close,onScene}){const [session,S]=useState(null),[ok,O]=useState(false),[loading,L]=useState(true),[email,E]=useState('rakinfiverr@gmail.com'),[password,P]=useState(''),[error,Err]=useState(''),[tab,T]=useState('scene'),[scene,C]=useState(defaults),[profile,F]=useState(fallback),[projects,Q]=useState([]),[messages,M]=useState([]),[draft,D]=useState({title:'',category:'BRAND IDENTITY',description:'',project_url:''}),[saving,B]=useState(false);
+ const verify=async(s)=>{if(!s?.user){S(null);O(false);L(false);return;}S(s);const {data}=await supabase.from('admin_users').select('user_id').eq('user_id',s.user.id).maybeSingle();if(data){O(true);Err('');}else{O(false);Err('এই account-এ admin access নেই।');await supabase.auth.signOut();}L(false);};
+ useEffect(()=>{let live=true;supabase.auth.getSession().then(({data})=>{if(live)verify(data.session)});const {data:{subscription}}=supabase.auth.onAuthStateChange((_,s)=>{setTimeout(()=>{if(live)verify(s)},0)});return()=>{live=false;subscription.unsubscribe()};},[]);
+ useEffect(()=>{if(!ok)return;(async()=>{const [a,b,c,d]=await Promise.all([supabase.from('site_settings').select('value').eq('key','hero_scene').maybeSingle(),supabase.from('profiles').select('*').limit(1).maybeSingle(),supabase.from('projects').select('*').order('sort_order'),supabase.from('contact_messages').select('*').order('created_at',{ascending:false}).limit(30)]);if(a.data?.value)C({...defaults,...a.data.value});if(b.data)F(b.data);if(c.data)Q(c.data);if(d.data)M(d.data)})();},[ok]);
+ const login=async e=>{e.preventDefault();L(true);const {data,error}=await supabase.auth.signInWithPassword({email,password});if(error){Err(error.message);L(false)}else verify(data.session)};
+ const saveScene=async()=>{B(true);const {error}=await supabase.from('site_settings').upsert({key:'hero_scene',value:scene},{onConflict:'key'});if(error)Err(error.message);else onScene(scene);B(false)};
+ const saveProfile=async()=>{B(true);const payload={name:profile.name,headline:profile.headline,bio:profile.bio,location:profile.location,email:profile.email,is_published:true,updated_at:new Date().toISOString()};const {data}=await supabase.from('profiles').select('id').limit(1).maybeSingle();const result=data?await supabase.from('profiles').update(payload).eq('id',data.id):await supabase.from('profiles').insert(payload);if(result.error)Err(result.error.message);B(false)};
+ const add=async e=>{e.preventDefault();B(true);const slug=draft.title.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-'+Date.now();const {data,error}=await supabase.from('projects').insert({...draft,slug,is_published:true,sort_order:projects.length}).select().single();if(error)Err(error.message);else{Q([...projects,data]);D({title:'',category:'BRAND IDENTITY',description:'',project_url:''})}B(false)};
+ const upload=async file=>{if(!file)return;if(!/\.(glb|gltf)$/i.test(file.name)){Err('শুধু GLB/GLTF ফাইল দিন।');return}B(true);const path='models/'+Date.now()+'-'+file.name.replace(/[^a-z0-9.-]/gi,'-');const {error}=await supabase.storage.from('portfolio-assets').upload(path,file,{contentType:file.name.endsWith('.gltf')?'model/gltf+json':'model/gltf-binary'});if(error)Err(error.message);else{const {data}=supabase.storage.from('portfolio-assets').getPublicUrl(path);C({...scene,model_url:data.publicUrl,model_type:'uploaded'})}B(false)};
+ if(loading)return <div className="admin-shell">Loading secure admin session…</div>;
+ if(!ok)return <div className="admin-shell"><form className="login-card" onSubmit={login}><Lock/><p className="eyebrow">PRIVATE WORKSPACE</p><h2>Welcome <span>back.</span></h2><label>Email<input type="email" value={email} onChange={e=>E(e.target.value)} required/></label><label>Password<input type="password" value={password} onChange={e=>P(e.target.value)} required/></label>{error&&<p className="form-error">{error}</p>}<button className="primary-button">Sign in securely</button></form></div>;
+ return <div className="admin-shell"><header className="admin-top"><a className="wordmark" href="/">RK<span>.</span></a><button className="icon-button" onClick={close}><X/></button></header><div className="admin-layout"><aside className="admin-sidebar">{[['scene','3D Scene'],['profile','Profile'],['projects','Projects'],['messages','Messages']].map(([k,v])=><button className={tab===k?'active':''} key={k} onClick={()=>T(k)}>{v}</button>)}<button onClick={()=>supabase.auth.signOut()}><LogOut size={14}/> Sign out {session?.user?.email}</button></aside><section className="admin-content">{error&&<p className="form-error">{error}</p>}{tab==='scene'&&<><p className="eyebrow">HERO CONFIGURATION</p><h2>3D Scene <span>Control.</span></h2><div className="scene-preview"><Scene config={scene}/></div><div className="field-grid"><label>Model<select value={scene.model_type} onChange={e=>C({...scene,model_type:e.target.value,model_url:null})}><option value="orb">Liquid orb</option><option value="uploaded" disabled={!scene.model_url}>Uploaded model</option></select></label><label>Accent color<input type="color" value={scene.color} onChange={e=>C({...scene,color:e.target.value})}/></label><label>Scale<input type="number" min=".2" max="4" step=".1" value={scene.scale} onChange={e=>C({...scene,scale:+e.target.value})}/></label><label>Rotation speed<input type="number" min="0" max="2" step=".05" value={scene.auto_rotate_speed} onChange={e=>C({...scene,auto_rotate_speed:+e.target.value})}/></label></div><label className="upload-field"><Upload/> Upload GLB / GLTF<input type="file" accept=".glb,.gltf" onChange={e=>upload(e.target.files?.[0])}/></label><label className="toggle-line"><input type="checkbox" checked={scene.auto_rotate} onChange={e=>C({...scene,auto_rotate:e.target.checked})}/> Auto rotate</label><button className="primary-button" disabled={saving} onClick={saveScene}><Save/> Save 3D settings</button></>}{tab==='profile'&&<><p className="eyebrow">PROFILE DETAILS</p><h2>Profile <span>Editor.</span></h2><div className="admin-form">{['name','headline','location','email','bio'].map(k=><label key={k}>{k}<input value={profile[k]||''} onChange={e=>F({...profile,[k]:e.target.value})}/></label>)}<button className="primary-button" onClick={saveProfile}>Save profile</button></div></>}{tab==='projects'&&<><p className="eyebrow">PORTFOLIO CONTENT</p><h2>Selected <span>Work.</span></h2><form className="admin-form" onSubmit={add}>{['title','category','description','project_url'].map(k=><label key={k}>{k}<input value={draft[k]} onChange={e=>D({...draft,[k]:e.target.value})} required={k==='title'}/></label>)}<button className="primary-button" disabled={saving}><Plus/> Add project</button></form>{projects.map(p=><div className="admin-project-row" key={p.id}>{p.title}<button className="icon-button danger" onClick={async()=>{const {error}=await supabase.from('projects').delete().eq('id',p.id);if(error)Err(error.message);else Q(projects.filter(x=>x.id!==p.id))}}><Trash2/></button></div>)}</>}{tab==='messages'&&<><p className="eyebrow">INCOMING ENQUIRIES</p><h2>Contact <span>Inbox.</span></h2>{messages.map(m=><article className="message-card" key={m.id}><b>{m.name}</b><small>{m.email} · {new Date(m.created_at).toLocaleString()}</small><p>{m.message}</p></article>)}</>}</section></div></div>
 }
-
-function HeroScene() {
-  return (
-    <Canvas camera={{ position: [0, 0, 4.8], fov: 42 }} dpr={[1, 1.6]}>
-      <ambientLight intensity={1.2} />
-      <directionalLight position={[3, 4, 4]} intensity={3} color="#fff1d6" />
-      <pointLight position={[-3, -2, 2]} intensity={18} color="#7b6a49" />
-      <Orb />
-      <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.35} />
-    </Canvas>
-  );
-}
-
-const projects = [
-  { number: '01', type: 'BRAND IDENTITY', title: 'Restaurant & Food Branding', note: 'Identity systems, menus and visual direction' },
-  { number: '02', type: 'DIGITAL DESIGN', title: 'Campaign & Social Visuals', note: 'Digital-first graphics built to stand out' },
-  { number: '03', type: 'PRINT DESIGN', title: 'Posters, Flyers & Menus', note: 'Clear, memorable communication in print' },
-];
-
-export default function App() {
-  return (
-    <main>
-      <nav className="nav">
-        <a className="wordmark" href="#top" aria-label="Rakin Khan home">RK<span>.</span></a>
-        <div className="nav-links">
-          <a href="#work">Selected work</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-        </div>
-        <a className="nav-cta" href="#contact">Let’s talk <ArrowUpRight size={15} /></a>
-        <button className="menu-button" aria-label="Open menu"><Menu size={21} /></button>
-      </nav>
-
-      <section className="hero" id="top">
-        <div className="hero-copy">
-          <p className="eyebrow"><span className="status-dot" /> INDEPENDENT GRAPHIC DESIGNER</p>
-          <h1>RAKIN<br /><span>KHAN</span><i>.</i></h1>
-          <div className="hero-bottom">
-            <p className="hero-description">I create thoughtful visual identities and purposeful design that help brands make a lasting impression.</p>
-            <a className="round-link" href="#work" aria-label="Explore selected work"><ArrowDownRight size={23} /></a>
-          </div>
-        </div>
-        <div className="hero-art" aria-label="Animated 3D abstract sculpture">
-          <div className="art-orbit orbit-one" />
-          <div className="art-orbit orbit-two" />
-          <div className="scene"><HeroScene /></div>
-          <span className="art-index">3D / 001</span>
-          <span className="art-caption">FORM STUDY — 2026</span>
-        </div>
-        <div className="hero-meta"><span>BASED IN BANGLADESH</span><span>AVAILABLE FOR SELECT PROJECTS</span><span>SCROLL TO EXPLORE ↓</span></div>
-      </section>
-
-      <section className="work section" id="work">
-        <div className="section-heading">
-          <p className="eyebrow">01 / SELECTED SERVICES</p>
-          <h2>Design with<br /><span>purpose.</span></h2>
-        </div>
-        <div className="project-list">
-          {projects.map((project) => (
-            <a className="project-row" href="#contact" key={project.number}>
-              <span className="project-number">{project.number}</span>
-              <div className="project-info"><span>{project.type}</span><h3>{project.title}</h3><p>{project.note}</p></div>
-              <ArrowUpRight className="project-arrow" size={22} />
-            </a>
-          ))}
-        </div>
-      </section>
-
-      <section className="about section" id="about">
-        <p className="eyebrow">02 / A LITTLE ABOUT ME</p>
-        <div className="about-content">
-          <h2>Good design<br />makes people <span>feel.</span></h2>
-          <p>I’m Rakin Khan, an independent graphic designer focused on building clear, distinctive visual communication. From restaurant branding to digital campaigns, I bring ideas to life with thoughtful details and a strong visual point of view.</p>
-        </div>
-      </section>
-
-      <section className="contact section" id="contact">
-        <p className="eyebrow">03 / HAVE A PROJECT IN MIND?</p>
-        <h2>Let’s make<br />something <span>matter.</span></h2>
-        <a className="contact-link" href="mailto:rakinfiverr@gmail.com">rakinfiverr@gmail.com <ArrowUpRight size={20} /></a>
-      </section>
-
-      <footer><a className="wordmark" href="#top">RK<span>.</span></a><span>© 2026 RAKIN KHAN</span><a href="#top">BACK TO TOP ↑</a></footer>
-    </main>
-  );
+export default function App(){const [profile,F]=useState(fallback),[projects,Q]=useState([]),[scene,C]=useState(defaults),[admin,A]=useState(location.pathname==='/admin'),[menu,M]=useState(false),[light,L]=useState(false),[bn,B]=useState(false),[form,G]=useState({name:'',email:'',subject:'',message:''}),[sent,S]=useState('');
+ useEffect(()=>{let live=true;(async()=>{const [p,w,s]=await Promise.all([supabase.from('profiles').select('*').eq('is_published',true).limit(1).maybeSingle(),supabase.from('projects').select('*').eq('is_published',true).order('sort_order'),supabase.from('site_settings').select('value').eq('key','hero_scene').maybeSingle()]);if(!live)return;if(p.data)F({...fallback,...p.data});if(w.data?.length)Q(w.data);if(s.data?.value)C({...defaults,...s.data.value})})();return()=>{live=false}},[]);
+ useEffect(()=>{const f=()=>A(location.pathname==='/admin');addEventListener('popstate',f);return()=>removeEventListener('popstate',f)},[]);
+ const open=()=>{history.pushState({},'','/admin');A(true)},close=()=>{history.pushState({},'','/');A(false)};
+ const submit=async e=>{e.preventDefault();S('sending');const {error}=await supabase.from('contact_messages').insert(form);if(error)S('error');else{S('sent');G({name:'',email:'',subject:'',message:''})}};
+ if(admin)return <Admin close={close} onScene={C}/>;
+ const labels=bn?{work:'কাজ',about:'পরিচিতি',contact:'যোগাযোগ',cta:'কথা বলি',intro:'আমি ব্র্যান্ডের জন্য আলাদা ভিজ্যুয়াল আইডেন্টিটি ও ডিজাইন তৈরি করি।',name:'আপনার নাম',email:'ইমেইল',subject:'বিষয়',message:'আপনার মেসেজ',send:'মেসেজ পাঠান'}:{work:'Selected work',about:'About',contact:'Contact',cta:'Let’s talk',intro:'I create thoughtful visual identities and purposeful design that help brands make a lasting impression.',name:'Your name',email:'Email address',subject:'Subject',message:'Tell me about your project',send:'Send message'};
+ return <main className={light?'site light':'site'}><nav className="nav"><a className="wordmark" href="#top">RK<span>.</span></a><div className="nav-links"><a href="#work">{labels.work}</a><a href="#about">{labels.about}</a><a href="#contact">{labels.contact}</a></div><div className="nav-actions"><button className="icon-button" onClick={()=>B(!bn)}>{bn?'EN':'বাংলা'}</button><button className="icon-button" onClick={()=>L(!light)}>{light?<Moon/>:<Sun/>}</button></div><a className="nav-cta" href="#contact">{labels.cta}<ArrowUpRight/></a><button className="menu-button" onClick={()=>M(!menu)}>{menu?<X/>:<Menu/>}</button>{menu&&<div className="mobile-menu"><a href="#work">{labels.work}</a><a href="#about">{labels.about}</a><a href="#contact">{labels.contact}</a></div>}</nav><section className="hero" id="top"><div className="hero-copy"><p className="eyebrow"><span className="status-dot"/> INDEPENDENT GRAPHIC DESIGNER</p><h1>RAKIN<br/><span>KHAN</span><i>.</i></h1><div className="hero-bottom"><p className="hero-description">{profile.headline}<span>{profile.bio||labels.intro}</span></p><a className="round-link" href="#work"><ArrowDownRight/></a></div></div><div className="hero-art"><div className="art-orbit orbit-one"/><div className="art-orbit orbit-two"/><div className="scene"><Scene config={scene}/></div><span className="art-index">3D / 001</span><span className="art-caption">DHAKA — BANGLADESH</span></div><div className="hero-meta"><span>{profile.location}</span><span>AVAILABLE FOR SELECT PROJECTS</span><span>SCROLL TO EXPLORE ↓</span></div></section><section className="work section" id="work"><div className="section-heading"><p className="eyebrow">01 / SELECTED WORK</p><h2>Design with<br/><span>purpose.</span></h2></div><div className="project-list">{(projects.length?projects:[{id:'a',title:'Restaurant Brand Identity',category:'BRAND IDENTITY',description:'Identity systems, menus and visual direction'},{id:'b',title:'Campaign & Social Visuals',category:'DIGITAL DESIGN',description:'Digital-first graphics built to stand out'},{id:'c',title:'Posters, Flyers & Menus',category:'PRINT DESIGN',description:'Clear, memorable communication'}]).map((p,i)=><a className="project-row" href={p.project_url||'#contact'} key={p.id}><span className="project-number">{String(i+1).padStart(2,'0')}</span><div className="project-info"><span>{p.category}</span><h3>{p.title}</h3><p>{p.description}</p></div><ArrowUpRight className="project-arrow"/></a>)}</div></section><section className="about section" id="about"><p className="eyebrow">02 / ABOUT ME</p><div className="about-content"><h2>Good design<br/>makes people <span>feel.</span></h2><p>{profile.bio}<br/><br/>{profile.location}</p></div></section><section className="contact section" id="contact"><p className="eyebrow">03 / HAVE A PROJECT IN MIND?</p><h2>Let’s make<br/><span>something matter.</span></h2><a className="contact-link" href={'mailto:'+profile.email}>{profile.email}<ArrowUpRight/></a><form className="contact-form" onSubmit={submit}><div><label>{labels.name}<input required maxLength="120" value={form.name} onChange={e=>G({...form,name:e.target.value})}/></label><label>{labels.email}<input required type="email" maxLength="254" value={form.email} onChange={e=>G({...form,email:e.target.value})}/></label></div><label>{labels.subject}<input maxLength="180" value={form.subject} onChange={e=>G({...form,subject:e.target.value})}/></label><label>{labels.message}<textarea required rows="4" maxLength="10000" value={form.message} onChange={e=>G({...form,message:e.target.value})}/></label><button className="primary-button" disabled={sent==='sending'}>{labels.send}<ArrowUpRight/></button>{sent==='sent'&&<p className="success-note">Message sent successfully.</p>}{sent==='error'&&<p className="form-error">Could not send message. Please try again.</p>}</form></section><footer><a className="wordmark" href="#top">RK<span>.</span></a><span>© {new Date().getFullYear()} RAKIN KHAN</span><a href="#top">BACK TO TOP ↑</a><button className="admin-trigger" onClick={open}><Settings2/> ADMIN</button></footer></main>
 }
