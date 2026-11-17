@@ -2,6 +2,7 @@ import { SERVICES } from '../data/content'
 import { usePublicRows } from '../hooks/usePublicRows'
 import { useReveal } from '../hooks/useScrollAnimation'
 import { IconArrowRight, SiteIcon } from './icons'
+import SectionBackground from './SectionBackground'
 
 export default function ServicesSection() {
   const serviceRows = usePublicRows('services')
@@ -10,6 +11,7 @@ export default function ServicesSection() {
 
   return (
     <section ref={ref} id="services" className="section services" aria-label="Services">
+      <SectionBackground section='services' />
       <div className="container split">
         <div className="split-head" data-reveal>
           <p className="section-label">{'//'} My Services</p>
