@@ -2,7 +2,7 @@ import { FormEvent, useEffect, useMemo, useState } from 'react'
 import { getSession, getCurrentUser, isAdmin, signIn, signOut, selectRows, saveRow, deleteRow, type Session } from '../lib/supabase'
 import './admin.css'
 
-const SECTIONS = [
+const SECTIONS: { id: string; label: string; icon: string; key: string; readOnly?: boolean }[] = [
   { id: 'profiles', label: 'Profile', icon: '◉', key: 'id' },
   { id: 'projects', label: 'Portfolio projects', icon: '▧', key: 'id' },
   { id: 'services', label: 'Services', icon: '✳', key: 'id' },
@@ -13,7 +13,7 @@ const SECTIONS = [
   { id: 'testimonials', label: 'Testimonials', icon: '❝', key: 'id' },
   { id: 'contact_messages', label: 'Messages', icon: '✉', key: 'id', readOnly: true },
   { id: 'site_settings', label: 'Site settings', icon: '⚙', key: 'key' },
-] as const
+]
 
 const EXAMPLES: Record<string, Record<string, unknown>> = {
   profiles: { name: 'Rakin Khan', headline: '', bio: '', location: 'Dhaka, Bangladesh', email: '', is_published: true },
