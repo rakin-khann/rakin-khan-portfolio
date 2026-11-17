@@ -65,6 +65,14 @@ export const IconMapPin = (p: IconProps) => (
 
 /* ---------- Social ---------- */
 
+export const IconLinkedIn = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M5.2 8.4a2.1 2.1 0 1 0 0-4.2 2.1 2.1 0 0 0 0 4.2Z" fill="currentColor" stroke="none" />
+    <path d="M3.4 10h3.6v10.6H3.4z" fill="currentColor" stroke="none" />
+    <path d="M9.2 10h3.5v1.45c.75-1.05 1.85-1.7 3.45-1.7 3 0 4.45 1.9 4.45 5.1v5.75H17v-5.15c0-1.65-.55-2.55-1.9-2.55-1.5 0-2.3 1.05-2.3 2.8v4.9H9.2z" fill="currentColor" stroke="none" />
+  </svg>
+)
+
 export const IconFacebook = (p: IconProps) => (
   <svg {...base(p)}>
     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
@@ -200,6 +208,7 @@ export const IconCode = (p: IconProps) => (
 
 const ICONS: Record<string, (p: IconProps) => ReactElement> = {
   facebook: IconFacebook,
+  linkedin: IconLinkedIn,
   youtube: IconYouTube,
   instagram: IconInstagram,
   behance: IconBehance,
