@@ -577,6 +577,7 @@ button {
 .hero-samurai img {
   width: 100%;
   height: 100%;
+  object-fit: contain; /* allow replacement characters with different image proportions */
   max-width: none; /* neutralize the global img { max-width: 100% } clamp */
   object-fit: contain;
   filter: drop-shadow(0 0 46px rgba(var(--red-rgb), 0.3));
