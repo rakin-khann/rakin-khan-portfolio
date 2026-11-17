@@ -1,8 +1,11 @@
 import { PROJECTS } from '../data/content'
+import { usePublicRows } from '../hooks/usePublicRows'
 import { useReveal } from '../hooks/useScrollAnimation'
 import { IconArrowRight } from './icons'
 
 export default function PortfolioSection() {
+  const projectRows = usePublicRows('projects')
+  const projects = projectRows.length ? projectRows.map(row => ({ title: String(row.title || ''), category: String(row.category || ''), image: String(row.cover_image_url || '/assets/work-neon.webp'), placeholder: false })) : PROJECTS
   const ref = useReveal<HTMLElement>()
 
   return (
@@ -20,7 +23,7 @@ export default function PortfolioSection() {
         </div>
 
         <div className="work-grid">
-          {PROJECTS.map((project, i) => (
+          {projects.map((project, i) => (
             <article
               className="work-card"
               key={project.title}

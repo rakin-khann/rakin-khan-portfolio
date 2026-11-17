@@ -1,8 +1,11 @@
 import { PROFILE, STATS } from '../data/content'
+import { usePublicRows } from '../hooks/usePublicRows'
 import { useReveal } from '../hooks/useScrollAnimation'
 import { IconArrowRight, SiteIcon } from './icons'
 
 export default function AboutSection() {
+  const profileRow = usePublicRows('profiles')[0]
+  const profile = { ...PROFILE, name: String(profileRow?.name || PROFILE.name), about: String(profileRow?.bio || PROFILE.about) }
   const ref = useReveal<HTMLElement>()
 
   return (
@@ -17,7 +20,7 @@ export default function AboutSection() {
           <h2 className="section-title">
             Rakin <span className="text-red">Khan</span>
           </h2>
-          <p className="section-sub about-text">{PROFILE.about}</p>
+          <p className="section-sub about-text">{profile.about}</p>
           <a href="#contact" className="btn btn-ghost">
             Know More <IconArrowRight />
           </a>

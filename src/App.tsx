@@ -8,8 +8,12 @@ import SkillsSection from './components/SkillsSection'
 import ContactSection from './components/ContactSection'
 import Footer from './components/Footer'
 import BackToTop from './components/BackToTop'
+import AdminApp from './admin/AdminApp'
 
 export default function App() {
+  const path = window.location.pathname.replace(/\/$/, '')
+  if (path === '/admin') return <AdminApp />
+
   return (
     <>
       <Header />

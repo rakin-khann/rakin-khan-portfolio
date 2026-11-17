@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../lib/gsap'
 import { SKILLS } from '../data/content'
+import { usePublicRows } from '../hooks/usePublicRows'
 import { useReveal } from '../hooks/useScrollAnimation'
 import { IconArrowRight } from './icons'
 
@@ -73,6 +74,8 @@ function SkillRing({ name, value }: { name: string; value: number }) {
 }
 
 export default function SkillsSection() {
+  const skillRows = usePublicRows('skills')
+  const skills = skillRows.length ? skillRows.map(row => ({ name: String(row.name || ''), value: Number(row.proficiency || 0) })) : SKILLS
   const ref = useReveal<HTMLElement>()
 
   return (
@@ -94,7 +97,7 @@ export default function SkillsSection() {
         </div>
 
         <div className="skills-rings">
-          {SKILLS.map((skill) => (
+          {skills.map((skill) => (
             <SkillRing key={skill.name} name={skill.name} value={skill.value} />
           ))}
         </div>

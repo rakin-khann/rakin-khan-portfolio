@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from 'react'
 import type { CSSProperties } from 'react'
 import { gsap } from '../lib/gsap'
 import { PROFILE, SOCIALS } from '../data/content'
+import { usePublicRows } from '../hooks/usePublicRows'
 import { IconArrowRight, SiteIcon } from './icons'
 
 /** Deterministic pseudo-random petals (falling red maple leaves). */
@@ -23,6 +24,10 @@ const PETALS: CSSProperties[] = Array.from({ length: 14 }, (_, i) => {
  * behind it. Scrolling up reverses the sequence smoothly.
  */
 export default function HeroSection() {
+  const profileRow = usePublicRows('profiles')[0]
+  const socialRows = usePublicRows('social_links')
+  const profile = { ...PROFILE, name: String(profileRow?.name || PROFILE.name), title: String(profileRow?.headline || PROFILE.title), tagline: String(profileRow?.tagline || PROFILE.tagline), about: String(profileRow?.bio || PROFILE.about), email: String(profileRow?.email || PROFILE.email), location: String(profileRow?.location || PROFILE.location) }
+  const socials = socialRows.length ? socialRows.map(row => ({ label: String(row.platform || ''), icon: String(row.icon || 'link'), href: String(row.url || '#') })) : SOCIALS
   const sectionRef = useRef<HTMLElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
@@ -129,18 +134,18 @@ export default function HeroSection() {
       </div>
 
       <div ref={introRef} className="hero-intro">
-        <p className="hero-role">{PROFILE.title}</p>
+        <p className="hero-role">{profile.title}</p>
         <p className="hero-name">
           Rakin <span>Khan</span>
         </p>
-        <p className="hero-tagline">{PROFILE.tagline}</p>
+        <p className="hero-tagline">{profile.tagline}</p>
         <a href="#portfolio" className="btn">
           Explore My Work <IconArrowRight />
         </a>
       </div>
 
       <div ref={socialRef} className="hero-social">
-        {SOCIALS.map((s) => (
+        {socials.map((s) => (
           <a key={s.label} href={s.href} target="_blank" rel="noreferrer" aria-label={s.label}>
             <SiteIcon name={s.icon} width={18} height={18} />
           </a>
