@@ -6,6 +6,9 @@ import { IconArrowRight, SiteIcon } from './icons'
 export default function AboutSection() {
   const profileRow = usePublicRows('profiles')[0]
   const profile = { ...PROFILE, name: String(profileRow?.name || PROFILE.name), about: String(profileRow?.bio || PROFILE.about), avatar: String(profileRow?.avatar_url || '/assets/portrait.webp'), cv: String(profileRow?.cv_url || '') }
+  const nameParts = profile.name.trim().split(/\\s+/)
+  const firstName = nameParts.shift() || 'Rakin'
+  const lastName = nameParts.join(' ') || 'Khan'
   const ref = useReveal<HTMLElement>()
 
   return (
@@ -18,12 +21,10 @@ export default function AboutSection() {
         <div className="about-info" data-reveal>
           <p className="section-label">{'//'} About Me</p>
           <h2 className="section-title">
-            Rakin <span className="text-red">Khan</span>
+            {firstName} <span className="text-red">{lastName}</span>
           </h2>
           <p className="section-sub about-text">{profile.about}</p>
-          <a href="#contact" className="btn btn-ghost">
-            Know More <IconArrowRight />
-          </a>
+          <div className="about-actions"><a href="#contact" className="btn btn-ghost">Know More <IconArrowRight /></a>{profile.cv && <a href={profile.cv} className="btn btn-ghost" target="_blank" rel="noreferrer">View CV ↗</a>}</div>
         </div>
 
         <div className="about-portrait" data-reveal data-reveal-delay="0.12">
