@@ -49,7 +49,7 @@ export default function Header() {
           <a
             href="#home"
             className="header-logo"
-            aria-label={`${PROFILE.name} — home`}
+            aria-label={`${profileName} — home`}
             onClick={() => setOpen(false)}
           >
             <img src="/assets/logo.webp" alt="Rakin Khan logo" width={188} height={63} />
