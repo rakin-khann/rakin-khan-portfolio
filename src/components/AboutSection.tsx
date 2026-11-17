@@ -5,7 +5,7 @@ import { IconArrowRight, SiteIcon } from './icons'
 
 export default function AboutSection() {
   const profileRow = usePublicRows('profiles')[0]
-  const profile = { ...PROFILE, name: String(profileRow?.name || PROFILE.name), about: String(profileRow?.bio || PROFILE.about) }
+  const profile = { ...PROFILE, name: String(profileRow?.name || PROFILE.name), about: String(profileRow?.bio || PROFILE.about), avatar: String(profileRow?.avatar_url || '/assets/portrait.webp') }
   const ref = useReveal<HTMLElement>()
 
   return (
@@ -29,7 +29,7 @@ export default function AboutSection() {
         <div className="about-portrait" data-reveal data-reveal-delay="0.12">
           <div className="portrait-frame">
             <img
-              src="/assets/portrait.webp"
+              src={profile.avatar}
               alt="Illustrated pop-art portrait of Rakin Khan"
               loading="lazy"
             />
