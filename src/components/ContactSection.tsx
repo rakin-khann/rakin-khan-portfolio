@@ -41,6 +41,8 @@ export default function ContactSection() {
             </span>
           </a>
 
+          {profile.phone && <a className="contact-card" href={`tel:${profile.phone}`} data-reveal data-reveal-delay="0.15"><span className="contact-icon"><IconMail /></span><span><span className="contact-card-label">Phone / WhatsApp</span><span className="contact-card-value">{profile.phone}</span></span></a>}
+
           <a
             className="contact-card"
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(profile.location)}`}
