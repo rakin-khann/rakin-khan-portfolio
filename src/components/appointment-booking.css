@@ -1,0 +1,24 @@
+.contact-action-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:28px}
+.contact-action-row>.btn{margin-top:0}
+.appointment-open-btn{white-space:nowrap}
+.appointment-backdrop{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.84);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.appointment-dialog{position:relative;width:min(900px,100%);max-height:min(90vh,900px);overflow-y:auto;padding:clamp(24px,4vw,46px);background:radial-gradient(ellipse at 90% 0%,#291014 0%,#100d0e 38%,#080808 100%);border:1px solid rgba(255,35,48,.48);box-shadow:0 0 65px rgba(180,0,20,.2),0 25px 100px #000}
+.appointment-close{position:absolute;top:18px;right:18px;width:40px;height:40px;display:grid;place-items:center;border:1px solid #593137;border-radius:8px;color:#fff;cursor:pointer}
+.appointment-close:hover{background:#b8212c;border-color:#b8212c}
+.appointment-dialog h2{font-family:var(--font-display);font-size:clamp(32px,5vw,54px);line-height:1.08;text-transform:uppercase;margin:8px 46px 12px 0}
+.appointment-lead{max-width:680px;color:#bdb4b5;font-size:16px;margin-bottom:28px}
+.appointment-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.appointment-form label{display:flex;flex-direction:column;gap:7px;color:#e9dfe0;font-size:14px;font-weight:600;letter-spacing:.025em}
+.appointment-form input,.appointment-form select,.appointment-form textarea{width:100%;min-width:0;border:1px solid #493036;border-radius:5px;background:#090909;color:#f7f3f3;padding:12px 13px;font:500 15px var(--font-body);outline:none;color-scheme:dark}
+.appointment-form input:focus,.appointment-form select:focus,.appointment-form textarea:focus{border-color:var(--red);box-shadow:0 0 0 2px rgba(255,16,26,.13)}
+.appointment-form input::placeholder,.appointment-form textarea::placeholder{color:#766d6e}
+.appointment-form select:invalid{color:#766d6e}
+.appointment-form textarea{resize:vertical;min-height:115px}
+.appointment-full{grid-column:1/-1}
+.appointment-submit{margin-top:22px;width:fit-content}
+.appointment-submit:disabled{opacity:.65;cursor:wait}
+.appointment-privacy{margin-top:13px;color:#82797a;font-size:12px}
+.appointment-message{margin-top:18px;padding:13px 15px;border:1px solid #5a3338;background:#140c0d;color:#f4eeee;font-size:14px}
+.appointment-message.success{border-color:#276344;color:#b9f3d1}
+.appointment-message.error{border-color:#8e2831;color:#ffb9be}
+@media(max-width:640px){.contact-action-row{gap:10px}.contact-action-row>.btn,.appointment-open-btn{padding:12px 16px;font-size:.82rem}.appointment-backdrop{padding:0;align-items:flex-end}.appointment-dialog{max-height:94vh;padding:26px 18px 30px;border-radius:14px 14px 0 0}.appointment-form-grid{grid-template-columns:1fr;gap:14px}.appointment-full{grid-column:auto}.appointment-dialog h2{font-size:35px}.appointment-close{top:13px;right:13px}}
