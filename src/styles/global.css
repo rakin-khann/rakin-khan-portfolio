@@ -10,11 +10,11 @@
   --red-deep: #850000;
   --white: #ffffff;
   --gray: #c0c0c0;
-  --border-red: rgba(255, 16, 26, 0.28);
+  --border-red: rgba(var(--red-rgb), 0.28);
   --font-display: 'Anton', 'Arial Narrow', 'Impact', sans-serif;
   --font-body: 'Rajdhani', 'Segoe UI', 'Helvetica Neue', sans-serif;
   --header-h: 76px;
-  --glow-red: 0 0 22px rgba(255, 16, 26, 0.45);
+  --glow-red: 0 0 22px rgba(var(--red-rgb), 0.45);
 }
 
 * {
@@ -101,7 +101,7 @@ button {
   letter-spacing: 0.26em;
   text-transform: uppercase;
   margin-bottom: 14px;
-  text-shadow: 0 0 14px rgba(255, 16, 26, 0.55);
+  text-shadow: 0 0 14px rgba(var(--red-rgb), 0.55);
 }
 
 .section-title {
@@ -113,7 +113,7 @@ button {
 
 .text-red {
   color: var(--red);
-  text-shadow: 0 0 26px rgba(255, 16, 26, 0.45);
+  text-shadow: 0 0 26px rgba(var(--red-rgb), 0.45);
 }
 
 .section-sub {
@@ -151,10 +151,10 @@ button {
   color: var(--white);
   border: 1.5px solid var(--red);
   border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255, 16, 26, 0.2), rgba(133, 0, 0, 0.3));
+  background: linear-gradient(180deg, rgba(var(--red-rgb), 0.2), rgba(var(--red-deep-rgb), 0.3));
   box-shadow:
-    0 0 18px rgba(255, 16, 26, 0.35),
-    inset 0 0 14px rgba(255, 16, 26, 0.14);
+    0 0 18px rgba(var(--red-rgb), 0.35),
+    inset 0 0 14px rgba(var(--red-rgb), 0.14);
   cursor: pointer;
   transition:
     transform 0.3s ease,
@@ -171,7 +171,7 @@ button {
 
 .btn:hover {
   background: var(--red);
-  box-shadow: 0 0 34px rgba(255, 16, 26, 0.65);
+  box-shadow: 0 0 34px rgba(var(--red-rgb), 0.65);
   transform: translateY(-2px);
 }
 
@@ -180,7 +180,7 @@ button {
 }
 
 .btn-ghost {
-  background: rgba(255, 16, 26, 0.06);
+  background: rgba(var(--red-rgb), 0.06);
 }
 
 /* ---------- Decorative background art ---------- */
@@ -232,8 +232,8 @@ button {
   position: absolute;
   width: 46px;
   height: 46px;
-  border: 2px solid rgba(255, 16, 26, 0.5);
-  filter: drop-shadow(0 0 6px rgba(255, 16, 26, 0.6));
+  border: 2px solid rgba(var(--red-rgb), 0.5);
+  filter: drop-shadow(0 0 6px rgba(var(--red-rgb), 0.6));
 }
 
 .frame-corners .c-tl {
@@ -306,7 +306,7 @@ button {
   background: rgba(5, 5, 5, 0.82);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom-color: rgba(255, 16, 26, 0.3);
+  border-bottom-color: rgba(var(--red-rgb), 0.3);
 }
 
 .header-inner {
@@ -326,7 +326,7 @@ button {
 .header-logo img {
   height: 42px;
   width: auto;
-  filter: drop-shadow(0 0 12px rgba(255, 16, 26, 0.4));
+  filter: drop-shadow(0 0 12px rgba(var(--red-rgb), 0.4));
 }
 
 .nav-list {
@@ -414,7 +414,7 @@ button {
   justify-content: center;
   gap: 44px;
   background:
-    radial-gradient(ellipse 80% 55% at 50% 0%, rgba(133, 0, 0, 0.4), transparent 62%),
+    radial-gradient(ellipse 80% 55% at 50% 0%, rgba(var(--red-deep-rgb), 0.4), transparent 62%),
     rgba(4, 4, 4, 0.97);
   opacity: 0;
   visibility: hidden;
@@ -458,7 +458,7 @@ button {
 .mobile-menu-list a:hover,
 .mobile-menu-list a.active {
   color: var(--red);
-  text-shadow: 0 0 24px rgba(255, 16, 26, 0.6);
+  text-shadow: 0 0 24px rgba(var(--red-rgb), 0.6);
 }
 
 .mobile-menu-social {
@@ -516,7 +516,7 @@ button {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 62% 52% at 50% 66%, rgba(255, 16, 26, 0.13), transparent 62%),
+    radial-gradient(ellipse 62% 52% at 50% 66%, rgba(var(--red-rgb), 0.13), transparent 62%),
     linear-gradient(
       180deg,
       rgba(5, 5, 5, 0.78) 0%,
@@ -541,7 +541,7 @@ button {
   white-space: nowrap;
   color: #f4efe9;
   opacity: 0.3;
-  text-shadow: 0 0 70px rgba(255, 16, 26, 0.3);
+  text-shadow: 0 0 70px rgba(var(--red-rgb), 0.3);
   will-change: transform, opacity;
 }
 
@@ -553,7 +553,7 @@ button {
   width: 72vw;
   height: 55vh;
   transform: translateX(-50%);
-  background: radial-gradient(ellipse 50% 50% at 50% 60%, rgba(255, 16, 26, 0.32), transparent 68%);
+  background: radial-gradient(ellipse 50% 50% at 50% 60%, rgba(var(--red-rgb), 0.32), transparent 68%);
   filter: blur(10px);
   opacity: 0.45;
   pointer-events: none;
@@ -579,7 +579,7 @@ button {
   height: 100%;
   max-width: none; /* neutralize the global img { max-width: 100% } clamp */
   object-fit: contain;
-  filter: drop-shadow(0 0 46px rgba(255, 16, 26, 0.3));
+  filter: drop-shadow(0 0 46px rgba(var(--red-rgb), 0.3));
 }
 
 .hero-petals {
@@ -616,7 +616,7 @@ button {
 
 .hero-name span {
   color: var(--red);
-  text-shadow: 0 0 30px rgba(255, 16, 26, 0.55);
+  text-shadow: 0 0 30px rgba(var(--red-rgb), 0.55);
 }
 
 .hero-tagline {
@@ -658,7 +658,7 @@ button {
 .hero-social a:hover {
   color: #fff;
   border-color: var(--red);
-  background: rgba(255, 16, 26, 0.16);
+  background: rgba(var(--red-rgb), 0.16);
   box-shadow: var(--glow-red);
   transform: translateX(-4px);
 }
@@ -708,7 +708,7 @@ button {
 
 .about {
   background:
-    radial-gradient(ellipse 55% 60% at 88% 42%, rgba(133, 0, 0, 0.28), transparent 66%),
+    radial-gradient(ellipse 55% 60% at 88% 42%, rgba(var(--red-deep-rgb), 0.28), transparent 66%),
     var(--bg);
 }
 
@@ -744,11 +744,11 @@ button {
   content: '';
   position: absolute;
   inset: -6px;
-  border: 2px solid rgba(255, 16, 26, 0.6);
+  border: 2px solid rgba(var(--red-rgb), 0.6);
   transform: rotate(3.5deg);
   box-shadow:
-    0 0 44px rgba(255, 16, 26, 0.28),
-    inset 0 0 30px rgba(255, 16, 26, 0.1);
+    0 0 44px rgba(var(--red-rgb), 0.28),
+    inset 0 0 30px rgba(var(--red-rgb), 0.1);
   pointer-events: none;
 }
 
@@ -786,7 +786,7 @@ button {
   align-items: center;
   gap: 18px;
   padding: 20px 24px;
-  background: linear-gradient(120deg, rgba(255, 16, 26, 0.1), rgba(10, 10, 12, 0.9));
+  background: linear-gradient(120deg, rgba(var(--red-rgb), 0.1), rgba(10, 10, 12, 0.9));
   border: 1px solid var(--border-red);
   border-radius: 12px;
   backdrop-filter: blur(4px);
@@ -795,7 +795,7 @@ button {
 
 .stat-card:hover {
   border-color: var(--red);
-  box-shadow: 0 0 28px rgba(255, 16, 26, 0.3);
+  box-shadow: 0 0 28px rgba(var(--red-rgb), 0.3);
   transform: translateX(-6px);
 }
 
@@ -806,8 +806,8 @@ button {
   display: grid;
   place-items: center;
   border-radius: 12px;
-  background: rgba(255, 16, 26, 0.14);
-  border: 1px solid rgba(255, 16, 26, 0.4);
+  background: rgba(var(--red-rgb), 0.14);
+  border: 1px solid rgba(var(--red-rgb), 0.4);
   color: var(--red);
 }
 
@@ -835,7 +835,7 @@ button {
 
 .services {
   background:
-    radial-gradient(ellipse 45% 55% at 8% 30%, rgba(133, 0, 0, 0.18), transparent 62%),
+    radial-gradient(ellipse 45% 55% at 8% 30%, rgba(var(--red-deep-rgb), 0.18), transparent 62%),
     var(--bg);
 }
 
@@ -866,7 +866,7 @@ button {
   position: absolute;
   inset: auto -30% -55% -30%;
   height: 70%;
-  background: radial-gradient(ellipse at center, rgba(255, 16, 26, 0.16), transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(var(--red-rgb), 0.16), transparent 70%);
   opacity: 0;
   transition: opacity 0.35s ease;
   pointer-events: none;
@@ -874,8 +874,8 @@ button {
 
 .service-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(255, 16, 26, 0.65);
-  box-shadow: 0 18px 44px rgba(255, 16, 26, 0.2);
+  border-color: rgba(var(--red-rgb), 0.65);
+  box-shadow: 0 18px 44px rgba(var(--red-rgb), 0.2);
 }
 
 .service-card:hover::after {
@@ -888,8 +888,8 @@ button {
   display: grid;
   place-items: center;
   border-radius: 11px;
-  background: rgba(255, 16, 26, 0.13);
-  border: 1px solid rgba(255, 16, 26, 0.32);
+  background: rgba(var(--red-rgb), 0.13);
+  border: 1px solid rgba(var(--red-rgb), 0.32);
   color: var(--red);
   transition: all 0.35s ease;
 }
@@ -902,7 +902,7 @@ button {
 .service-card:hover .service-icon {
   background: var(--red);
   color: #fff;
-  box-shadow: 0 0 22px rgba(255, 16, 26, 0.6);
+  box-shadow: 0 0 22px rgba(var(--red-rgb), 0.6);
 }
 
 .service-name {
@@ -951,7 +951,7 @@ button {
 
 .work-card:hover {
   border-color: var(--red);
-  box-shadow: 0 0 32px rgba(255, 16, 26, 0.28);
+  box-shadow: 0 0 32px rgba(var(--red-rgb), 0.28);
   transform: translateY(-5px);
 }
 
@@ -971,7 +971,7 @@ button {
   text-transform: uppercase;
   color: #ffb9bc;
   background: rgba(5, 5, 5, 0.72);
-  border: 1px solid rgba(255, 16, 26, 0.45);
+  border: 1px solid rgba(var(--red-rgb), 0.45);
   border-radius: 999px;
   backdrop-filter: blur(4px);
 }
@@ -1056,7 +1056,7 @@ button {
   stroke: var(--red);
   stroke-width: 9;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 7px rgba(255, 16, 26, 0.65));
+  filter: drop-shadow(0 0 7px rgba(var(--red-rgb), 0.65));
 }
 
 .ring-value {
@@ -1083,7 +1083,7 @@ button {
 
 .contact {
   background:
-    radial-gradient(ellipse 50% 60% at 90% 80%, rgba(133, 0, 0, 0.3), transparent 66%),
+    radial-gradient(ellipse 50% 60% at 90% 80%, rgba(var(--red-deep-rgb), 0.3), transparent 66%),
     var(--bg);
 }
 
@@ -1115,7 +1115,7 @@ button {
   align-items: center;
   gap: 18px;
   padding: 22px 26px;
-  background: linear-gradient(120deg, rgba(255, 16, 26, 0.08), rgba(10, 10, 12, 0.92));
+  background: linear-gradient(120deg, rgba(var(--red-rgb), 0.08), rgba(10, 10, 12, 0.92));
   border: 1px solid var(--border-red);
   border-radius: 12px;
   backdrop-filter: blur(4px);
@@ -1124,7 +1124,7 @@ button {
 
 .contact-card:hover {
   border-color: var(--red);
-  box-shadow: 0 0 28px rgba(255, 16, 26, 0.3);
+  box-shadow: 0 0 28px rgba(var(--red-rgb), 0.3);
   transform: translateX(6px);
 }
 
@@ -1137,7 +1137,7 @@ button {
   border-radius: 11px;
   background: var(--red);
   color: #fff;
-  box-shadow: 0 0 20px rgba(255, 16, 26, 0.5);
+  box-shadow: 0 0 20px rgba(var(--red-rgb), 0.5);
 }
 
 .contact-icon svg {
@@ -1194,7 +1194,7 @@ button {
 .footer {
   position: relative;
   background: #040404;
-  border-top: 1px solid rgba(255, 16, 26, 0.28);
+  border-top: 1px solid rgba(var(--red-rgb), 0.28);
   padding: 40px 0 26px;
 }
 
@@ -1221,7 +1221,7 @@ button {
 .footer-logo img {
   height: 36px;
   width: auto;
-  filter: drop-shadow(0 0 10px rgba(255, 16, 26, 0.35));
+  filter: drop-shadow(0 0 10px rgba(var(--red-rgb), 0.35));
 }
 
 .footer-nav {
@@ -1289,7 +1289,7 @@ button {
   background: rgba(8, 8, 10, 0.85);
   color: var(--red);
   cursor: pointer;
-  box-shadow: 0 0 16px rgba(255, 16, 26, 0.3);
+  box-shadow: 0 0 16px rgba(var(--red-rgb), 0.3);
   opacity: 0;
   transform: translateY(16px);
   pointer-events: none;
@@ -1305,7 +1305,7 @@ button {
 .back-top:hover {
   background: var(--red);
   color: #fff;
-  box-shadow: 0 0 30px rgba(255, 16, 26, 0.65);
+  box-shadow: 0 0 30px rgba(var(--red-rgb), 0.65);
 }
 
 .back-top svg {

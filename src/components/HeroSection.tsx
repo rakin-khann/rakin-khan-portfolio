@@ -26,6 +26,9 @@ const PETALS: CSSProperties[] = Array.from({ length: 14 }, (_, i) => {
 export default function HeroSection() {
   const profileRow = usePublicRows('profiles')[0]
   const socialRows = usePublicRows('social_links')
+  const settingsRows = usePublicRows('site_settings')
+  const heroScene = (settingsRows.find(row => row.key === 'hero_scene')?.value || {}) as Record<string, unknown>
+  const characterSrc = String(heroScene.character_url || '/assets/samurai.webp')
   const profile = { ...PROFILE, name: String(profileRow?.name || PROFILE.name), title: String(profileRow?.headline || PROFILE.title), tagline: String(profileRow?.tagline || PROFILE.tagline), about: String(profileRow?.bio || PROFILE.about), email: String(profileRow?.email || PROFILE.email), location: String(profileRow?.location || PROFILE.location) }
   const socials = socialRows.length ? socialRows.map(row => ({ label: String(row.platform || ''), icon: String(row.icon || 'link'), href: String(row.url || '#') })) : SOCIALS
   const sectionRef = useRef<HTMLElement>(null)
@@ -63,8 +66,8 @@ export default function HeroSection() {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top top',
-            end: () => (isMobile() ? '+=75%' : '+=100%'), // ~40% shorter scroll distance
-            scrub: 0.4, // tighter catch-up — responsive in both directions
+            end: () => (isMobile() ? '+=48%' : '+=62%'), // shorter pin distance for a faster reveal
+            scrub: 0.25, // faster response while keeping smooth reverse scrubbing
             pin: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
@@ -120,7 +123,7 @@ export default function HeroSection() {
 
       <div ref={samuraiRef} className="hero-samurai">
         <img
-          src="/assets/samurai.webp"
+          src={characterSrc}
           alt="Crimson ronin samurai — signature artwork of Rakin Khan"
           draggable={false}
           decoding="async"

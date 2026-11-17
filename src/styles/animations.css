@@ -10,7 +10,7 @@
   top: -5%;
   background: radial-gradient(circle at 32% 30%, #ff5a60, var(--red-deep) 78%);
   border-radius: 62% 38% 60% 40%;
-  box-shadow: 0 0 8px rgba(255, 16, 26, 0.45);
+  box-shadow: 0 0 8px rgba(var(--red-rgb), 0.45);
   animation-name: petal-fall;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
@@ -79,7 +79,7 @@
   inset: -8px;
   z-index: -1;
   border-radius: inherit;
-  box-shadow: 0 0 26px rgba(255, 16, 26, 0.55);
+  box-shadow: 0 0 26px rgba(var(--red-rgb), 0.55);
   opacity: 0.35;
   animation: btn-glow 4s ease-in-out infinite alternate;
   pointer-events: none;
