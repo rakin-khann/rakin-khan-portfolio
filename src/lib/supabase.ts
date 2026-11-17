@@ -12,16 +12,77 @@ function saveSession(session: Session | null) {
   if (session) localStorage.setItem(SESSION_KEY, JSON.stringify(session))
   else localStorage.removeItem(SESSION_KEY)
 }
+let refreshInFlight: Promise<Session> | null = null
+
+function tokenExpiresSoon(token: string) {
+  try {
+    const payload = token.split('.')[1]
+    if (!payload) return false
+    const claims = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/'))) as { exp?: number }
+    return typeof claims.exp === 'number' && claims.exp * 1000 <= Date.now() + 60_000
+  } catch {
+    return false
+  }
+}
+
+async function refreshSession(): Promise<Session> {
+  if (refreshInFlight) return refreshInFlight
+  refreshInFlight = (async () => {
+    const current = getSession()
+    if (!current?.refresh_token) {
+      saveSession(null)
+      throw new Error('Admin session expired. Please sign in again.')
+    }
+    const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: current.refresh_token }),
+    })
+    const body = await response.text()
+    const data = body ? JSON.parse(body) : null
+    if (!response.ok || !data?.access_token || !data?.refresh_token) {
+      saveSession(null)
+      throw new Error(data?.msg || data?.message || data?.error_description || 'Admin session expired. Please sign in again.')
+    }
+    const next = { ...current, ...data, user: data.user || current.user } as Session
+    saveSession(next)
+    return next
+  })()
+  try { return await refreshInFlight }
+  finally { refreshInFlight = null }
+}
+
+export async function getFreshAccessToken(token?: string): Promise<string> {
+  const current = getSession()
+  if (!current) {
+    if (token) return token
+    throw new Error('Admin session expired. Please sign in again.')
+  }
+  // Prefer the latest locally persisted token; components may still hold an older session snapshot.
+  const activeToken = current.access_token || token || ''
+  if (current.refresh_token && tokenExpiresSoon(activeToken)) {
+    return (await refreshSession()).access_token
+  }
+  return activeToken
+}
+
+async function authenticatedFetch(url: string, init: RequestInit = {}, token?: string) {
+  const headers = new Headers(init.headers)
+  headers.set('apikey', SUPABASE_KEY)
+  if (token) headers.set('Authorization', `Bearer ${await getFreshAccessToken(token)}`)
+  let response = await fetch(url, { ...init, headers })
+  if (response.status === 401 && token && getSession()?.refresh_token) {
+    const fresh = await refreshSession()
+    headers.set('Authorization', `Bearer ${fresh.access_token}`)
+    response = await fetch(url, { ...init, headers })
+  }
+  return response
+}
+
 async function request(path: string, init: RequestInit = {}, token?: string) {
-  const response = await fetch(`${SUPABASE_URL}${path}`, {
-    ...init,
-    headers: {
-      apikey: SUPABASE_KEY,
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(init.headers || {}),
-    },
-  })
+  const headers = new Headers(init.headers)
+  if (!headers.has('Content-Type') && !(init.body instanceof FormData)) headers.set('Content-Type', 'application/json')
+  const response = await authenticatedFetch(`${SUPABASE_URL}${path}`, { ...init, headers }, token)
   const body = await response.text()
   const data = body ? JSON.parse(body) : null
   if (!response.ok) throw new Error(data?.msg || data?.message || data?.error_description || data?.details || 'Request failed')
@@ -74,11 +135,11 @@ export async function uploadPublicAsset(file: File, token: string): Promise<stri
   if (file.size > 12 * 1024 * 1024) throw new Error('Image must be smaller than 12 MB.')
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-')
   const path = 'uploads/' + Date.now() + '-' + safeName
-  const response = await fetch(SUPABASE_URL + '/storage/v1/object/portfolio-assets/' + path, {
+  const response = await authenticatedFetch(SUPABASE_URL + '/storage/v1/object/portfolio-assets/' + path, {
     method: 'POST',
     headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + token, 'Content-Type': file.type, 'x-upsert': 'true' },
     body: file,
-  })
+  }, token)
   const result = await response.json().catch(() => ({}))
   if (!response.ok) throw new Error(result.message || result.error || 'Image upload failed')
   return SUPABASE_URL + '/storage/v1/object/public/portfolio-assets/' + path
@@ -93,7 +154,7 @@ export async function uploadPortfolioVideo(file: File, token: string, quality: s
   const projectRef = new URL(SUPABASE_URL).hostname.split('.')[0]
   const endpoint = 'https://' + projectRef + '.storage.supabase.co/storage/v1/upload/resumable'
   const metadata = (key: string, value: string) => key + ' ' + btoa(unescape(encodeURIComponent(value)))
-  const created = await fetch(endpoint, {
+  const created = await authenticatedFetch(endpoint, {
     method: 'POST',
     headers: {
       apikey: SUPABASE_KEY,
@@ -108,7 +169,7 @@ export async function uploadPortfolioVideo(file: File, token: string, quality: s
       ].join(','),
       'x-upsert': 'true',
     },
-  })
+  }, token)
   if (!created.ok) {
     const detail = await created.text()
     throw new Error(detail || 'Could not start resumable video upload.')
@@ -123,7 +184,7 @@ export async function uploadPortfolioVideo(file: File, token: string, quality: s
     let lastError = 'Video upload interrupted.'
     for (let attempt = 0; attempt < 4 && !uploaded; attempt++) {
       try {
-        const response = await fetch(new URL(location, endpoint).toString(), {
+        const response = await authenticatedFetch(new URL(location, endpoint).toString(), {
           method: 'PATCH',
           headers: {
             apikey: SUPABASE_KEY,
@@ -133,7 +194,7 @@ export async function uploadPortfolioVideo(file: File, token: string, quality: s
             'Content-Type': 'application/offset+octet-stream',
           },
           body: chunk,
-        })
+        }, token)
         if (!response.ok) {
           lastError = await response.text()
           if (response.status === 409) throw new Error(lastError || 'Upload offset conflict.')
