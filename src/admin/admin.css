@@ -64,3 +64,21 @@
 .editor-actions{display:flex;justify-content:flex-end;gap:10px;padding-top:8px}
 .editor-actions .admin-primary,.editor-actions .admin-secondary{min-width:150px}
 @media(max-width:700px){.editor-fields{grid-template-columns:1fr}.editor-field.full{grid-column:auto}.visual-editor{padding:16px}.editor-actions{flex-direction:column-reverse}.editor-actions button{width:100%}}
+
+/* Admin controls for the cinematic hero background */
+.background-mode-switch{display:flex;flex-wrap:wrap;gap:10px}
+.background-mode-switch button{padding:11px 16px;border:1px solid #493034;color:#cdbfc1;font:700 12px Rajdhani,sans-serif;letter-spacing:.08em;cursor:pointer}
+.background-mode-switch button.selected{background:#57151b;border-color:#d34a51;color:#fff;box-shadow:0 0 18px #d34a5133}
+.hero-bg-colour{max-width:260px}
+.hero-bg-colour input[type=color]{width:70px;height:44px;padding:3px;background:#080708;border:1px solid #493034}
+.glow-control{display:grid;grid-template-columns:1fr auto;gap:10px;color:#e6dfe0;font-weight:700}
+.glow-control input{grid-column:1/-1;width:100%;accent-color:#d33a44}
+.glow-control strong{color:#ff777e}
+.hero-bg-upload{width:max-content}
+.hero-bg-clear{justify-self:start}
+.hero-background-preview{position:relative;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;overflow:hidden;background-position:center;background-size:cover;border:1px solid #8d333a;text-align:center}
+.hero-background-preview:before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 70%,rgba(255,16,26,.28),transparent 62%),linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.55));pointer-events:none}
+.hero-background-preview span,.hero-background-preview strong,.hero-background-preview small{position:relative;z-index:1;text-shadow:0 2px 12px #000}
+.hero-background-preview span{font:clamp(28px,6vw,52px) Anton,sans-serif;color:#eee;opacity:.65}
+.hero-background-preview strong{font:clamp(23px,4vw,38px) Anton,sans-serif;color:#fff;letter-spacing:.08em}
+.hero-background-preview small{color:#ddd;letter-spacing:.18em}
