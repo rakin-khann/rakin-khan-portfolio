@@ -94,7 +94,7 @@ export default function Header() {
           {NAV_LINKS.map((link, i) => (
             <li key={link.href} style={{ transitionDelay: open ? `${80 + i * 55}ms` : '0ms' }}>
               <a
-                href={link.href}
+                href={sectionHref(link.href)}
                 className={active === link.href ? 'active' : ''}
                 onClick={() => setOpen(false)}
                 tabIndex={open ? 0 : -1}
