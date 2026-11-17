@@ -2,6 +2,7 @@ import { PROFILE, SOCIALS } from '../data/content'
 import { usePublicRows } from '../hooks/usePublicRows'
 import { useReveal } from '../hooks/useScrollAnimation'
 import { IconArrowRight, IconMail, IconMapPin, SiteIcon } from './icons'
+import AppointmentBooking from './AppointmentBooking'
 
 export default function ContactSection() {
   const profileRow = usePublicRows('profiles')[0]
@@ -25,9 +26,10 @@ export default function ContactSection() {
           <p className="section-sub">
             Have a project in mind? Let&apos;s create something amazing!
           </p>
-          <a href={`mailto:${profile.email}`} className="btn">
-            Contact Me <IconArrowRight />
-          </a>
+          <div className="contact-action-row">
+            <a href={`mailto:${profile.email}`} className="btn">Contact Me <IconArrowRight /></a>
+            <AppointmentBooking />
+          </div>
         </div>
 
         <div className="contact-panel">
