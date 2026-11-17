@@ -24,7 +24,7 @@ export default function TestimonialsSection() {
                 {row.avatar_url ? <img src={String(row.avatar_url)} alt={String(row.client_name || 'Client')} loading="lazy" /> : <span className="testimonial-avatar-fallback">{String(row.client_name || 'C').trim().charAt(0).toUpperCase()}</span>}
                 <div>
                   <h3>{String(row.client_name || 'Client')}</h3>
-                  {(row.client_role || row.company) && <p>{[row.client_role, row.company].filter(Boolean).map(String).join(' · ')}</p>}
+                  {Boolean(row.client_role || row.company) && <p>{[row.client_role, row.company].filter(Boolean).map(String).join(' · ')}</p>}
                 </div>
               </div>
             </article>
