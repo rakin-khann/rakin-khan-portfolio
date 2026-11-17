@@ -33,8 +33,8 @@ export default function JourneySection() {
                     <span className="journey-date">{formatDate(row.start_date)} — {formatDate(row.end_date)}</span>
                     <h4>{String(row.role || 'Position')}</h4>
                     <p className="journey-place">{String(row.company || '')}{row.employment_type ? ` · ${String(row.employment_type)}` : ''}</p>
-                    {row.location && <p className="journey-location">{String(row.location)}</p>}
-                    {row.description && <p className="journey-description">{String(row.description)}</p>}
+                    {Boolean(row.location) && <p className="journey-location">{String(row.location)}</p>}
+                    {Boolean(row.description) && <p className="journey-description">{String(row.description)}</p>}
                   </article>
                 ))}
               </div>
