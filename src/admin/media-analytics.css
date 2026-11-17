@@ -1,0 +1,35 @@
+
+/* Analytics and media administration */
+.analytics-panel,.media-panel{display:grid;gap:22px}
+.analytics-toolbar,.media-toolbar{display:flex;justify-content:space-between;align-items:center;gap:18px}
+.analytics-toolbar h2,.media-toolbar h2{font:27px Anton,sans-serif;margin:4px 0}
+.analytics-toolbar small,.media-toolbar small{color:#a99598;display:block;max-width:680px}
+.analytics-actions{display:flex;gap:9px;align-items:center}
+.analytics-actions select,.editor-field select,.portfolio-video-meta select{background:#100e0f;border:1px solid #493034;color:#eee;padding:10px 12px;font:600 14px Rajdhani,sans-serif}
+.analytics-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.analytics-metric,.analytics-card{background:#100e0f;border:1px solid #302326;padding:20px}
+.analytics-metric{display:grid;gap:7px}.analytics-metric small{color:#ad9699;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.analytics-metric strong{font:32px Anton,sans-serif;color:#fff}.analytics-metric span{color:#9d898c;font-size:12px}
+.analytics-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.analytics-card-head h3{font:20px Anton,sans-serif;margin:0}.analytics-card-head span{color:#b88e92;font-size:10px;letter-spacing:.12em}
+.analytics-bars{display:flex;gap:14px;align-items:end;min-height:180px;overflow:auto}
+.analytics-bar-col{flex:1;min-width:54px;display:grid;grid-template-rows:auto 130px auto;gap:6px;text-align:center}
+.analytics-bar-col strong{font-size:12px;color:#eee}.analytics-bar-track{height:130px;background:#21191a;display:flex;align-items:end}
+.analytics-bar-track i{display:block;width:100%;min-height:2px;background:linear-gradient(0deg,#8e1d27,#e34a55)}
+.analytics-bar-col small{font-size:10px;color:#a99598}
+.analytics-empty{padding:35px 10px;text-align:center;color:#a99598}
+.analytics-table-wrap{overflow:auto}.analytics-table{width:100%;border-collapse:collapse;font-size:13px}.analytics-table th,.analytics-table td{padding:11px;text-align:left;border-bottom:1px solid #302326;white-space:nowrap}.analytics-table th{color:#b88e92;font-size:10px;letter-spacing:.1em}.analytics-table td{color:#d6cccd}
+.analytics-footnote{color:#917f82;font-size:12px;line-height:1.6}
+.media-editor{display:grid;gap:18px;background:#100e0f;border:1px solid #3c292c;padding:24px}
+.media-records{display:grid;gap:10px}.media-record{display:flex;align-items:center;gap:16px;padding:14px;background:#100e0f;border:1px solid #292123}
+.media-record>img{width:110px;height:70px;object-fit:cover;background:#080708}.media-record-copy{display:grid;gap:5px;flex:1}.media-record-copy strong{font-size:18px}.media-record-copy small{color:#a99598}
+.portfolio-video-section{padding:70px 0;background:#080808}
+.portfolio-video-heading{margin-bottom:28px}.portfolio-video-heading .section-label{color:var(--red,#ff101a)}
+.portfolio-video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.portfolio-video-card{min-width:0;background:#100e0f;border:1px solid #302326;overflow:hidden}
+.portfolio-video-frame{aspect-ratio:16/9;background:#000}.portfolio-video-frame video{width:100%;height:100%;object-fit:contain;display:block}
+.portfolio-video-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px}
+.portfolio-video-meta h3{font:20px Anton,sans-serif;margin:0 0 5px;color:#fff}.portfolio-video-meta small{font-size:10px;letter-spacing:.1em;color:#a99598}
+.portfolio-video-meta label{display:flex;align-items:center;gap:8px;color:#b88e92;font-size:10px;white-space:nowrap}
+@media(max-width:800px){.analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.analytics-toolbar,.media-toolbar{align-items:flex-start;flex-direction:column}.portfolio-video-grid{grid-template-columns:1fr}}
+@media(max-width:500px){.analytics-grid{grid-template-columns:1fr 1fr}.analytics-metric{padding:14px}.analytics-metric strong{font-size:26px}.media-record{align-items:flex-start;flex-wrap:wrap}.media-record>img{width:84px;height:58px}.portfolio-video-meta{align-items:flex-start;flex-direction:column}.portfolio-video-meta label{justify-content:space-between;width:100%}}
