@@ -173,7 +173,7 @@ export async function recordAnalyticsEvent(event: {
 }) {
   const response = await fetch(SUPABASE_URL + '/rest/v1/site_analytics_events', {
     method: 'POST',
-    headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+    headers: { apikey: SUPABASE_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
     body: JSON.stringify(event),
   })
   if (!response.ok) throw new Error('Analytics event could not be recorded')
