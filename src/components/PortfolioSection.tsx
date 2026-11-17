@@ -4,6 +4,7 @@ import { useReveal } from '../hooks/useScrollAnimation'
 import { IconArrowRight } from './icons'
 import PortfolioVideo from './PortfolioVideo'
 import { trackEvent } from '../lib/analytics'
+import SectionBackground from './SectionBackground'
 
 export default function PortfolioSection() {
   const projectRows = usePublicRows('projects')
@@ -13,6 +14,7 @@ export default function PortfolioSection() {
 
   return (
     <section ref={ref} id="portfolio" className="section portfolio" aria-label="Featured work">
+      <SectionBackground section='portfolio' />
       <div className="container split">
         <div className="split-head" data-reveal>
           <p className="section-label">{'//'} My Portfolio</p>
