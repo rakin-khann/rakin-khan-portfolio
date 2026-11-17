@@ -86,6 +86,14 @@ export default function AdminApp() {
   useEffect(() => { if (session) void verify(session); else setReady(true) }, [])
   async function loadRows() {
     if (!session || !allowed) return
+    // These sections have dedicated data loaders and do not map to a table named
+    // after the navigation id. Video records live in portfolio_media.
+    if (section === 'analytics' || section === 'media') {
+      setRows([])
+      setLoading(false)
+      setError('')
+      return
+    }
     setLoading(true); setError('')
     try { setRows(await selectRows(section, session.access_token)) }
     catch (e) { setError(e instanceof Error ? e.message : 'ডেটা লোড করা যায়নি') }
