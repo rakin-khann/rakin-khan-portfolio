@@ -1313,3 +1313,10 @@ button {
   width: 20px;
   height: 20px;
 }
+
+/* Project CMS details */
+.work-description{color:#e4dddd;font-size:.86rem;line-height:1.4;margin-top:6px;max-width:42ch;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease}
+.work-project-link{display:inline-flex;width:max-content;margin-top:8px;padding:6px 10px;border:1px solid var(--red);border-radius:5px;color:#fff;font-size:.75rem;font-weight:700;letter-spacing:.08em;opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease,background .25s ease}
+.work-card:hover .work-description,.work-card:hover .work-project-link,.work-card:focus-within .work-description,.work-card:focus-within .work-project-link{opacity:1;transform:none}
+.work-project-link:hover{background:var(--red)}
+@media(max-width:768px){.work-description,.work-project-link{opacity:1;transform:none}.work-description{-webkit-line-clamp:2;font-size:.78rem}.work-project-link{font-size:.7rem;padding:5px 8px}}
