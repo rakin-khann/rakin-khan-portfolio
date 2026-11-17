@@ -8,7 +8,8 @@ import './media-analytics.css'
 
 type Field = { key: string; label: string; type?: 'text' | 'textarea' | 'url' | 'number' | 'image' | 'date' | 'boolean' | 'gallery' | 'select'; hint?: string; required?: boolean; options?: { label: string; value: string }[] }
 type Section = { id: string; label: string; icon: string; key: string; readOnly?: boolean; fields?: Field[] }
-const common: Field[] = [{ key: 'sort_order', label: 'Display order', type: 'number' }, { key: 'is_published', label: 'Show on website', type: 'boolean' }]
+const common: Field[] = [{ key: 'sort_order', label: 'Display order', type: 'number' } , { key: 'is_published', label: 'Show on website', type: 'boolean' }]
+const projectFields: Field[] = [{ key: 'sort_order', label: 'Display order', type: 'number' }]
 const SECTIONS: Section[] = [
   { id: 'analytics', label: 'Website Analytics', icon: '▥', key: 'id', readOnly: true },
   { id: 'media', label: 'Video Portfolio', icon: '▶', key: 'id' },
@@ -20,7 +21,7 @@ const SECTIONS: Section[] = [
   { id: 'projects', label: 'Portfolio projects', icon: '▧', key: 'id', fields: [
     { key: 'title', label: 'Project title', required: true }, { key: 'category', label: 'Category' }, { key: 'description', label: 'Project description', type: 'textarea' },
     { key: 'cover_image_url', label: 'Cover image', type: 'image' }, { key: 'gallery', label: 'Gallery image URLs (one per line)', type: 'gallery', hint: 'Optional: paste one image URL per line.' },
-    { key: 'project_url', label: 'Project / Live URL', type: 'url' }, ...common,
+    { key: 'project_url', label: 'Project / Live URL', type: 'url' }, ...projectFields,
   ] },
   { id: 'services', label: 'Services', icon: '✳', key: 'id', fields: [
     { key: 'title', label: 'Service title', required: true }, { key: 'short_description', label: 'Short description', type: 'textarea' },
@@ -125,6 +126,8 @@ export default function AdminApp() {
     setBusy(true); setError(''); setNotice('')
     try {
       const value = { ...draft }
+      // Portfolio projects are always public: adding or editing one must never unpublish another.
+      if (section === 'projects') value.is_published = true
       if (section === 'projects' || section === 'services') {
         const title = String(value.title || '')
         value.slug = String(value.slug || title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'item')
