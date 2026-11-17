@@ -1,0 +1,23 @@
+.project-detail-page{min-height:75vh;background:radial-gradient(ellipse at 50% 0%,#251013 0%,#080708 46%,#050505 100%);padding:120px 24px 90px;color:#f4f0eb}
+.project-detail-wrap{width:min(1100px,100%);margin:0 auto}
+.project-back-link{display:inline-block;color:#c8aeb0;text-decoration:none;margin-bottom:38px;font:600 14px Rajdhani,sans-serif}
+.project-detail-wrap h1{font:clamp(42px,7vw,84px) Anton,sans-serif;line-height:1.05;text-transform:uppercase;margin:14px 0 22px}
+.project-detail-intro{max-width:780px;color:#c5babc;font:500 19px/1.7 Rajdhani,sans-serif;white-space:pre-line;margin:0 0 34px}
+.project-meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:30px 0 44px}
+.project-meta{padding:18px 20px;background:#100d0e;border:1px solid #44252a;display:grid;gap:8px}
+.project-meta small{color:#d34a51;text-transform:uppercase;letter-spacing:.13em;font:700 10px Rajdhani,sans-serif}
+.project-meta strong{color:#eee;font:600 16px/1.4 Rajdhani,sans-serif;white-space:pre-line}
+.project-gallery-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:36px 0 54px}
+.project-gallery-grid figure{margin:0;overflow:hidden;background:#100d0e;border:1px solid #3a2428}
+.project-gallery-grid img{display:block;width:100%;height:auto;max-height:760px;object-fit:contain;transition:transform .5s ease}
+.project-gallery-grid figure:hover img{transform:scale(1.025)}
+.project-story{max-width:850px;padding:28px 0;border-top:1px solid #392529}
+.project-story p:last-child{color:#c5babc;font:500 18px/1.75 Rajdhani,sans-serif;white-space:pre-line;margin:8px 0 0}
+.project-live-link{display:inline-flex;margin-top:24px;padding:13px 20px;background:#b8212c;color:#fff;text-decoration:none;font:700 13px Rajdhani,sans-serif;letter-spacing:.08em}
+.work-card-cover{display:block;position:absolute;inset:0;z-index:0}
+.work-card-cover img{width:100%;height:100%;object-fit:cover}
+.work-overlay{z-index:1;pointer-events:none}
+.work-overlay a{pointer-events:auto}
+.project-gallery-previews{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}
+.project-gallery-previews img{width:100%;height:85px;object-fit:cover;border:1px solid #493034;background:#080708;padding:3px}
+@media(max-width:700px){.project-detail-page{padding:95px 18px 60px}.project-gallery-grid{grid-template-columns:1fr;gap:12px}.project-detail-wrap h1{font-size:46px}.project-detail-intro{font-size:17px}}
