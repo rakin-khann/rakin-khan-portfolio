@@ -82,3 +82,9 @@
 .hero-background-preview span{font:clamp(28px,6vw,52px) Anton,sans-serif;color:#eee;opacity:.65}
 .hero-background-preview strong{font:clamp(23px,4vw,38px) Anton,sans-serif;color:#fff;letter-spacing:.08em}
 .hero-background-preview small{color:#ddd;letter-spacing:.18em}
+
+
+/* Native select fields for social platform icon selection. */
+.editor-field select{width:100%;min-width:0;background:#080708;border:1px solid #403034;color:#fff;padding:12px 14px;font:600 16px Rajdhani,sans-serif;outline:none;border-radius:4px;cursor:pointer}
+.editor-field select:focus{border-color:#d34a51;box-shadow:0 0 0 2px #d34a5122}
+.editor-field select option{background:#100e0f;color:#fff}
