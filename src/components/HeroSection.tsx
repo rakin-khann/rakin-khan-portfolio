@@ -55,7 +55,7 @@ export default function HeroSection() {
   const nameParts = profile.name.trim().split(/\s+/)
   const firstName = nameParts.shift() || 'Rakin'
   const lastName = nameParts.join(' ') || 'Khan'
-  const socials = socialRows.map(row => ({ label: String(row.platform || ''), icon: String(row.icon || ''), href: String(row.url || '') })).filter(item => item.label && item.icon && /^https?:\/\//i.test(item.href)
+  const socials = socialRows.map(row => ({ label: String(row.platform || ''), icon: String(row.icon || ''), href: String(row.url || '') })).filter(item => item.label && item.icon && /^https?:\/\//i.test(item.href))
   const sectionRef = useRef<HTMLElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
