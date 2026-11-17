@@ -26,11 +26,11 @@ export default function ProjectDetail({ slug }: { slug: string }) {
         <a className="project-back-link" href="/#portfolio">← Back to portfolio</a>
         <p className="section-label">// {String(project.category || 'Selected work')}</p>
         <h1>{String(project.title || '')}</h1>
-        {project.description && <p className="project-detail-intro">{String(project.description)}</p>}
+        {Boolean(project.description) && <p className="project-detail-intro">{String(project.description)}</p>}
         {details.length > 0 && <div className="project-meta-grid">{details.map(([label, value]) => <div className="project-meta" key={String(label)}><small>{String(label)}</small><strong>{String(value)}</strong></div>)}</div>}
         {images.length > 0 && <section className="project-gallery-grid" aria-label="Project image gallery">{images.map((src, index) => <figure key={src}><img src={src} alt={String(project.title) + ' — image ' + (index + 1)} loading={index > 1 ? 'lazy' : 'eager'} /></figure>)}</section>}
         {sections.map(([heading, body]) => <section className="project-story" key={String(heading)}><p className="section-label">// {String(heading)}</p><p>{String(body)}</p></section>)}
-        {project.project_url && <a className="project-live-link" href={String(project.project_url)} target="_blank" rel="noreferrer">Visit live project ↗</a>}
+        {Boolean(project.project_url) && <a className="project-live-link" href={String(project.project_url)} target="_blank" rel="noreferrer">Visit live project ↗</a>}
       </div>
     </main>
     <Footer />
