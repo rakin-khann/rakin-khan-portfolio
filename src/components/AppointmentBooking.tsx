@@ -12,8 +12,9 @@ export default function AppointmentBooking() {
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    const formElement = event.currentTarget
     setSending(true); setMessage(''); setSuccess(false)
-    const form = new FormData(event.currentTarget)
+    const form = new FormData(formElement)
     const payload = Object.fromEntries(form.entries())
     try {
       const response = await fetch(SUPABASE_URL + '/functions/v1/submit-appointment', {
@@ -25,7 +26,7 @@ export default function AppointmentBooking() {
       if (!response.ok || !result.success) throw new Error(result.error || 'Could not submit your request.')
       setSuccess(true)
       setMessage(result.emailSent ? 'Your appointment request has been sent successfully. I will contact you soon.' : 'Your request was received. Email notification is not fully configured yet.')
-      event.currentTarget.reset()
+      formElement.reset()
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Something went wrong. Please try again.')
     } finally { setSending(false) }
