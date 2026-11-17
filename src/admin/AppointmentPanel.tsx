@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { selectAppointmentRequests, updateAppointmentRequest } from '../lib/supabase'
+import './appointment-bookings.css'
 
 type RequestRow = Record<string, any>
 const statuses = [
