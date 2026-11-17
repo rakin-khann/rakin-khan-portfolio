@@ -1,12 +1,12 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react'
 import { getSession, getCurrentUser, isAdmin, signIn, signOut, selectRows, saveRow, deleteRow, uploadPublicAsset, type Session } from '../lib/supabase'
 import './admin.css'
-import AppearancePanel from './AppearancePanel'
+import AppearancePanel from './AppearancePanel'\nimport AnalyticsPanel from './AnalyticsPanel'\nimport MediaPanel from './MediaPanel'\nimport './media-analytics.css'
 
 type Field = { key: string; label: string; type?: 'text' | 'textarea' | 'url' | 'number' | 'image' | 'date' | 'boolean' | 'gallery'; hint?: string; required?: boolean }
 type Section = { id: string; label: string; icon: string; key: string; readOnly?: boolean; fields?: Field[] }
 const common: Field[] = [{ key: 'sort_order', label: 'Display order', type: 'number' }, { key: 'is_published', label: 'Show on website', type: 'boolean' }]
-const SECTIONS: Section[] = [
+const SECTIONS: Section[] = [\n  { id: 'analytics', label: 'Website Analytics', icon: '▥', key: 'id', readOnly: true },\n  { id: 'media', label: 'Video Portfolio', icon: '▶', key: 'id' },
   { id: 'profiles', label: 'Profile & About', icon: '◉', key: 'id', fields: [
     { key: 'name', label: 'Your name', required: true }, { key: 'headline', label: 'Professional title' }, { key: 'tagline', label: 'Hero tagline' },
     { key: 'bio', label: 'About description', type: 'textarea' }, { key: 'location', label: 'Location' }, { key: 'email', label: 'Email', type: 'text' },
@@ -147,7 +147,7 @@ export default function AdminApp() {
       <section className="admin-content">
         {section !== 'site_settings' && <div className="admin-toolbar"><input aria-label="Search records" placeholder="Search records…" value={query} onChange={e => setQuery(e.target.value)} /><div><button className="admin-secondary" onClick={() => void loadRows()}>↻ Refresh</button>{!active.readOnly && <button className="admin-primary" onClick={() => openEditor()}>＋ Add new</button>}</div></div>}
         {error && <p className="admin-error admin-notice">{error}</p>}{notice && <p className="admin-success admin-notice">{notice}</p>}
-        {section === 'site_settings' ? <AppearancePanel session={session} rows={rows} reload={loadRows} setError={setError} /> : editing !== null || Object.keys(draft).length > 0 ? (
+        {section === 'analytics' ? <AnalyticsPanel token={session.access_token} /> : section === 'media' ? <MediaPanel session={session} /> : section === 'site_settings' ? <AppearancePanel session={session} rows={rows} reload={loadRows} setError={setError} /> : editing !== null || Object.keys(draft).length > 0 ? (
           <form className="admin-editor visual-editor" onSubmit={handleSave}><div className="admin-editor-head"><div><p className="admin-eyebrow">CONTENT EDITOR</p><h2>{editing ? 'Edit content' : 'Add new content'}</h2></div><button type="button" onClick={() => { setEditing(null); setDraft({}) }}>✕ Close</button></div>
             <p className="editor-help">নিচের ফিল্ডগুলো পূরণ করো। কোনো কোড লিখতে হবে না। Save করলে কনটেন্ট ওয়েবসাইটে দেখাবে।</p>
             <div className="editor-fields">{(active.fields || []).map(field => <label className={field.type === 'textarea' || field.type === 'gallery' ? 'editor-field full' : 'editor-field'} key={field.key}>
