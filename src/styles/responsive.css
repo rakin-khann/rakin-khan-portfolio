@@ -106,19 +106,23 @@
   }
 
   .hero-title {
-    top: 13%;
+    left: 50%;
+    top: 12%;
     flex-direction: column;
     align-items: center;
     gap: 0;
-    font-size: clamp(3.4rem, 20vw, 7rem);
+    font-size: clamp(4rem, 17vw, 7.4rem);
     line-height: 0.92;
     text-align: center;
     white-space: normal;
   }
 
   .hero-samurai {
-    height: 56%; /* same ~15% reduction as desktop, keeps tablet/mobile balance */
+    left: 50%;
+    height: 64%;
     bottom: 0;
+    aspect-ratio: 1349 / 1024;
+    max-width: none;
   }
 
   .hero-flare {
@@ -140,7 +144,8 @@
   }
 
   .hero-name {
-    font-size: 2.15rem;
+    font-size: clamp(2.35rem, 8vw, 3rem);
+    line-height: 1.05;
   }
 
   .hero-tagline {
