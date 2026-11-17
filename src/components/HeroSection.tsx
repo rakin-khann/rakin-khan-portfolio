@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { gsap } from '../lib/gsap'
 import { PROFILE } from '../data/content'
@@ -46,11 +46,35 @@ export default function HeroSection() {
   const profileRow = usePublicRows('profiles')[0]
   const socialRows = usePublicRows('social_links')
   const settingsRows = usePublicRows('site_settings')
-  const heroScene = (settingsRows.find(row => row.key === 'hero_scene')?.value || {}) as Record<string, unknown>
+  const legacyScene = (settingsRows.find(row => row.key === 'hero_scene')?.value || {}) as Record<string, unknown>
+  const configuredScenes = settingsRows.find(row => row.key === 'hero_scenes')?.value
+  const scenes = (Array.isArray(configuredScenes) ? configuredScenes : [legacyScene])
+    .filter((scene: Record<string, unknown>) => Boolean(scene.character_url) && (scene.background_mode !== 'image' || Boolean(scene.background_url)))
+    .slice(0, 10) as Record<string, unknown>[]
+  const [sceneIndex, setSceneIndex] = useState(0)
+  const rotationInitialized = useRef(false)
+  useEffect(() => {
+    if (rotationInitialized.current || settingsRows.length === 0) return
+    rotationInitialized.current = true
+    if (!scenes.length) return
+    try {
+      const key = 'rakin_hero_theme_rotation'
+      const nextIndex = Math.abs(Number(window.localStorage.getItem(key) || 0)) % scenes.length
+      setSceneIndex(nextIndex)
+      window.localStorage.setItem(key, String((nextIndex + 1) % scenes.length))
+    } catch { setSceneIndex(0) }
+  }, [settingsRows])
+  const heroScene = scenes[sceneIndex] || scenes[0] || legacyScene
   const characterSrc = String(heroScene.character_url || '/assets/samurai.webp')
   const heroBackgroundUrl = String(heroScene.background_url || '')
   const heroBackgroundColor = String(heroScene.background_color || '#050505')
   const heroRedGlow = Math.max(0, Math.min(0.6, Number(heroScene.red_glow ?? 0.13)))
+  const heroAccent = String(heroScene.accent_color || '#ff101a')
+  const heroSecondary = String(heroScene.secondary_color || '#850000')
+  const hexToRgb = (hex: string) => {
+    const match = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex)
+    return match ? `${parseInt(match[1], 16)}, ${parseInt(match[2], 16)}, ${parseInt(match[3], 16)}` : '255, 16, 26'
+  }
   const profile = { ...PROFILE, name: String(profileRow?.name || PROFILE.name), title: String(profileRow?.headline || PROFILE.title), tagline: String(profileRow?.tagline || PROFILE.tagline), about: String(profileRow?.bio || PROFILE.about), email: String(profileRow?.email || PROFILE.email), location: String(profileRow?.location || PROFILE.location) }
   const nameParts = profile.name.trim().split(/\s+/)
   const firstName = nameParts.shift() || 'Rakin'
@@ -135,7 +159,7 @@ export default function HeroSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} id="home" className="hero" aria-label="Introduction">
+    <section ref={sectionRef} id="home" className="hero" aria-label="Introduction" style={{ '--red': heroAccent, '--red-rgb': hexToRgb(heroAccent), '--hero-secondary': heroSecondary, '--bg': heroBackgroundColor } as CSSProperties}>
       <div
         ref={bgRef}
         className="hero-bg"
