@@ -29,6 +29,9 @@ export default function HeroSection() {
   const settingsRows = usePublicRows('site_settings')
   const heroScene = (settingsRows.find(row => row.key === 'hero_scene')?.value || {}) as Record<string, unknown>
   const characterSrc = String(heroScene.character_url || '/assets/samurai.webp')
+  const heroBackgroundUrl = String(heroScene.background_url || '')
+  const heroBackgroundColor = String(heroScene.background_color || '#050505')
+  const heroRedGlow = Math.max(0, Math.min(0.6, Number(heroScene.red_glow ?? 0.13)))
   const profile = { ...PROFILE, name: String(profileRow?.name || PROFILE.name), title: String(profileRow?.headline || PROFILE.title), tagline: String(profileRow?.tagline || PROFILE.tagline), about: String(profileRow?.bio || PROFILE.about), email: String(profileRow?.email || PROFILE.email), location: String(profileRow?.location || PROFILE.location) }
   const nameParts = profile.name.trim().split(/\s+/)
   const firstName = nameParts.shift() || 'Rakin'
@@ -114,8 +117,17 @@ export default function HeroSection() {
 
   return (
     <section ref={sectionRef} id="home" className="hero" aria-label="Introduction">
-      <div ref={bgRef} className="hero-bg">
-      </div>
+      <div
+        ref={bgRef}
+        className="hero-bg"
+        style={{
+          backgroundColor: heroBackgroundColor,
+          backgroundImage: heroBackgroundUrl ? `url("${heroBackgroundUrl}")` : undefined,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          ['--hero-red-glow' as string]: heroRedGlow,
+        } as CSSProperties}
+      />
 
       <h1 ref={titleRef} className="hero-title">
         <span>{firstName.toUpperCase()}</span>

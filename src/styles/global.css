@@ -516,7 +516,7 @@ button {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 62% 52% at 50% 66%, rgba(var(--red-rgb), 0.13), transparent 62%),
+    radial-gradient(ellipse 62% 52% at 50% 66%, rgba(var(--red-rgb), var(--hero-red-glow, 0.13)), transparent 62%),
     linear-gradient(
       180deg,
       rgba(5, 5, 5, 0.78) 0%,

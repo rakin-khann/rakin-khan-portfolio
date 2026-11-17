@@ -69,7 +69,8 @@ export async function selectPublicRows(table: string) {
 
 
 export async function uploadPublicAsset(file: File, token: string): Promise<string> {
-  if (!file.type.startsWith('image/')) throw new Error('Please choose an image file.')
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/avif']
+  if (!allowedTypes.includes(file.type)) throw new Error('Supported image formats: JPG, JPEG, PNG, WebP and AVIF.')
   if (file.size > 12 * 1024 * 1024) throw new Error('Image must be smaller than 12 MB.')
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-')
   const path = 'uploads/' + Date.now() + '-' + safeName
