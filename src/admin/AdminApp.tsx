@@ -12,7 +12,7 @@ const SECTIONS: { id: string; label: string; icon: string; key: string; readOnly
   { id: 'social_links', label: 'Social links', icon: '◎', key: 'id' },
   { id: 'testimonials', label: 'Testimonials', icon: '❝', key: 'id' },
   { id: 'contact_messages', label: 'Messages', icon: '✉', key: 'id', readOnly: true },
-  { id: 'site_settings', label: 'Site settings', icon: '⚙', key: 'key' },
+  { id: 'site_settings', label: 'Appearance & character', icon: '⚙', key: 'key' },
 ]
 
 const EXAMPLES: Record<string, Record<string, unknown>> = {
