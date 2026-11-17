@@ -64,5 +64,5 @@ export async function deleteRow(table: string, row: Record<string, unknown>, tok
   await request(`/rest/v1/${table}?${primaryKey}=eq.${encodeURIComponent(String(key))}`, { method: 'DELETE' }, token)
 }
 export async function selectPublicRows(table: string) {
-  return request(`/rest/v1/${table}?select=*&order=sort_order.asc&limit=100`) as Promise<Record<string, unknown>[]>
+  return request(`/rest/v1/${table}?select=*&limit=100`) as Promise<Record<string, unknown>[]>
 }
