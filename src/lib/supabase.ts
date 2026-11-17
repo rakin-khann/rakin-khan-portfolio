@@ -90,16 +90,68 @@ export async function uploadPortfolioVideo(file: File, token: string, quality: s
   if (file.size > 500 * 1024 * 1024) throw new Error('Each video version must be 500 MB or smaller.')
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-')
   const path = 'videos/' + Date.now() + '-' + quality + 'p-' + safeName
-  const response = await fetch(SUPABASE_URL + '/storage/v1/object/portfolio-media/' + path, {
+  const projectRef = new URL(SUPABASE_URL).hostname.split('.')[0]
+  const endpoint = 'https://' + projectRef + '.storage.supabase.co/storage/v1/upload/resumable'
+  const metadata = (key: string, value: string) => key + ' ' + btoa(unescape(encodeURIComponent(value)))
+  const created = await fetch(endpoint, {
     method: 'POST',
-    headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + token, 'Content-Type': file.type, 'x-upsert': 'true' },
-    body: file,
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: 'Bearer ' + token,
+      'Tus-Resumable': '1.0.0',
+      'Upload-Length': String(file.size),
+      'Upload-Metadata': [
+        metadata('bucketName', 'portfolio-media'),
+        metadata('objectName', path),
+        metadata('contentType', file.type),
+        metadata('cacheControl', '31536000'),
+      ].join(','),
+      'x-upsert': 'true',
+    },
   })
-  const result = await response.json().catch(() => ({}))
-  if (!response.ok) throw new Error(result.message || result.error || 'Video upload failed')
+  if (!created.ok) {
+    const detail = await created.text()
+    throw new Error(detail || 'Could not start resumable video upload.')
+  }
+  const location = created.headers.get('Location')
+  if (!location) throw new Error('Storage did not return a resumable upload URL.')
+  let offset = 0
+  const chunkSize = 6 * 1024 * 1024
+  while (offset < file.size) {
+    const chunk = file.slice(offset, Math.min(offset + chunkSize, file.size))
+    let uploaded = false
+    let lastError = 'Video upload interrupted.'
+    for (let attempt = 0; attempt < 4 && !uploaded; attempt++) {
+      try {
+        const response = await fetch(new URL(location, endpoint).toString(), {
+          method: 'PATCH',
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: 'Bearer ' + token,
+            'Tus-Resumable': '1.0.0',
+            'Upload-Offset': String(offset),
+            'Content-Type': 'application/offset+octet-stream',
+          },
+          body: chunk,
+        })
+        if (!response.ok) {
+          lastError = await response.text()
+          if (response.status === 409) throw new Error(lastError || 'Upload offset conflict.')
+          throw new Error(lastError || 'Video chunk upload failed.')
+        }
+        const nextOffset = Number(response.headers.get('Upload-Offset'))
+        if (!Number.isFinite(nextOffset) || nextOffset <= offset) throw new Error('Storage returned an invalid upload offset.')
+        offset = nextOffset
+        uploaded = true
+      } catch (error) {
+        lastError = error instanceof Error ? error.message : lastError
+        if (attempt < 3) await new Promise(resolve => setTimeout(resolve, 1200 * (attempt + 1)))
+      }
+    }
+    if (!uploaded) throw new Error(lastError)
+  }
   return SUPABASE_URL + '/storage/v1/object/public/portfolio-media/' + path
 }
-
 export async function selectPortfolioMedia(token: string) {
   return request('/rest/v1/portfolio_media?select=*&order=sort_order.asc,created_at.desc&limit=200', {}, token) as Promise<Record<string, unknown>[]>
 }
