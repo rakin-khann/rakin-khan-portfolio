@@ -11,6 +11,8 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<string>('#home')
+  // Section links must return to the homepage when clicked from a project detail route.
+  const sectionHref = (href: string) => window.location.pathname === '/' ? href : `/${href}`
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -47,7 +49,7 @@ export default function Header() {
       <header className={`header${scrolled ? ' scrolled' : ''}${open ? ' menu-open' : ''}`}>
         <div className="container header-inner">
           <a
-            href="#home"
+            href={sectionHref("#home")}
             className="header-logo"
             aria-label={`${profileName} — home`}
             onClick={() => setOpen(false)}
@@ -60,7 +62,7 @@ export default function Header() {
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
                   <a
-                    href={link.href}
+                    href={sectionHref(link.href)}
                     className={`nav-link${active === link.href ? ' active' : ''}`}
                   >
                     {link.label}
@@ -71,7 +73,7 @@ export default function Header() {
           </nav>
 
           <div className="header-actions">
-            <a href="#contact" className="btn header-cta">
+            <a href={sectionHref("#contact")} className="btn header-cta">
               Let&apos;s Talk <IconArrowRight />
             </a>
             <button
