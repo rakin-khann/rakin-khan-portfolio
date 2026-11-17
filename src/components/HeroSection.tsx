@@ -64,7 +64,7 @@ export default function HeroSection() {
       window.localStorage.setItem(key, String((nextIndex + 1) % scenes.length))
     } catch { setSceneIndex(0) }
   }, [settingsRows])
-  const heroScene = scenes[sceneIndex] || scenes[0] || legacyScene
+  const heroScene = scenes[sceneIndex] || scenes[0] || (Array.isArray(configuredScenes) ? {} : legacyScene)
   const characterSrc = String(heroScene.character_url || '/assets/samurai.webp')
   const heroBackgroundUrl = String(heroScene.background_url || '')
   const heroBackgroundColor = String(heroScene.background_color || '#050505')
