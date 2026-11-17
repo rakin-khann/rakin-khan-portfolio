@@ -5,7 +5,7 @@ import { PROFILE, SOCIALS } from '../data/content'
 import { usePublicRows } from '../hooks/usePublicRows'
 import { IconArrowRight, SiteIcon } from './icons'
 
-/** Deterministic falling crimson Japanese maple leaves. */
+/** Dense, drifting dark-crimson cherry blossom petals. */
 const PETALS: CSSProperties[] = Array.from({ length: 42 }, (_, i) => {
   const size = 8 + ((i * 7) % 10)
   return {
@@ -18,7 +18,7 @@ const PETALS: CSSProperties[] = Array.from({ length: 42 }, (_, i) => {
   }
 })
 
-/** Dark crimson maple leaves drift inward from both edges of the cinematic hero. */
+/** Individual crimson sakura petals drift inward from both edges. */
 const SAKURA_PETALS: CSSProperties[] = Array.from({ length: 30 }, (_, i) => {
   const fromLeft = i % 2 === 0
   return {
@@ -165,18 +165,35 @@ export default function HeroSection() {
       </div>
 
       <div className="hero-sakura-branches" aria-hidden="true">
-        <svg className="sakura-branch sakura-branch-left" viewBox="0 0 320 820" preserveAspectRatio="none">
+        <svg className="sakura-branch sakura-branch-left" viewBox="0 0 360 820" preserveAspectRatio="none">
           <defs>
-            <linearGradient id="maple-bark" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#080708"/><stop offset=".48" stopColor="#321014"/><stop offset="1" stopColor="#090708"/></linearGradient>
-            <linearGradient id="maple-leaf" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#090809"/><stop offset=".42" stopColor="#39080f"/><stop offset=".78" stopColor="#8e101c"/><stop offset="1" stopColor="#c32932"/></linearGradient>
+            <linearGradient id="sakura-bark-left" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#050506"/><stop offset=".5" stopColor="#241013"/><stop offset="1" stopColor="#090809"/></linearGradient>
+            <radialGradient id="sakura-bloom-left"><stop offset="0" stopColor="#a51b29"/><stop offset=".58" stopColor="#690b17"/><stop offset="1" stopColor="#26070d"/></radialGradient>
           </defs>
-          <g className="maple-wood"><path d="M-28 830 C35 720 28 635 78 552 C120 482 113 430 151 365 C190 298 191 218 245 154 C271 122 288 72 321 8"/><path d="M55 690 C8 632 2 581 18 520 M89 536 C40 488 34 434 43 389 M145 376 C92 344 76 291 82 244 M197 260 C157 222 157 180 171 137 M178 320 C230 316 264 282 286 235 M241 165 C278 168 300 146 315 118"/></g>
-          {Array.from({length:17},(_,i)=><g key={i} className="maple-leaf-cluster" transform={`translate(${18+((i*53)%290)} ${95+((i*79)%660)}) rotate(${(i*47)%110-55}) scale(${0.62+((i*7)%6)/10})`}><path d="M0 0 C-8 -10 -7 -20 -3 -28 L-14 -25 L-10 -39 L-23 -35 L-17 -49 L-4 -44 L-7 -59 L5 -48 L14 -62 L16 -45 L31 -50 L23 -35 L38 -30 L23 -20 L28 -7 L12 -12 L5 0 L2 -15 Z"/><path className="maple-vein" d="M0 0 L2 -43 M2 -27 L-12 -36 M3 -32 L18 -41 M1 -20 L-12 -23 M2 -22 L18 -28"/></g>)}
+          <g className="sakura-wood">
+            <path d="M-30 830 C38 720 34 634 91 548 C140 474 124 412 174 346 C222 281 216 212 274 145 C303 112 323 63 365 5"/>
+            <path d="M72 582 C20 547 8 491 17 435 M113 502 C64 461 53 410 61 360 M166 357 C112 327 95 276 104 226 M217 286 C176 247 176 196 189 153 M262 166 C222 136 215 99 228 62 M196 335 C254 334 291 299 321 251 M147 401 C205 414 246 394 272 358 M286 129 C321 134 345 111 359 80"/>
+          </g>
+          {Array.from({length:15},(_,i)=><g key={i} className="sakura-flower-cluster" transform={`translate(${18+((i*61)%325)} ${72+((i*83)%680)}) scale(${.68+((i*7)%5)*.11}) rotate(${(i*37)%80-40})`}>
+            {Array.from({length:5},(_,j)=><ellipse key={j} className="sakura-bloom-petal" cx="0" cy="-9" rx="5.4" ry="10.5" transform={`rotate(${j*72})`}/>)}
+            <circle className="sakura-bloom-center" r="3"/>
+          </g>)}
+          {Array.from({length:12},(_,i)=><ellipse key={i} className="sakura-bud" cx={22+((i*43)%315)} cy={65+((i*71)%680)} rx="3.5" ry="6.5" transform={`rotate(${(i*29)%90} ${22+((i*43)%315)} ${65+((i*71)%680)})`}/>)}
         </svg>
-        <svg className="sakura-branch sakura-branch-right" viewBox="0 0 320 820" preserveAspectRatio="none">
-          <use href="#maple-branch-shape" />
-          <g className="maple-wood"><path d="M-28 830 C35 720 28 635 78 552 C120 482 113 430 151 365 C190 298 191 218 245 154 C271 122 288 72 321 8"/><path d="M55 690 C8 632 2 581 18 520 M89 536 C40 488 34 434 43 389 M145 376 C92 344 76 291 82 244 M197 260 C157 222 157 180 171 137 M178 320 C230 316 264 282 286 235 M241 165 C278 168 300 146 315 118"/></g>
-          {Array.from({length:17},(_,i)=><g key={i} className="maple-leaf-cluster" transform={`translate(${18+((i*53)%290)} ${95+((i*79)%660)}) rotate(${(i*47)%110-55}) scale(${0.62+((i*7)%6)/10})`}><path d="M0 0 C-8 -10 -7 -20 -3 -28 L-14 -25 L-10 -39 L-23 -35 L-17 -49 L-4 -44 L-7 -59 L5 -48 L14 -62 L16 -45 L31 -50 L23 -35 L38 -30 L23 -20 L28 -7 L12 -12 L5 0 L2 -15 Z"/><path className="maple-vein" d="M0 0 L2 -43 M2 -27 L-12 -36 M3 -32 L18 -41 M1 -20 L-12 -23 M2 -22 L18 -28"/></g>)}
+        <svg className="sakura-branch sakura-branch-right" viewBox="0 0 360 820" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="sakura-bark-right" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#050506"/><stop offset=".5" stopColor="#241013"/><stop offset="1" stopColor="#090809"/></linearGradient>
+            <radialGradient id="sakura-bloom-right"><stop offset="0" stopColor="#a51b29"/><stop offset=".58" stopColor="#690b17"/><stop offset="1" stopColor="#26070d"/></radialGradient>
+          </defs>
+          <g className="sakura-wood">
+            <path d="M-30 830 C38 720 34 634 91 548 C140 474 124 412 174 346 C222 281 216 212 274 145 C303 112 323 63 365 5"/>
+            <path d="M72 582 C20 547 8 491 17 435 M113 502 C64 461 53 410 61 360 M166 357 C112 327 95 276 104 226 M217 286 C176 247 176 196 189 153 M262 166 C222 136 215 99 228 62 M196 335 C254 334 291 299 321 251 M147 401 C205 414 246 394 272 358 M286 129 C321 134 345 111 359 80"/>
+          </g>
+          {Array.from({length:15},(_,i)=><g key={i} className="sakura-flower-cluster" transform={`translate(${18+((i*61)%325)} ${72+((i*83)%680)}) scale(${.68+((i*7)%5)*.11}) rotate(${(i*37)%80-40})`}>
+            {Array.from({length:5},(_,j)=><ellipse key={j} className="sakura-bloom-petal" cx="0" cy="-9" rx="5.4" ry="10.5" transform={`rotate(${j*72})`}/>)}
+            <circle className="sakura-bloom-center" r="3"/>
+          </g>)}
+          {Array.from({length:12},(_,i)=><ellipse key={i} className="sakura-bud" cx={22+((i*43)%315)} cy={65+((i*71)%680)} rx="3.5" ry="6.5" transform={`rotate(${(i*29)%90} ${22+((i*43)%315)} ${65+((i*71)%680)})`}/>)}
         </svg>
       </div>
       <div className="hero-petals" aria-hidden="true">
