@@ -137,16 +137,39 @@ export async function selectPublicRows(table: string) {
 }
 
 
+async function optimizePortfolioImage(file: File): Promise<File> {
+  if (file.size < 350 * 1024 || !('createImageBitmap' in window)) return file
+  let bitmap: ImageBitmap
+  try { bitmap = await createImageBitmap(file) } catch { return file }
+  try {
+    const maxSide = 1920
+    const ratio = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height))
+    const width = Math.max(1, Math.round(bitmap.width * ratio))
+    const height = Math.max(1, Math.round(bitmap.height * ratio))
+    const canvas = document.createElement('canvas')
+    canvas.width = width
+    canvas.height = height
+    const context = canvas.getContext('2d')
+    if (!context) return file
+    context.drawImage(bitmap, 0, 0, width, height)
+    const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/webp', 0.82))
+    if (!blob || blob.size >= file.size) return file
+    const name = file.name.replace(/\\.[^.]+$/, '') + '.webp'
+    return new File([blob], name, { type: 'image/webp', lastModified: file.lastModified })
+  } finally { bitmap.close() }
+}
+
 export async function uploadPublicAsset(file: File, token: string): Promise<string> {
   const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/avif']
   if (!allowedTypes.includes(file.type)) throw new Error('Supported image formats: JPG, JPEG, PNG, WebP and AVIF.')
   if (file.size > 12 * 1024 * 1024) throw new Error('Image must be smaller than 12 MB.')
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-')
-  const path = 'uploads/' + Date.now() + '-' + safeName
+  const optimized = await optimizePortfolioImage(file)
+  const safeName = optimized.name.replace(/[^a-zA-Z0-9._-]/g, '-')
+  const path = 'uploads/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '-' + safeName
   const response = await authenticatedFetch(SUPABASE_URL + '/storage/v1/object/portfolio-assets/' + path, {
     method: 'POST',
-    headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + token, 'Content-Type': file.type, 'x-upsert': 'true' },
-    body: file,
+    headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + token, 'Content-Type': optimized.type, 'Cache-Control': 'public, max-age=31536000, immutable', 'x-upsert': 'true' },
+    body: optimized,
   }, token)
   const result = await response.json().catch(() => ({}))
   if (!response.ok) throw new Error(result.message || result.error || 'Image upload failed')
