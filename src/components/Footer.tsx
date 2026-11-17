@@ -9,11 +9,13 @@ export default function Footer() {
   const name = String(profile?.name || PROFILE.name)
   const title = String(profile?.headline || PROFILE.title)
   const socials = socialRows.length ? socialRows.map(row => ({ label: String(row.platform || ''), icon: String(row.icon || 'link'), href: String(row.url || '#') })) : SOCIALS
+  // Footer section links should navigate back to the homepage from detail pages.
+  const sectionHref = (href: string) => window.location.pathname === '/' ? href : `/${href}`
 
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <a href="#home" className="footer-logo" aria-label={`${name} — back to top`}>
+        <a href={sectionHref("#home")} className="footer-logo" aria-label={`${name} — back to top`}>
           <img src="/assets/logo.webp" alt="Rakin Khan logo" width={150} height={50} />
         </a>
 
@@ -21,7 +23,7 @@ export default function Footer() {
           <ul className="footer-nav">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
-                <a href={link.href}>{link.label}</a>
+                <a href={sectionHref(link.href)}>{link.label}</a>
               </li>
             ))}
           </ul>
