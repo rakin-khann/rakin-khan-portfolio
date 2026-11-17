@@ -7,7 +7,11 @@ export function usePublicRows(table: string) {
   useEffect(() => {
     let active = true
     selectPublicRows(table).then(data => {
-      if (active) setRows(data.filter(row => row.is_published !== false))
+      if (active) {
+        const published = data.filter(row => row.is_published !== false)
+        published.sort((a, b) => Number(a.sort_order ?? 0) - Number(b.sort_order ?? 0))
+        setRows(published)
+      }
     }).catch(() => {
       // Keep the original designed content visible if the CMS is not configured yet.
     })

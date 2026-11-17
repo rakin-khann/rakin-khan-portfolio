@@ -5,6 +5,8 @@ import AboutSection from './components/AboutSection'
 import ServicesSection from './components/ServicesSection'
 import PortfolioSection from './components/PortfolioSection'
 import SkillsSection from './components/SkillsSection'
+import JourneySection from './components/JourneySection'
+import TestimonialsSection from './components/TestimonialsSection'
 import ContactSection from './components/ContactSection'
 import Footer from './components/Footer'
 import BackToTop from './components/BackToTop'
@@ -44,6 +46,8 @@ export default function App() {
         <ServicesSection />
         <PortfolioSection />
         <SkillsSection />
+        <JourneySection />
+        <TestimonialsSection />
         <EdgeDivider flip />
         <ContactSection />
       </main>
