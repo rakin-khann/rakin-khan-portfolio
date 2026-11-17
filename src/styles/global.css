@@ -1582,3 +1582,7 @@ button {
 .rotation-colours { margin-top:20px; }
 .rotation-add { margin:4px 0 16px; width:100%; min-height:48px; }
 @media (max-width:700px) { .rotation-media-grid { grid-template-columns:1fr; } .rotation-scene-head { flex-direction:column; } }
+
+.rotation-publish { display:flex; align-items:center; gap:10px; margin:14px 0 4px; color:#ddd; font-size:13px; }
+.rotation-publish input { width:17px; height:17px; accent-color:#e11; }
+.hero-flare { background: radial-gradient(ellipse 50% 50% at 50% 60%, color-mix(in srgb, var(--hero-secondary, #850000) 42%, transparent), transparent 68%), radial-gradient(ellipse 50% 50% at 50% 60%, rgba(var(--red-rgb), 0.32), transparent 68%); }
