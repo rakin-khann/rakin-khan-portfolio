@@ -1565,3 +1565,20 @@ button {
 /* User-requested cleanup: remove the decorative branch and moon overlays. */
 .hero-moon,
 .hero-sakura-branches { display: none !important; }
+
+
+/* Admin-managed rotating hero theme cards */
+.rotation-summary { display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; padding:14px 16px; margin-top:18px; border:1px solid rgba(255,255,255,.12); border-radius:12px; }
+.rotation-summary span, .rotation-scene small { color:#aaa; font-size:12px; }
+.rotation-scene-head { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:18px; }
+.rotation-scene-head h2 { margin:0; }
+.rotation-actions { display:flex; gap:6px; flex-wrap:wrap; }
+.rotation-actions button { min-width:38px; }
+.rotation-remove { color:#ff7777 !important; }
+.rotation-media-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; margin-top:18px; }
+.rotation-media-grid > div { display:flex; flex-direction:column; gap:12px; min-width:0; }
+.rotation-media-grid > div > strong { font-size:13px; }
+.rotation-media-grid .character-preview, .rotation-media-grid .hero-background-preview { min-height:210px; }
+.rotation-colours { margin-top:20px; }
+.rotation-add { margin:4px 0 16px; width:100%; min-height:48px; }
+@media (max-width:700px) { .rotation-media-grid { grid-template-columns:1fr; } .rotation-scene-head { flex-direction:column; } }
