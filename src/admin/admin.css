@@ -88,3 +88,11 @@
 .editor-field select{width:100%;min-width:0;background:#080708;border:1px solid #403034;color:#fff;padding:12px 14px;font:600 16px Rajdhani,sans-serif;outline:none;border-radius:4px;cursor:pointer}
 .editor-field select:focus{border-color:#d34a51;box-shadow:0 0 0 2px #d34a5122}
 .editor-field select option{background:#100e0f;color:#fff}
+
+
+/* Multi-image project gallery previews */
+.project-gallery-previews{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px;margin-top:12px}
+.project-gallery-preview{position:relative;min-width:0;aspect-ratio:4/3;background:#080708;border:1px solid #493034;overflow:hidden}
+.project-gallery-preview img{width:100%;height:100%;display:block;object-fit:cover}
+.project-gallery-preview button{position:absolute;top:6px;right:6px;width:28px;height:28px;border:1px solid #ffffff55;background:#17090bdc;color:#fff;font-size:20px;line-height:1;cursor:pointer}
+.project-gallery-preview button:hover{background:#c52b35}
