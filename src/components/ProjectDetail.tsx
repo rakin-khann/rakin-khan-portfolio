@@ -8,7 +8,7 @@ export default function ProjectDetail({ slug }: { slug: string }) {
   const rows = usePublicRows('projects')
   const project = rows.find(row => String(row.slug || '') === slug)
   if (!project) return <><Header /><main className="project-detail-page"><div className="project-detail-wrap"><p className="section-label">// PROJECT NOT FOUND</p><h1>This project is <span className="text-red">unavailable.</span></h1><a className="work-project-link" href="/#portfolio">← Back to portfolio</a></div></main><Footer /></>
-  const gallery = Array.isArray(project.gallery) ? project.gallery.map(String).filter(Boolean) : []
+  const gallery = Array.isArray(project.gallery) ? project.gallery.flatMap(item => String(item).split(/\r?\n|\\n/).map(url => url.trim()).filter(Boolean)) : typeof project.gallery === 'string' ? project.gallery.split(/\r?\n|\\n/).map(url => url.trim()).filter(Boolean) : []
   const cover = String(project.cover_image_url || '')
   const images = [...new Set([cover, ...gallery].filter(Boolean))]
   const details = [
