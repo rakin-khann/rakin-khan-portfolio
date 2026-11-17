@@ -9,7 +9,13 @@ import './media-analytics.css'
 type Field = { key: string; label: string; type?: 'text' | 'textarea' | 'url' | 'number' | 'image' | 'date' | 'boolean' | 'gallery' | 'select'; hint?: string; required?: boolean; options?: { label: string; value: string }[] }
 type Section = { id: string; label: string; icon: string; key: string; readOnly?: boolean; fields?: Field[] }
 const common: Field[] = [{ key: 'sort_order', label: 'Display order', type: 'number' } , { key: 'is_published', label: 'Show on website', type: 'boolean' }]
-const projectFields: Field[] = [{ key: 'sort_order', label: 'Display order', type: 'number' }]
+const projectFields: Field[] = [
+  { key: 'client_name', label: 'Client / Brand name' }, { key: 'role_description', label: 'My role' },
+  { key: 'project_goal', label: 'Project goal', type: 'textarea' }, { key: 'challenge', label: 'Challenge', type: 'textarea' },
+  { key: 'solution', label: 'My solution', type: 'textarea' }, { key: 'outcome', label: 'Result / Outcome', type: 'textarea' },
+  { key: 'tools_used', label: 'Tools & technologies', hint: 'যেমন: Photoshop, Illustrator, Figma' },
+  { key: 'project_duration', label: 'Project duration' }, { key: 'sort_order', label: 'Display order', type: 'number' }
+]
 const SECTIONS: Section[] = [
   { id: 'analytics', label: 'Website Analytics', icon: '▥', key: 'id', readOnly: true },
   { id: 'media', label: 'Video Portfolio', icon: '▶', key: 'id' },
@@ -20,7 +26,7 @@ const SECTIONS: Section[] = [
   ] },
   { id: 'projects', label: 'Portfolio projects', icon: '▧', key: 'id', fields: [
     { key: 'title', label: 'Project title', required: true }, { key: 'category', label: 'Category' }, { key: 'description', label: 'Project description', type: 'textarea' },
-    { key: 'cover_image_url', label: 'Cover image', type: 'image' }, { key: 'gallery', label: 'Gallery image URLs (one per line)', type: 'gallery', hint: 'Optional: paste one image URL per line.' },
+    { key: 'cover_image_url', label: 'Cover image', type: 'image' }, { key: 'gallery', label: 'Project gallery — multiple images', type: 'gallery', hint: 'একসঙ্গে একাধিক ছবি Upload করো, অথবা প্রতিটি image URL আলাদা লাইনে দাও।' },
     { key: 'project_url', label: 'Project / Live URL', type: 'url' }, ...projectFields,
   ] },
   { id: 'services', label: 'Services', icon: '✳', key: 'id', fields: [
@@ -51,7 +57,7 @@ const SECTIONS: Section[] = [
 ]
 const EXAMPLES: Record<string, Record<string, unknown>> = {
   profiles: { name: 'Rakin Khan', headline: 'Graphic Designer & Digital Creative', tagline: '', bio: '', location: 'Dhaka, Bangladesh', email: 'rakinfiverr@gmail.com', phone: '', avatar_url: '', cv_url: '', is_published: true },
-  projects: { title: '', slug: '', description: '', category: '', cover_image_url: '', gallery: [], project_url: '', sort_order: 0, is_published: true },
+  projects: { title: '', slug: '', description: '', category: '', cover_image_url: '', gallery: [], project_url: '', client_name: '', role_description: '', project_goal: '', challenge: '', solution: '', outcome: '', tools_used: '', project_duration: '', sort_order: 0, is_published: true },
   services: { title: '', slug: '', short_description: '', description: '', icon: 'pen', sort_order: 0, is_published: true },
   skills: { name: '', category: 'Design', proficiency: 80, sort_order: 0, is_published: true },
   experiences: { company: '', role: '', employment_type: '', location: '', start_date: '', end_date: '', description: '', sort_order: 0, is_published: true },
@@ -121,6 +127,18 @@ export default function AdminApp() {
     catch (e) { setError(e instanceof Error ? e.message : 'Image upload failed') }
     finally { setUploading(null) }
   }
+  async function uploadGallery(files: FileList | null) {
+    if (!files?.length || !session) return
+    setUploading('gallery'); setError('')
+    try {
+      const existing = Array.isArray(draft.gallery) ? draft.gallery as string[] : String(draft.gallery || '').split('\\n').map(x => x.trim()).filter(Boolean)
+      const uploaded: string[] = []
+      for (const file of Array.from(files)) uploaded.push(await uploadPublicAsset(file, session.access_token))
+      update('gallery', [...existing, ...uploaded].join('\\n'))
+      setNotice(`${uploaded.length}টি ছবি Gallery-তে যোগ হয়েছে। Save Changes চাপলে প্রকাশিত হবে।`)
+    } catch (e) { setError(e instanceof Error ? e.message : 'Gallery upload failed') }
+    finally { setUploading(null) }
+  }
   async function handleSave(event: FormEvent) {
     event.preventDefault(); if (!session) return
     setBusy(true); setError(''); setNotice('')
@@ -168,7 +186,7 @@ export default function AdminApp() {
             <p className="editor-help">নিচের ফিল্ডগুলো পূরণ করো। কোনো কোড লিখতে হবে না। Save করলে কনটেন্ট ওয়েবসাইটে দেখাবে।</p>
             <div className="editor-fields">{(active.fields || []).map(field => <label className={field.type === 'textarea' || field.type === 'gallery' ? 'editor-field full' : 'editor-field'} key={field.key}>
               <span>{field.label}{field.required && <b> *</b>}</span>
-              {field.type === 'textarea' || field.type === 'gallery' ? <textarea required={field.required} rows={field.type === 'gallery' ? 4 : 5} value={String(draft[field.key] ?? '')} onChange={e => update(field.key, e.target.value)} placeholder={field.hint || 'এখানে লিখো…'} /> :
+              {field.type === 'gallery' ? <><input className="editor-file" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple disabled={uploading === 'gallery'} onChange={e => { void uploadGallery(e.target.files); e.currentTarget.value = '' }} /><small>{uploading === 'gallery' ? 'Uploading gallery images…' : field.hint}</small><textarea rows={5} value={String(draft[field.key] ?? '')} onChange={e => update(field.key, e.target.value)} placeholder="প্রতি লাইনে একটি image URL" />{String(draft[field.key] || '').split('\\n').filter(Boolean).length > 0 && <div className="project-gallery-previews">{String(draft[field.key]).split('\\n').filter(Boolean).map((src, i) => <img key={src + i} src={src} alt={`Gallery preview ${i+1}`} />)}</div>}</> : field.type === 'textarea' ? <textarea required={field.required} rows={5} value={String(draft[field.key] ?? '')} onChange={e => update(field.key, e.target.value)} placeholder={field.hint || 'এখানে লিখো…'} /> :
               field.type === 'boolean' ? <span className="editor-toggle"><input type="checkbox" checked={Boolean(draft[field.key])} onChange={e => update(field.key, e.target.checked)} /> <small>{draft[field.key] ? 'Published / Visible' : 'Hidden / Draft'}</small></span> :
               field.type === 'select' ? <select required={field.required} value={String(draft[field.key] ?? '')} onChange={e => update(field.key, e.target.value)}>{(field.options || []).map(option => <option key={option.value} value={option.value}>{option.label}</option>)}</select> :
               field.type === 'image' ? <><input type="url" value={String(draft[field.key] || '')} onChange={e => update(field.key, e.target.value)} placeholder="Image URL অথবা নিচে Upload করো" /><input className="editor-file" type="file" accept="image/jpeg,image/png,image/webp,image/avif,.jpg,.jpeg,.png,.webp,.avif" disabled={uploading === field.key} onChange={e => void uploadField(field.key, e.target.files?.[0])} /><small>{uploading === field.key ? 'Uploading image…' : field.hint || 'ছবি Upload করো অথবা URL paste করো।'}</small>{Boolean(draft[field.key]) && <img className="editor-image-preview" src={String(draft[field.key])} alt="Upload preview" />}</> :
