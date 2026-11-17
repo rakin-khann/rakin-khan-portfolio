@@ -37,7 +37,7 @@ export default function ContactSection() {
             </span>
             <span>
               <span className="contact-card-label">Email</span>
-              <span className="contact-card-value">{PROFILE.email}</span>
+              <span className="contact-card-value">{profile.email}</span>
             </span>
           </a>
 
