@@ -1,8 +1,11 @@
 import { SERVICES } from '../data/content'
+import { usePublicRows } from '../hooks/usePublicRows'
 import { useReveal } from '../hooks/useScrollAnimation'
 import { IconArrowRight, SiteIcon } from './icons'
 
 export default function ServicesSection() {
+  const serviceRows = usePublicRows('services')
+  const services = serviceRows.length ? serviceRows.map(row => ({ name: String(row.title || ''), icon: String(row.icon || 'pen'), desc: String(row.short_description || row.description || '') })) : SERVICES
   const ref = useReveal<HTMLElement>()
 
   return (
@@ -22,7 +25,7 @@ export default function ServicesSection() {
         </div>
 
         <div className="service-grid">
-          {SERVICES.map((service, i) => (
+          {services.map((service, i) => (
             <article
               className="service-card"
               key={service.name}
