@@ -69,12 +69,20 @@ export async function getFreshAccessToken(token?: string): Promise<string> {
 async function authenticatedFetch(url: string, init: RequestInit = {}, token?: string) {
   const headers = new Headers(init.headers)
   headers.set('apikey', SUPABASE_KEY)
-  if (token) headers.set('Authorization', `Bearer ${await getFreshAccessToken(token)}`)
+  const sentToken = token ? await getFreshAccessToken(token) : undefined
+  if (sentToken) headers.set('Authorization', `Bearer ${sentToken}`)
   let response = await fetch(url, { ...init, headers })
-  if (response.status === 401 && token && getSession()?.refresh_token) {
-    const fresh = await refreshSession()
-    headers.set('Authorization', `Bearer ${fresh.access_token}`)
-    response = await fetch(url, { ...init, headers })
+  if (response.status === 401 && token) {
+    const current = getSession()
+    // Another request may already have rotated the refresh token. Reuse that
+    // newer access token instead of attempting to refresh the same token twice.
+    const freshToken = current?.access_token && current.access_token !== sentToken
+      ? current.access_token
+      : current?.refresh_token ? (await refreshSession()).access_token : null
+    if (freshToken) {
+      headers.set('Authorization', `Bearer ${freshToken}`)
+      response = await fetch(url, { ...init, headers })
+    }
   }
   return response
 }
