@@ -1,8 +1,13 @@
 import { PROFILE, SOCIALS } from '../data/content'
+import { usePublicRows } from '../hooks/usePublicRows'
 import { useReveal } from '../hooks/useScrollAnimation'
 import { IconArrowRight, IconMail, IconMapPin, SiteIcon } from './icons'
 
 export default function ContactSection() {
+  const profileRow = usePublicRows('profiles')[0]
+  const socialRows = usePublicRows('social_links')
+  const profile = { ...PROFILE, email: String(profileRow?.email || profile.email), location: String(profileRow?.location || profile.location) }
+  const socials = socialRows.length ? socialRows.map(row => ({ label: String(row.platform || ''), icon: String(row.icon || 'link'), href: String(row.url || '#') })) : SOCIALS
   const ref = useReveal<HTMLElement>()
 
   return (
@@ -55,7 +60,7 @@ export default function ContactSection() {
           </a>
 
           <div className="contact-social" data-reveal data-reveal-delay="0.3">
-            {SOCIALS.map((s) => (
+            {socials.map((s) => (
               <a
                 key={s.label}
                 href={s.href}
