@@ -5,28 +5,28 @@ import { PROFILE, SOCIALS } from '../data/content'
 import { usePublicRows } from '../hooks/usePublicRows'
 import { IconArrowRight, SiteIcon } from './icons'
 
-/** Deterministic pseudo-random petals (falling red maple leaves). */
+/** Deterministic falling crimson Japanese maple leaves. */
 const PETALS: CSSProperties[] = Array.from({ length: 42 }, (_, i) => {
-  const size = 5 + ((i * 7) % 8)
+  const size = 8 + ((i * 7) % 10)
   return {
     left: `${(i * 71 + 13) % 100}%`,
     width: `${size}px`,
     height: `${size}px`,
-    opacity: 0.3 + ((i * 29) % 45) / 100,
+    opacity: 0.42 + ((i * 29) % 42) / 100,
     animationDuration: `${8 + ((i * 13) % 9)}s`,
     animationDelay: `${-((i * 17) % 16)}s`,
   }
 })
 
-/** Sakura petals drift inward from both edges of the cinematic hero. */
+/** Dark crimson maple leaves drift inward from both edges of the cinematic hero. */
 const SAKURA_PETALS: CSSProperties[] = Array.from({ length: 30 }, (_, i) => {
   const fromLeft = i % 2 === 0
   return {
     top: `${5 + ((i * 19) % 88)}%`,
     left: fromLeft ? `${-2 + (i % 5) * 1.2}%` : 'auto',
     right: fromLeft ? 'auto' : `${-2 + (i % 5) * 1.2}%`,
-    width: `${8 + ((i * 11) % 10)}px`,
-    height: `${12 + ((i * 7) % 10)}px`,
+    width: `${10 + ((i * 11) % 13)}px`,
+    height: `${15 + ((i * 7) % 13)}px`,
     opacity: 0.35 + ((i * 17) % 45) / 100,
     animationDuration: `${12 + ((i * 13) % 12)}s`,
     animationDelay: `-${(i * 7) % 22}s`,
@@ -166,16 +166,17 @@ export default function HeroSection() {
 
       <div className="hero-sakura-branches" aria-hidden="true">
         <svg className="sakura-branch sakura-branch-left" viewBox="0 0 320 820" preserveAspectRatio="none">
-          <path d="M-24 820 C72 660 42 540 126 410 S214 188 314 18" />
-          <path d="M52 680 C-4 596 10 530 34 468 M126 410 C66 368 48 304 58 256 M212 214 C160 190 144 134 154 92 M168 336 C232 328 264 284 280 238" />
-          {Array.from({length: 22},(_,i)=><circle key={i} cx={28+((i*47)%270)} cy={55+((i*83)%700)} r={3+(i%4)} className="sakura-blossom" />)}
-          {Array.from({length: 9},(_,i)=><g key={i} className="sakura-flower" transform={`translate(${34+(i*31)%250} ${110+(i*73)%620})`}>{Array.from({length:5},(_,j)=><ellipse key={j} cx="0" cy="-7" rx="4.5" ry="8" transform={`rotate(${j*72})`} />)}<circle r="3" /></g>)}
+          <defs>
+            <linearGradient id="maple-bark" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#080708"/><stop offset=".48" stopColor="#321014"/><stop offset="1" stopColor="#090708"/></linearGradient>
+            <linearGradient id="maple-leaf" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stopColor="#090809"/><stop offset=".42" stopColor="#39080f"/><stop offset=".78" stopColor="#8e101c"/><stop offset="1" stopColor="#c32932"/></linearGradient>
+          </defs>
+          <g className="maple-wood"><path d="M-28 830 C35 720 28 635 78 552 C120 482 113 430 151 365 C190 298 191 218 245 154 C271 122 288 72 321 8"/><path d="M55 690 C8 632 2 581 18 520 M89 536 C40 488 34 434 43 389 M145 376 C92 344 76 291 82 244 M197 260 C157 222 157 180 171 137 M178 320 C230 316 264 282 286 235 M241 165 C278 168 300 146 315 118"/></g>
+          {Array.from({length:17},(_,i)=><g key={i} className="maple-leaf-cluster" transform={`translate(${18+((i*53)%290)} ${95+((i*79)%660)}) rotate(${(i*47)%110-55}) scale(${0.62+((i*7)%6)/10})`}><path d="M0 0 C-8 -10 -7 -20 -3 -28 L-14 -25 L-10 -39 L-23 -35 L-17 -49 L-4 -44 L-7 -59 L5 -48 L14 -62 L16 -45 L31 -50 L23 -35 L38 -30 L23 -20 L28 -7 L12 -12 L5 0 L2 -15 Z"/><path className="maple-vein" d="M0 0 L2 -43 M2 -27 L-12 -36 M3 -32 L18 -41 M1 -20 L-12 -23 M2 -22 L18 -28"/></g>)}
         </svg>
         <svg className="sakura-branch sakura-branch-right" viewBox="0 0 320 820" preserveAspectRatio="none">
-          <path d="M-24 820 C72 660 42 540 126 410 S214 188 314 18" />
-          <path d="M52 680 C-4 596 10 530 34 468 M126 410 C66 368 48 304 58 256 M212 214 C160 190 144 134 154 92 M168 336 C232 328 264 284 280 238" />
-          {Array.from({length: 22},(_,i)=><circle key={i} cx={28+((i*47)%270)} cy={55+((i*83)%700)} r={3+(i%4)} className="sakura-blossom" />)}
-          {Array.from({length: 9},(_,i)=><g key={i} className="sakura-flower" transform={`translate(${34+(i*31)%250} ${110+(i*73)%620})`}>{Array.from({length:5},(_,j)=><ellipse key={j} cx="0" cy="-7" rx="4.5" ry="8" transform={`rotate(${j*72})`} />)}<circle r="3" /></g>)}
+          <use href="#maple-branch-shape" />
+          <g className="maple-wood"><path d="M-28 830 C35 720 28 635 78 552 C120 482 113 430 151 365 C190 298 191 218 245 154 C271 122 288 72 321 8"/><path d="M55 690 C8 632 2 581 18 520 M89 536 C40 488 34 434 43 389 M145 376 C92 344 76 291 82 244 M197 260 C157 222 157 180 171 137 M178 320 C230 316 264 282 286 235 M241 165 C278 168 300 146 315 118"/></g>
+          {Array.from({length:17},(_,i)=><g key={i} className="maple-leaf-cluster" transform={`translate(${18+((i*53)%290)} ${95+((i*79)%660)}) rotate(${(i*47)%110-55}) scale(${0.62+((i*7)%6)/10})`}><path d="M0 0 C-8 -10 -7 -20 -3 -28 L-14 -25 L-10 -39 L-23 -35 L-17 -49 L-4 -44 L-7 -59 L5 -48 L14 -62 L16 -45 L31 -50 L23 -35 L38 -30 L23 -20 L28 -7 L12 -12 L5 0 L2 -15 Z"/><path className="maple-vein" d="M0 0 L2 -43 M2 -27 L-12 -36 M3 -32 L18 -41 M1 -20 L-12 -23 M2 -22 L18 -28"/></g>)}
         </svg>
       </div>
       <div className="hero-petals" aria-hidden="true">
