@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react'
 import { getSession, getCurrentUser, isAdmin, signIn, signOut, selectRows, saveRow, deleteRow, type Session } from '../lib/supabase'
 import './admin.css'
+import AppearancePanel from './AppearancePanel'
 
 const SECTIONS: { id: string; label: string; icon: string; key: string; readOnly?: boolean }[] = [
   { id: 'profiles', label: 'Profile', icon: '◉', key: 'id' },
@@ -127,7 +128,7 @@ export default function AdminApp() {
         <section className="admin-content">
           <div className="admin-toolbar"><input aria-label="Search records" placeholder="Search records…" value={query} onChange={e => setQuery(e.target.value)} /><div><button className="admin-secondary" onClick={() => void loadRows()}>↻ Refresh</button>{!active.readOnly && <button className="admin-primary" onClick={() => openEditor()}>＋ Add new</button>}</div></div>
           {error && <p className="admin-error admin-notice">{error}</p>}
-          {editing !== null || editor ? (
+          {section === 'site_settings' ? <AppearancePanel session={session} rows={rows} reload={loadRows} setError={setError} /> : editing !== null || editor ? (
             <form className="admin-editor" onSubmit={handleSave}><div className="admin-editor-head"><h2>{editing ? 'Edit record' : 'Create record'}</h2><button type="button" onClick={() => { setEditing(null); setEditor('') }}>✕ Close</button></div><p>JSON record editor — change the values, then save.</p><textarea spellCheck={false} value={editor} onChange={e => setEditor(e.target.value)} rows={18} /><button className="admin-primary" disabled={busy}>{busy ? 'SAVING…' : 'SAVE CHANGES →'}</button></form>
           ) : loading ? <div className="admin-empty">LOADING RECORDS…</div> : filtered.length === 0 ? <div className="admin-empty"><span>◇</span><h2>No records found</h2><p>Add a new record or change your search.</p></div> : (
             <div className="admin-records">{filtered.map((row, index) => <article className="admin-record" key={String(row[active.key] ?? index)}><div><strong>{String(row.title || row.name || row.platform || row.company || row.client_name || row.key || row.subject || 'Record')}</strong><small>{String(row.category || row.email || row.role || row.created_at || row.key || '')}</small><p>{String(row.short_description || row.description || row.quote || row.message || row.headline || '')}</p><span className={row.is_published === true ? 'admin-pill published' : 'admin-pill'}>{row.is_published === true ? 'PUBLISHED' : active.readOnly ? 'MESSAGE' : 'DRAFT / PRIVATE'}</span></div><div className="admin-record-actions"><button onClick={() => openEditor(row)}>Edit</button>{!active.readOnly && <button className="danger" onClick={() => void handleDelete(row)}>Delete</button>}</div></article>)}</div>
