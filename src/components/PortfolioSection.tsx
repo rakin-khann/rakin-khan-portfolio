@@ -2,9 +2,12 @@ import { PROJECTS } from '../data/content'
 import { usePublicRows } from '../hooks/usePublicRows'
 import { useReveal } from '../hooks/useScrollAnimation'
 import { IconArrowRight } from './icons'
+import PortfolioVideo from './PortfolioVideo'
+import { trackEvent } from '../lib/analytics'
 
 export default function PortfolioSection() {
   const projectRows = usePublicRows('projects')
+  const videoRows = usePublicRows('portfolio_media')
   const projects = projectRows.length ? projectRows.map(row => ({ title: String(row.title || ''), category: String(row.category || ''), image: String(row.cover_image_url || '/assets/work-neon.webp'), description: String(row.description || ''), url: String(row.project_url || ''), gallery: Array.isArray(row.gallery) ? row.gallery.map(item => String(item)).filter(Boolean) : [], placeholder: false })) : PROJECTS
   const ref = useReveal<HTMLElement>()
 
@@ -30,7 +33,7 @@ export default function PortfolioSection() {
               data-reveal
               data-reveal-delay={(i % 4) * 0.08}
             >
-              <img src={project.image} alt={`${project.title} — ${project.category}`} loading="lazy" />
+              <img onClick={() => trackEvent("project_view", project.title)} src={project.image} alt={`${project.title} — ${project.category}`} loading="lazy" />
               {project.placeholder && <span className="work-chip">Placeholder</span>}
               <div className="work-overlay">
                 <h3 className="work-title">{project.title}</h3>
@@ -43,6 +46,7 @@ export default function PortfolioSection() {
           ))}
         </div>
       </div>
+      {videoRows.length > 0 && <div className="container portfolio-video-section"><div className="portfolio-video-heading"><p className="section-label">// Videography</p><h2 className="section-title">Video <span className="text-red">Portfolio</span></h2><p className="section-sub">Selected films and motion work.</p></div><div className="portfolio-video-grid">{videoRows.map(row => <PortfolioVideo key={String(row.id)} id={String(row.id)} title={String(row.title)} poster={String(row.poster_url || '')} versions={{360:String(row.video_360_url||''),480:String(row.video_480_url||''),720:String(row.video_720_url||''),1080:String(row.video_1080_url||''),2160:String(row.video_2160_url||'')}} />)}</div></div>}
     </section>
   )
 }
