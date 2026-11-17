@@ -30,6 +30,9 @@ export default function HeroSection() {
   const heroScene = (settingsRows.find(row => row.key === 'hero_scene')?.value || {}) as Record<string, unknown>
   const characterSrc = String(heroScene.character_url || '/assets/samurai.webp')
   const profile = { ...PROFILE, name: String(profileRow?.name || PROFILE.name), title: String(profileRow?.headline || PROFILE.title), tagline: String(profileRow?.tagline || PROFILE.tagline), about: String(profileRow?.bio || PROFILE.about), email: String(profileRow?.email || PROFILE.email), location: String(profileRow?.location || PROFILE.location) }
+  const nameParts = profile.name.trim().split(/\s+/)
+  const firstName = nameParts.shift() || 'Rakin'
+  const lastName = nameParts.join(' ') || 'Khan'
   const socials = socialRows.length ? socialRows.map(row => ({ label: String(row.platform || ''), icon: String(row.icon || 'link'), href: String(row.url || '#') })) : SOCIALS
   const sectionRef = useRef<HTMLElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
@@ -115,8 +118,8 @@ export default function HeroSection() {
       </div>
 
       <h1 ref={titleRef} className="hero-title">
-        <span>RAKIN</span>
-        <span>KHAN</span>
+        <span>{firstName.toUpperCase()}</span>
+        <span>{lastName.toUpperCase()}</span>
       </h1>
 
       <div ref={flareRef} className="hero-flare" aria-hidden="true" />
@@ -139,7 +142,7 @@ export default function HeroSection() {
       <div ref={introRef} className="hero-intro">
         <p className="hero-role">{profile.title}</p>
         <p className="hero-name">
-          Rakin <span>Khan</span>
+          {firstName} <span>{lastName}</span>
         </p>
         <p className="hero-tagline">{profile.tagline}</p>
         <a href="#portfolio" className="btn">
