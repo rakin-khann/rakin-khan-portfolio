@@ -1,13 +1,19 @@
 import { NAV_LINKS, PROFILE, SOCIALS } from '../data/content'
+import { usePublicRows } from '../hooks/usePublicRows'
 import { SiteIcon } from './icons'
 
 export default function Footer() {
   const year = new Date().getFullYear()
+  const profile = usePublicRows('profiles')[0]
+  const socialRows = usePublicRows('social_links')
+  const name = String(profile?.name || PROFILE.name)
+  const title = String(profile?.headline || PROFILE.title)
+  const socials = socialRows.length ? socialRows.map(row => ({ label: String(row.platform || ''), icon: String(row.icon || 'link'), href: String(row.url || '#') })) : SOCIALS
 
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <a href="#home" className="footer-logo" aria-label={`${PROFILE.name} — back to top`}>
+        <a href="#home" className="footer-logo" aria-label={`${name} — back to top`}>
           <img src="/assets/logo.webp" alt="Rakin Khan logo" width={150} height={50} />
         </a>
 
@@ -22,7 +28,7 @@ export default function Footer() {
         </nav>
 
         <div className="footer-social">
-          {SOCIALS.map((s) => (
+          {socials.map((s) => (
             <a
               key={s.label}
               href={s.href}
@@ -39,9 +45,9 @@ export default function Footer() {
 
       <div className="container footer-bottom">
         <p>
-          © {year} {PROFILE.name}. All rights reserved.
+          © {year} {name}. All rights reserved.
         </p>
-        <p className="footer-role">{PROFILE.title}</p>
+        <p className="footer-role">{title}</p>
       </div>
     </footer>
   )
