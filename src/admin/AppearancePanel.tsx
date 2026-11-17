@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { saveRow, uploadPublicAsset, type Session } from '../lib/supabase'
 
 type Props = { session: Session; rows: Record<string, unknown>[]; reload: () => Promise<void>; setError: (value: string) => void }
-const defaults = { primary: '#ff101a', secondary: '#850000', background: '#050505', text: '#ffffff' }
+const defaults = { primary: '#ff101a', secondary: '#850000', background: '#050505', text: '#ffffff', muted: '#c0c0c0' }
 
 export default function AppearancePanel({ session, rows, reload, setError }: Props) {
   const [theme, setTheme] = useState(defaults)
@@ -12,7 +12,7 @@ export default function AppearancePanel({ session, rows, reload, setError }: Pro
   useEffect(() => {
     const savedTheme = (rows.find(row => row.key === 'global_theme')?.value || {}) as Record<string, string>
     const scene = (rows.find(row => row.key === 'hero_scene')?.value || {}) as Record<string, unknown>
-    setTheme({ primary: savedTheme.primary || defaults.primary, secondary: savedTheme.secondary || defaults.secondary, background: savedTheme.background || defaults.background, text: savedTheme.text || defaults.text })
+    setTheme({ primary: savedTheme.primary || defaults.primary, secondary: savedTheme.secondary || defaults.secondary, background: savedTheme.background || defaults.background, text: savedTheme.text || defaults.text, muted: savedTheme.muted || defaults.muted })
     setCharacterUrl(String(scene.character_url || '/assets/samurai.webp'))
   }, [rows])
   async function save() {
@@ -32,7 +32,7 @@ export default function AppearancePanel({ session, rows, reload, setError }: Pro
     catch (e) { setError(e instanceof Error ? e.message : 'Image upload failed') }
     finally { setUploading(false) }
   }
-  const colours: { key: keyof typeof theme; label: string }[] = [{ key: 'primary', label: 'Primary accent' }, { key: 'secondary', label: 'Secondary accent' }, { key: 'background', label: 'Background' }, { key: 'text', label: 'Main text' }]
+  const colours: { key: keyof typeof theme; label: string }[] = [{ key: 'primary', label: 'Primary accent' }, { key: 'secondary', label: 'Secondary accent' }, { key: 'background', label: 'Background' }, { key: 'text', label: 'Main text' }, { key: 'muted', label: 'Muted text' }]
   return <div className='appearance-editor'>
     <section className='appearance-card'><p className='admin-eyebrow'>GLOBAL DESIGN SYSTEM</p><h2>Website colours</h2><p>Choose the colours used across the public portfolio.</p>
       <div className='appearance-colours'>{colours.map(item => <label className='colour-field' key={item.key}>{item.label}<input type='color' value={theme[item.key]} onChange={e => setTheme(value => ({ ...value, [item.key]: e.target.value }))} /></label>)}</div>
