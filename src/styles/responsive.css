@@ -314,113 +314,141 @@
   .work-overlay{background:linear-gradient(180deg,transparent 22%,rgba(0,0,0,.92))}
 }
 
-
-/* ============================================================
-   MOBILE: preserve the actual desktop art direction.
-   The phone uses a 1024px desktop canvas and pans horizontally;
-   it does not reflow the Samurai hero or stack desktop sections.
-   ============================================================ */
+/* ---------- Refined mobile composition ---------- */
 @media (max-width: 768px) {
-  html, body, #root { min-width: 1024px; width: 1024px; }
-  body { font-size: 17px; overflow-x: auto; }
-  .container { width: min(1400px, 92vw); }
+  html, body, #root { width: 100%; min-width: 0; max-width: 100%; }
+  body { overflow-x: hidden; }
+  .container { width: min(1400px, 90vw); }
 
-  /* Keep the same desktop hero composition and typography. */
-  .hero { min-height: 620px; height: 100vh; height: 100svh; }
+  .header-inner { gap: 12px; }
+  .header-logo img { height: 38px; }
+  .menu-btn { width: 42px; height: 42px; }
+
+  .hero {
+    height: max(700px, 100svh);
+    min-height: 700px;
+  }
   .hero-title {
-    top: clamp(84px, 15vh, 170px);
+    top: 11%;
     left: 50%;
-    display: flex;
-    flex-direction: row;
-    align-items: initial;
-    gap: .28em;
-    font-size: 15.5rem;
-    line-height: .94;
+    width: 100%;
+    padding-inline: 12px;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    font-size: clamp(4.6rem, 19vw, 7.2rem);
+    line-height: .88;
+    letter-spacing: .015em;
     white-space: nowrap;
-    text-align: left;
+    text-align: center;
   }
   .hero-samurai {
     left: 50%;
     bottom: 0;
-    height: 82%;
-    aspect-ratio: 1349 / 1024;
+    height: 58%;
     max-width: none;
   }
-  .hero-intro {
-    left: 46px;
-    right: auto;
-    bottom: 13%;
-    max-width: 540px;
-    padding: 0;
-    background: none;
+  .hero-flare {
+    width: 130vw;
+    height: 38vh;
+    bottom: -6%;
   }
-  .hero-role { font-size: 1.06rem; }
-  .hero-name { font-size: 4.1rem; line-height: 1.02; }
-  .hero-tagline { font-size: 1.12rem; }
-  .hero-intro .btn { margin-top: 26px; padding: 13px 30px; font-size: .98rem; }
+  .hero-intro {
+    left: 6vw;
+    right: 6vw;
+    bottom: 5.5%;
+    max-width: 520px;
+    padding: 42px 0 0;
+    background: linear-gradient(180deg, transparent, rgba(5,5,5,.84) 35%);
+  }
+  .hero-role { font-size: .82rem; letter-spacing: .045em; }
+  .hero-name { font-size: clamp(2rem, 8.5vw, 2.8rem); line-height: 1; }
+  .hero-tagline { max-width: 42ch; font-size: .94rem; line-height: 1.45; }
+  .hero-intro .btn { margin-top: 14px; padding: 10px 19px; font-size: .82rem; }
   .hero-social {
-    top: 50%;
-    right: 24px;
+    top: 48%;
+    right: 12px;
     bottom: auto;
     transform: translateY(-50%);
-    gap: 12px;
+    gap: 7px;
   }
-  .hero-social a { width: 44px; height: 44px; }
-  .hero-scroll { display: flex; }
+  .hero-social a { width: 34px; height: 34px; border-radius: 8px; }
+  .hero-social a svg { width: 15px; height: 15px; }
+  .hero-scroll { display: none; }
 
-  /* Keep the desktop grid structures in every section. */
-  .section { padding: clamp(84px, 9.5vw, 136px) 0; }
-  .split {
-    grid-template-columns: minmax(300px, 400px) minmax(0, 1fr);
-    gap: clamp(36px, 4.5vw, 76px);
+  .section { padding: 76px 0; }
+  .split { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .split-head { max-width: 620px; }
+  .section-title { font-size: clamp(2rem, 8vw, 2.8rem); }
+  .section-sub { font-size: 1rem; line-height: 1.55; }
+
+  .about-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .about-stats { grid-column: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .about-stats .stat-card { min-width: 0; }
+  .portrait-frame { width: min(100%, 360px); margin-inline: auto; }
+
+  .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .service-card { min-width: 0; padding: 18px 14px; gap: 10px; }
+  .service-icon { width: 42px; height: 42px; }
+  .service-name { font-size: .98rem; line-height: 1.2; }
+  .service-desc { font-size: .84rem; line-height: 1.45; }
+
+  .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .work-card { min-width: 0; aspect-ratio: 1 / 1.12; }
+  .work-overlay { padding: 12px; }
+  .work-title { font-size: .94rem; }
+  .work-cat { font-size: .74rem; }
+  .work-title, .work-cat, .work-description, .work-project-link {
+    opacity: 1;
+    transform: none;
   }
-  .about-grid {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr) minmax(0, .8fr);
-    gap: clamp(30px, 3.6vw, 60px);
+  .work-overlay { background: linear-gradient(180deg, transparent 18%, rgba(0,0,0,.88)); }
+
+  .skills-rings {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: center;
+    gap: 24px 12px;
+    width: 100%;
+    max-width: 420px;
+    margin-inline: auto;
   }
-  .about-stats { grid-column: auto; flex-direction: column; flex-wrap: nowrap; }
-  .about-stats .stat-card { flex: none; }
-  .portrait-frame { width: auto; }
-  .service-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-  .service-card { padding: 26px; gap: 16px; }
-  .service-icon { width: 52px; height: 52px; }
-  .service-name { font-size: 1.06rem; }
-  .service-desc { font-size: .93rem; }
-  .work-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
-  .work-card { aspect-ratio: 1 / 1.14; }
-  .work-overlay { padding: 20px; }
-  .work-title { font-size: 1.08rem; }
-  .work-cat { font-size: .86rem; }
-  .work-title, .work-cat { opacity: 0; transform: translateY(10px); }
-  .work-card:hover .work-title, .work-card:hover .work-cat { opacity: 1; transform: none; }
-  .work-description, .work-project-link { opacity: 0; transform: translateY(8px); }
-  .work-card:hover .work-description, .work-card:hover .work-project-link { opacity: 1; transform: none; }
-  .skills-rings { grid-template-columns: repeat(4, auto); justify-content: space-between; gap: 26px; max-width: none; margin: 0; width: auto; }
-  .ring-wrap { width: 152px; height: 152px; }
-  .contact-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: clamp(40px, 5vw, 80px); }
-  .contact-card { padding: 22px 26px; }
-  .contact-card-value { font-size: 1.16rem; word-break: normal; }
-  .footer-inner { flex-direction: row; text-align: left; }
-  .footer-bottom { justify-content: space-between; text-align: left; }
-  .back-top { right: 22px; bottom: 22px; width: 50px; height: 50px; }
+  .ring-wrap { width: min(36vw, 142px); height: min(36vw, 142px); }
+  .ring-value { font-size: 1.3rem; }
+
+  .contact-grid { grid-template-columns: minmax(0, 1fr); gap: 30px; }
+  .contact-card { min-width: 0; padding: 18px; }
+  .contact-card-value { font-size: .98rem; overflow-wrap: anywhere; }
+  .contact-form { min-width: 0; }
+  .contact-form input, .contact-form textarea { min-width: 0; }
+
+  .footer-inner { flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+  .footer-bottom { justify-content: center; flex-wrap: wrap; gap: 12px; text-align: center; }
+  .back-top { right: 14px; bottom: 14px; width: 42px; height: 42px; }
 }
 
-/* Small-phone rules above are intentionally neutralized as well. */
 @media (max-width: 560px) {
-  .header-cta { display: inline-flex; }
-  .header-logo img { height: 42px; }
-  .service-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-  .service-card { padding: 26px; gap: 16px; }
-  .service-icon { width: 52px; height: 52px; }
-  .service-name { font-size: 1.06rem; }
-  .service-desc { font-size: .93rem; }
-  .work-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
-  .work-card { aspect-ratio: 1 / 1.14; }
-  .work-overlay { padding: 20px; }
-  .work-title { font-size: 1.08rem; }
-  .work-cat { font-size: .86rem; }
-  .ring-wrap { width: 152px; height: 152px; }
-  .ring-value { font-size: 1.55rem; }
-  .contact-card { padding: 22px 26px; }
-  .contact-card-value { font-size: 1.16rem; word-break: normal; }
+  .header-cta { display: none; }
+  .header-logo img { height: 34px; }
+  .hero { min-height: 680px; height: max(680px, 100svh); }
+  .hero-title { font-size: clamp(4.25rem, 18.5vw, 6.2rem); }
+  .hero-samurai { height: 54%; }
+  .hero-intro { bottom: 5%; }
+  .hero-role { font-size: .76rem; }
+  .hero-name { font-size: clamp(1.9rem, 8vw, 2.45rem); }
+  .hero-tagline { font-size: .88rem; }
+  .service-grid, .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .service-card { padding: 15px 12px; }
+  .service-name { font-size: .9rem; }
+  .service-desc { font-size: .8rem; }
+  .work-card { aspect-ratio: 1 / 1.18; }
+  .ring-wrap { width: min(38vw, 128px); height: min(38vw, 128px); }
+  .ring-value { font-size: 1.18rem; }
+}
+
+@media (max-width: 360px) {
+  .hero-title { font-size: 4.05rem; }
+  .hero-social { right: 8px; }
+  .hero-social a { width: 30px; height: 30px; }
+  .service-grid { gap: 9px; }
+  .service-card { padding: 13px 10px; }
 }
