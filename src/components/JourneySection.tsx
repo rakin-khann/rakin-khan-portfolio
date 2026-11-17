@@ -49,7 +49,7 @@ export default function JourneySection() {
                     <span className="journey-date">{formatDate(row.start_date)} — {formatDate(row.end_date)}</span>
                     <h4>{String(row.institution || 'Institution')}</h4>
                     <p className="journey-place">{[row.qualification, row.field_of_study].filter(Boolean).map(String).join(' · ')}</p>
-                    {row.description && <p className="journey-description">{String(row.description)}</p>}
+                    {Boolean(row.description) && <p className="journey-description">{String(row.description)}</p>}
                   </article>
                 ))}
               </div>
