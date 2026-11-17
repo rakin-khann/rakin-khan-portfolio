@@ -5,7 +5,7 @@ import { IconArrowRight, SiteIcon } from './icons'
 
 export default function AboutSection() {
   const profileRow = usePublicRows('profiles')[0]
-  const profile = { ...PROFILE, name: String(profileRow?.name || PROFILE.name), about: String(profileRow?.bio || PROFILE.about), avatar: String(profileRow?.avatar_url || '/assets/portrait.webp') }
+  const profile = { ...PROFILE, name: String(profileRow?.name || PROFILE.name), about: String(profileRow?.bio || PROFILE.about), avatar: String(profileRow?.avatar_url || '/assets/portrait.webp'), cv: String(profileRow?.cv_url || '') }
   const ref = useReveal<HTMLElement>()
 
   return (
