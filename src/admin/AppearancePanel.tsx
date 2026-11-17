@@ -21,7 +21,7 @@ export default function AppearancePanel({ session, rows, reload, setError }: Pro
     setTheme({ primary: savedTheme.primary || defaults.primary, secondary: savedTheme.secondary || defaults.secondary, background: savedTheme.background || defaults.background, text: savedTheme.text || defaults.text, muted: savedTheme.muted || defaults.muted })
     setScenes(parsed.length ? parsed : [newScene(1)])
   }, [rows])
-  function updateScene(index: number, key: keyof Scene, value: string | number) { setScenes(current => current.map((scene, i) => i === index ? { ...scene, [key]: value } : scene)) }
+  function updateScene(index: number, key: keyof Scene, value: string | number | boolean) { setScenes(current => current.map((scene, i) => i === index ? { ...scene, [key]: value } : scene)) }
   async function upload(index: number, target: 'character_url' | 'background_url', file?: File) {
     if (!file) return
     const uploadKey = `${index}-${target}`; setUploading(uploadKey); setError('')
