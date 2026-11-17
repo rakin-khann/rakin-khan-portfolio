@@ -4,6 +4,7 @@ import './admin.css'
 import AppearancePanel from './AppearancePanel'
 import AnalyticsPanel from './AnalyticsPanel'
 import MediaPanel from './MediaPanel'
+import AppointmentPanel from './AppointmentPanel'
 import './media-analytics.css'
 
 type Field = { key: string; label: string; type?: 'text' | 'textarea' | 'url' | 'number' | 'image' | 'date' | 'boolean' | 'gallery' | 'select'; hint?: string; required?: boolean; options?: { label: string; value: string }[] }
@@ -53,6 +54,7 @@ const SECTIONS: Section[] = [
     { key: 'quote', label: 'Client feedback', type: 'textarea', required: true }, { key: 'avatar_url', label: 'Client photo', type: 'image' }, ...common,
   ] },
   { id: 'contact_messages', label: 'Messages', icon: '✉', key: 'id', readOnly: true },
+  { id: 'appointment_requests', label: 'Appointment Bookings', icon: '▣', key: 'id', readOnly: true },
   { id: 'site_settings', label: 'Appearance & character', icon: '⚙', key: 'key' },
 ]
 const EXAMPLES: Record<string, Record<string, unknown>> = {
@@ -95,7 +97,7 @@ export default function AdminApp() {
     if (!session || !allowed) return
     // These sections have dedicated data loaders and do not map to a table named
     // after the navigation id. Video records live in portfolio_media.
-    if (section === 'analytics' || section === 'media') {
+    if (section === 'analytics' || section === 'media' || section === 'appointment_requests') {
       setRows([])
       setLoading(false)
       setError('')
@@ -179,9 +181,9 @@ export default function AdminApp() {
     </aside>
     <main className="admin-main"><header className="admin-topbar"><div><p className="admin-eyebrow">RAKIN KHAN / ADMINISTRATION</p><h1>{active.label}</h1></div><span className="admin-status">● SECURE SESSION</span></header>
       <section className="admin-content">
-        {!['site_settings', 'analytics', 'media'].includes(section) && <div className="admin-toolbar"><input aria-label="Search records" placeholder="Search records…" value={query} onChange={e => setQuery(e.target.value)} /><div><button className="admin-secondary" onClick={() => void loadRows()}>↻ Refresh</button>{!active.readOnly && <button className="admin-primary" onClick={() => openEditor()}>＋ Add new</button>}</div></div>}
+        {!['site_settings', 'analytics', 'media', 'appointment_requests'].includes(section) && <div className="admin-toolbar"><input aria-label="Search records" placeholder="Search records…" value={query} onChange={e => setQuery(e.target.value)} /><div><button className="admin-secondary" onClick={() => void loadRows()}>↻ Refresh</button>{!active.readOnly && <button className="admin-primary" onClick={() => openEditor()}>＋ Add new</button>}</div></div>}
         {error && <p className="admin-error admin-notice">{error}</p>}{notice && <p className="admin-success admin-notice">{notice}</p>}
-        {section === 'analytics' ? <AnalyticsPanel token={session.access_token} /> : section === 'media' ? <MediaPanel session={session} /> : section === 'site_settings' ? <AppearancePanel session={session} rows={rows} reload={loadRows} setError={setError} /> : editing !== null || Object.keys(draft).length > 0 ? (
+        {section === 'analytics' ? <AnalyticsPanel token={session.access_token} /> : section === 'media' ? <MediaPanel session={session} /> : section === 'appointment_requests' ? <AppointmentPanel token={session.access_token} /> : section === 'site_settings' ? <AppearancePanel session={session} rows={rows} reload={loadRows} setError={setError} /> : editing !== null || Object.keys(draft).length > 0 ? (
           <form className="admin-editor visual-editor" onSubmit={handleSave}><div className="admin-editor-head"><div><p className="admin-eyebrow">CONTENT EDITOR</p><h2>{editing ? 'Edit content' : 'Add new content'}</h2></div><button type="button" onClick={() => { setEditing(null); setDraft({}) }}>✕ Close</button></div>
             <p className="editor-help">নিচের ফিল্ডগুলো পূরণ করো। কোনো কোড লিখতে হবে না। Save করলে কনটেন্ট ওয়েবসাইটে দেখাবে।</p>
             <div className="editor-fields">{(active.fields || []).map(field => <label className={field.type === 'textarea' || field.type === 'gallery' ? 'editor-field full' : 'editor-field'} key={field.key}>
