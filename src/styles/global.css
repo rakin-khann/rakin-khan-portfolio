@@ -1322,3 +1322,5 @@ button {
 @media(max-width:768px){.work-description,.work-project-link{opacity:1;transform:none}.work-description{-webkit-line-clamp:2;font-size:.78rem}.work-project-link{font-size:.7rem;padding:5px 8px}}
 
 .work-gallery{display:flex;gap:6px;margin-top:7px}.work-gallery img{width:42px;height:42px;object-fit:cover;border:1px solid rgba(255,255,255,.3);border-radius:4px}
+
+.about-actions{display:flex;flex-wrap:wrap;gap:12px}.about-actions .btn{margin-top:30px}
