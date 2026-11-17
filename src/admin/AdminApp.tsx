@@ -1,12 +1,17 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react'
 import { getSession, getCurrentUser, isAdmin, signIn, signOut, selectRows, saveRow, deleteRow, uploadPublicAsset, type Session } from '../lib/supabase'
 import './admin.css'
-import AppearancePanel from './AppearancePanel'\nimport AnalyticsPanel from './AnalyticsPanel'\nimport MediaPanel from './MediaPanel'\nimport './media-analytics.css'
+import AppearancePanel from './AppearancePanel'
+import AnalyticsPanel from './AnalyticsPanel'
+import MediaPanel from './MediaPanel'
+import './media-analytics.css'
 
 type Field = { key: string; label: string; type?: 'text' | 'textarea' | 'url' | 'number' | 'image' | 'date' | 'boolean' | 'gallery'; hint?: string; required?: boolean }
 type Section = { id: string; label: string; icon: string; key: string; readOnly?: boolean; fields?: Field[] }
 const common: Field[] = [{ key: 'sort_order', label: 'Display order', type: 'number' }, { key: 'is_published', label: 'Show on website', type: 'boolean' }]
-const SECTIONS: Section[] = [\n  { id: 'analytics', label: 'Website Analytics', icon: '▥', key: 'id', readOnly: true },\n  { id: 'media', label: 'Video Portfolio', icon: '▶', key: 'id' },
+const SECTIONS: Section[] = [
+  { id: 'analytics', label: 'Website Analytics', icon: '▥', key: 'id', readOnly: true },
+  { id: 'media', label: 'Video Portfolio', icon: '▶', key: 'id' },
   { id: 'profiles', label: 'Profile & About', icon: '◉', key: 'id', fields: [
     { key: 'name', label: 'Your name', required: true }, { key: 'headline', label: 'Professional title' }, { key: 'tagline', label: 'Hero tagline' },
     { key: 'bio', label: 'About description', type: 'textarea' }, { key: 'location', label: 'Location' }, { key: 'email', label: 'Email', type: 'text' },
