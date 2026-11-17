@@ -222,11 +222,11 @@
 }
 
 @keyframes sakura-drift-in {
-  0% { transform: translate3d(calc(var(--sakura-direction) * -2vw), -2vh, 0) rotate(0deg); opacity: 0; }
+  0% { transform: translate3d(var(--sakura-start), -2vh, 0) rotate(0deg); opacity: 0; }
   14% { opacity: 0.9; }
-  48% { transform: translate3d(calc(var(--sakura-direction) * 19vw), 7vh, 0) rotate(190deg); opacity: 0.85; }
-  76% { transform: translate3d(calc(var(--sakura-direction) * 27vw), 24vh, 0) rotate(330deg); opacity: 0.72; }
-  100% { transform: translate3d(calc(var(--sakura-direction) * 34vw), 43vh, 0) rotate(520deg); opacity: 0; }
+  48% { transform: translate3d(var(--sakura-mid), 7vh, 0) rotate(190deg); opacity: 0.85; }
+  76% { transform: translate3d(var(--sakura-late), 24vh, 0) rotate(330deg); opacity: 0.72; }
+  100% { transform: translate3d(var(--sakura-end), 43vh, 0) rotate(520deg); opacity: 0; }
 }
 
 @media (max-width: 768px) {
