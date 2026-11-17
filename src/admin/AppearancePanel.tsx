@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { saveRow, uploadPublicAsset, type Session } from '../lib/supabase'
 
 type Props = { session: Session; rows: Record<string, unknown>[]; reload: () => Promise<void>; setError: (value: string) => void }
-type Scene = { name: string; character_url: string; background_mode: 'color' | 'image'; background_url: string; background_color: string; accent_color: string; secondary_color: string; red_glow: number }
+type Scene = { name: string; character_url: string; background_mode: 'color' | 'image'; background_url: string; background_color: string; accent_color: string; secondary_color: string; red_glow: number; is_published: boolean }
 const defaults = { primary: '#ff101a', secondary: '#850000', background: '#050505', text: '#ffffff', muted: '#c0c0c0' }
 const imageAccept = 'image/jpeg,image/png,image/webp,image/avif,.jpg,.jpeg,.png,.webp,.avif'
-const newScene = (number: number): Scene => ({ name: `Character ${number}`, character_url: '', background_mode: 'color', background_url: '', background_color: '#050505', accent_color: '#ff101a', secondary_color: '#850000', red_glow: 0.13 })
-const asScene = (value: Record<string, unknown>, number: number): Scene => ({ ...newScene(number), name: String(value.name || `Character ${number}`), character_url: String(value.character_url || ''), background_mode: value.background_mode === 'image' || value.background_url ? 'image' : 'color', background_url: String(value.background_url || ''), background_color: String(value.background_color || '#050505'), accent_color: String(value.accent_color || '#ff101a'), secondary_color: String(value.secondary_color || '#850000'), red_glow: Math.max(0, Math.min(0.6, Number(value.red_glow ?? 0.13))) })
+const newScene = (number: number): Scene => ({ name: `Character ${number}`, character_url: '', background_mode: 'color', background_url: '', background_color: '#050505', accent_color: '#ff101a', secondary_color: '#850000', red_glow: 0.13, is_published: true })
+const asScene = (value: Record<string, unknown>, number: number): Scene => ({ ...newScene(number), name: String(value.name || `Character ${number}`), character_url: String(value.character_url || ''), background_mode: value.background_mode === 'image' || value.background_url ? 'image' : 'color', background_url: String(value.background_url || ''), background_color: String(value.background_color || '#050505'), accent_color: String(value.accent_color || '#ff101a'), secondary_color: String(value.secondary_color || '#850000'), red_glow: Math.max(0, Math.min(0.6, Number(value.red_glow ?? 0.13))), is_published: value.is_published !== false })
 
 export default function AppearancePanel({ session, rows, reload, setError }: Props) {
   const [theme, setTheme] = useState(defaults)
@@ -54,6 +54,7 @@ export default function AppearancePanel({ session, rows, reload, setError }: Pro
         <button type='button' className='admin-secondary rotation-remove' disabled={scenes.length === 1} onClick={() => setScenes(current => current.filter((_, i) => i !== index))}>Remove</button>
       </div></div>
       <label className='character-url'>Theme / character name<input value={scene.name} onChange={e => updateScene(index, 'name', e.target.value)} placeholder='e.g. Samurai, Kratos, God of War' /></label>
+      <label className='rotation-publish'><input type='checkbox' checked={scene.is_published} onChange={e => updateScene(index, 'is_published', e.target.checked)} /> <span>Include this theme in public rotation</span></label>
       <div className='rotation-media-grid'>
         <div><strong>Character artwork</strong><div className='character-preview'>{scene.character_url ? <img src={scene.character_url} alt={scene.name} /> : <span>Upload character image</span>}</div>
           <label className='upload-character'>{uploading === `${index}-character_url` ? 'UPLOADING…' : 'UPLOAD CHARACTER IMAGE'}<input type='file' accept={imageAccept} disabled={Boolean(uploading)} onChange={e => void upload(index, 'character_url', e.target.files?.[0])} /></label>
