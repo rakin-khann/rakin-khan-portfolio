@@ -8,7 +8,7 @@ import { trackEvent } from '../lib/analytics'
 export default function PortfolioSection() {
   const projectRows = usePublicRows('projects')
   const videoRows = usePublicRows('portfolio_media')
-  const projects = projectRows.length ? projectRows.map(row => ({ id: String(row.id || ''), slug: String(row.slug || ''), title: String(row.title || ''), category: String(row.category || ''), image: String(row.cover_image_url || '/assets/work-neon.webp'), description: String(row.description || ''), url: String(row.project_url || ''), gallery: Array.isArray(row.gallery) ? row.gallery.map(item => String(item)).filter(Boolean) : [], placeholder: false })) : PROJECTS
+  const projects = projectRows.length ? projectRows.map(row => ({ id: String(row.id || ''), slug: String(row.slug || ''), title: String(row.title || ''), category: String(row.category || ''), image: String(row.cover_image_url || '/assets/work-neon.webp'), description: String(row.description || ''), url: String(row.project_url || ''), gallery: Array.isArray(row.gallery) ? row.gallery.map(item => String(item)).filter(Boolean) : [], placeholder: false })) : PROJECTS.map((project, index) => ({ ...project, slug: '', id: String(index) }))
   const ref = useReveal<HTMLElement>()
 
   return (
