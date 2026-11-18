@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { selectPublicRows } from '../lib/supabase'
+import { selectPublicRows, selectPortfolioPublicRows } from '../lib/supabase'
 
 type CacheEntry = { expiresAt: number; promise: Promise<Record<string, unknown>[]> }
 const publicRowsCache = new Map<string, CacheEntry>()
@@ -7,7 +7,7 @@ const publicRowsCache = new Map<string, CacheEntry>()
 function loadPublicRows(table: string) {
   const cached = publicRowsCache.get(table)
   if (cached && cached.expiresAt > Date.now()) return cached.promise
-  const promise = selectPublicRows(table).catch(error => {
+  const promise = (table === 'portfolio_media' ? selectPortfolioPublicRows() : selectPublicRows(table)).catch(error => {
     publicRowsCache.delete(table)
     throw error
   })
