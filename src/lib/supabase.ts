@@ -245,7 +245,16 @@ export async function uploadPortfolioVideo(file: File, token: string, quality: s
   return SUPABASE_URL + '/storage/v1/object/public/portfolio-media/' + path
 }
 export async function selectPortfolioMedia(token: string) {
-  return request('/rest/v1/portfolio_media?select=*&order=sort_order.asc,created_at.desc&limit=200', {}, token) as Promise<Record<string, unknown>[]>
+  const all: Record<string, unknown>[] = []
+  const pageSize = 1000
+  for (let start = 0; ; start += pageSize) {
+    const rows = await request('/rest/v1/portfolio_media?select=*&order=sort_order.asc,created_at.desc', {
+      headers: { Range: start + '-' + (start + pageSize - 1), 'Range-Unit': 'items' },
+    }, token) as Record<string, unknown>[]
+    all.push(...rows)
+    if (rows.length < pageSize) break
+  }
+  return all
 }
 export async function savePortfolioMedia(row: Record<string, unknown>, token: string) {
   const id = row.id
