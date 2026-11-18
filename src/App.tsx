@@ -5,6 +5,7 @@ import AboutSection from './components/AboutSection'
 import ServicesSection from './components/ServicesSection'
 import PortfolioSection from './components/PortfolioSection'
 import ProjectDetail from './components/ProjectDetail'
+import VideoDetail from './components/VideoDetail'
 import SkillsSection from './components/SkillsSection'
 import JourneySection from './components/JourneySection'
 import TestimonialsSection from './components/TestimonialsSection'
@@ -39,6 +40,7 @@ export default function App() {
   const path = window.location.pathname.replace(/\/$/, '')
   if (path === '/admin') return <AdminApp />
   if (path.startsWith('/projects/')) return <ProjectDetail slug={decodeURIComponent(path.slice('/projects/'.length))} />
+  if (path.startsWith('/videos/')) return <VideoDetail id={decodeURIComponent(path.slice('/videos/'.length))} />
 
   return (
     <>
