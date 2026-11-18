@@ -168,3 +168,23 @@
 @media(hover:none){
   .admin-sidebar nav button,.admin-primary,.admin-secondary,.admin-record-actions button{ -webkit-tap-highlight-color:transparent }
 }
+
+
+/* Reliable, visible multi-video picker and upload queue */
+.media-editor-multi-upload{display:grid;gap:12px;padding:16px;background:#171315;border:1px solid #493034;border-radius:5px;min-width:0}
+.media-editor-multi-upload h3{margin:0 0 6px;color:#fff;font:20px Anton,sans-serif}
+.media-editor-multi-upload p{line-height:1.45}
+.media-bulk-picker{display:grid;gap:8px;justify-items:start}
+.media-bulk-picker label{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 16px;background:#21191a;border:1px dashed #b45b63;color:#fff;font:700 13px Rajdhani,sans-serif;letter-spacing:.08em;cursor:pointer}
+.media-bulk-picker input{display:block;width:100%;max-width:100%;min-height:42px;color:#eee;font:14px Rajdhani,sans-serif}
+.media-bulk-picker input::file-selector-button{margin-right:10px;padding:10px 12px;background:#302124;border:1px solid #75434a;color:#fff;cursor:pointer}
+.media-bulk-picker small,.media-bulk-hint{color:#bba9ab;font-size:12px}
+.media-bulk-file-list{display:grid;gap:5px;max-height:180px;overflow:auto;margin:0;padding:10px 10px 10px 28px;background:#0b090a;border:1px solid #38272b}
+.media-bulk-file-list li{overflow-wrap:anywhere;color:#eee;font-size:13px}
+.media-bulk-file-list small{color:#ad999c}
+.media-bulk-progress{display:grid;gap:8px}
+.media-bulk-progress>div{display:flex;justify-content:space-between;gap:12px}
+.media-bulk-progress progress{width:100%;height:12px;accent-color:#c52b35}
+.media-bulk-errors{padding:10px;background:#2a1114;border:1px solid #71343a;color:#ffdadd;overflow-wrap:anywhere}
+.media-editor-multi-upload button{justify-self:start}
+@media(max-width:700px){.media-editor-multi-upload{padding:12px}.media-bulk-picker input{font-size:13px}.media-editor-multi-upload button{width:100%}}
