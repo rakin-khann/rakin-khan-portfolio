@@ -61,3 +61,9 @@
 @media(max-width:600px){.media-bulk-uploader{padding:15px}.media-bulk-picker{width:100%}.portfolio-video-link .portfolio-video-meta{align-items:flex-start}.portfolio-video-link .work-project-link{white-space:normal}}
 
 .video-detail-quality{display:flex;align-items:center;gap:12px;color:#b88e92;font-size:11px;letter-spacing:.1em;margin:-12px 0 24px}.video-detail-quality select{background:#100e0f;border:1px solid #493034;color:#fff;padding:9px 12px;font:600 14px Rajdhani,sans-serif}
+
+/* Automatic source-resolution detection in the video editor */
+.media-bulk-hint{padding:10px 12px;border-left:2px solid #b43b46;background:#1a1113;color:#d7c5c7!important;font-size:13px}
+.media-detected-qualities{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.media-detected-qualities span{padding:5px 9px;border:1px solid #493034;color:#8f7e81;font-size:11px;letter-spacing:.05em}
+.media-detected-qualities span.is-uploaded{border-color:#287a4a;color:#9be0b3;background:#102117}
