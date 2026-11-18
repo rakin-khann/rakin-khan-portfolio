@@ -71,16 +71,17 @@ export default function MediaPanel({ session }: { session: Session }) {
   return <div className="media-panel">
     <div className="media-toolbar"><div><p className="admin-eyebrow">PORTFOLIO MEDIA LIBRARY</p><h2>Video projects</h2><small>Upload separate MP4/WebM versions for each quality. Auto selects the best available source supported by the viewer.</small></div><button className="admin-primary" onClick={()=>{setDraft(blank());setError('');setNotice('')}}>＋ Add video project</button></div>
     {error&&<p className="admin-error admin-notice">{error}</p>}{notice&&<p className="admin-success admin-notice">{notice}</p>}
-    <section className="media-bulk-uploader">
-      <div><h3>Bulk video upload</h3><p>Select up to 1,000+ MP4/WebM files at once. Each file becomes its own video project. Uploads run in a safe queue, one at a time.</p></div>
-      <label className="media-bulk-picker">＋ Select multiple videos<input type="file" accept="video/mp4,video/webm,.mp4,.webm" multiple disabled={bulkRunning} onChange={e=>setBulkFiles(Array.from(e.target.files||[]))}/></label>
-      {bulkFiles.length>0&&<><p className="media-bulk-count">{bulkFiles.length.toLocaleString()} videos selected</p><p className="media-bulk-hint">Each file's actual resolution will be detected automatically and saved under its matching quality.</p><label className="editor-toggle"><input type="checkbox" checked={bulkPublish} disabled={bulkRunning} onChange={e=>setBulkPublish(e.target.checked)}/> <small>Publish each video immediately after upload</small></label><button className="admin-primary" disabled={bulkRunning} onClick={()=>void uploadBulkVideos()}>{bulkRunning?'UPLOADING…':'UPLOAD '+bulkFiles.length.toLocaleString()+' VIDEOS →'}</button></>}
-      {bulkRunning&&<div className="media-bulk-progress"><div><strong>{bulkProgress.done.toLocaleString()} / {bulkProgress.total.toLocaleString()}</strong><span>{Math.round(bulkProgress.done/Math.max(1,bulkProgress.total)*100)}%</span></div><progress max={bulkProgress.total||1} value={bulkProgress.done}/><small>Now uploading: {bulkProgress.current}</small></div>}
-      {bulkFailures.length>0&&<details className="media-bulk-errors"><summary>{bulkFailures.length} files could not be uploaded</summary>{bulkFailures.map((failure,i)=><p key={i}>{failure}</p>)}</details>}
-    </section>
+
 
     {draft&&<section className="media-editor">
       <div className="admin-editor-head"><h2>{draft.id?'Edit video project':'New video project'}</h2><button onClick={()=>setDraft(null)}>✕ Close</button></div>
+      <section className="media-bulk-uploader media-editor-multi-upload">
+        <div><h3>Upload multiple videos</h3><p>একসাথে একাধিক MP4/WebM ভিডিও নির্বাচন করো। প্রতিটি ভিডিও আলাদা Portfolio project হিসেবে যোগ হবে এবং Resolution নিজে থেকেই শনাক্ত হবে।</p></div>
+        <label className="media-bulk-picker">＋ Select multiple videos<input type="file" accept="video/mp4,video/webm,.mp4,.webm" multiple disabled={bulkRunning} onChange={e=>setBulkFiles(Array.from(e.target.files||[]))}/></label>
+        {bulkFiles.length>0&&<><p className="media-bulk-count">{bulkFiles.length.toLocaleString()} videos selected</p><p className="media-bulk-hint">প্রতিটি ভিডিওর জন্য আলাদা project তৈরি হবে।</p><label className="editor-toggle"><input type="checkbox" checked={bulkPublish} disabled={bulkRunning} onChange={e=>setBulkPublish(e.target.checked)}/> <small>Publish each video immediately after upload</small></label><button className="admin-primary" disabled={bulkRunning} onClick={()=>void uploadBulkVideos()}>{bulkRunning?'UPLOADING…':'UPLOAD '+bulkFiles.length.toLocaleString()+' VIDEOS →'}</button></>}
+        {bulkRunning&&<div className="media-bulk-progress"><div><strong>{bulkProgress.done.toLocaleString()} / {bulkProgress.total.toLocaleString()}</strong><span>{Math.round(bulkProgress.done/Math.max(1,bulkProgress.total)*100)}%</span></div><progress max={bulkProgress.total||1} value={bulkProgress.done}/><small>Now uploading: {bulkProgress.current}</small></div>}
+        {bulkFailures.length>0&&<details className="media-bulk-errors"><summary>{bulkFailures.length} files could not be uploaded</summary>{bulkFailures.map((failure,i)=><p key={i}>{failure}</p>)}</details>}
+      </section>
       <div className="editor-fields">
         <label className="editor-field"><span>Project title *</span><input value={String(draft.title||'')} onChange={e=>update('title',e.target.value)} required/></label>
         <label className="editor-field"><span>Category</span><input value={String(draft.category||'')} onChange={e=>update('category',e.target.value)}/></label>
