@@ -14,6 +14,7 @@ export default function MediaPanel({ session }: { session: Session }) {
   const [bulkFiles,setBulkFiles] = useState<File[]>([])
   const [bulkRunning,setBulkRunning] = useState(false)
   const [bulkPublish,setBulkPublish] = useState(true)
+  const [bulkQuality,setBulkQuality] = useState<typeof qualities[number]>('1080')
   const [bulkProgress,setBulkProgress] = useState({done:0,total:0,current:''})
   const [bulkFailures,setBulkFailures] = useState<string[]>([])
   async function load(){ setBusy(true); try{setItems(await selectPortfolioMedia(session.access_token))}catch(e){setError(e instanceof Error?e.message:'Could not load media')}finally{setBusy(false)} }
@@ -30,9 +31,9 @@ export default function MediaPanel({ session }: { session: Session }) {
       setBulkProgress({done:completed,total:bulkFiles.length,current:file.name})
       try{
         if(!['mp4','webm'].includes(file.name.split('.').pop()?.toLowerCase()||''))throw new Error('Unsupported format (MP4/WebM only)')
-        const url=await uploadPortfolioVideo(file,session.access_token,'1080')
+        const url=await uploadPortfolioVideo(file,session.access_token,bulkQuality)
         const title=file.name.replace(/\\.[^.]+$/,'').replace(/[_-]+/g,' ').trim()||'Untitled video'
-        await savePortfolioMedia({title,category:'Videography',description:'',poster_url:null,default_quality:'1080',video_1080_url:url,sort_order:100000+index,is_published:bulkPublish},session.access_token)
+        await savePortfolioMedia({title,category:'Videography',description:'',poster_url:null,default_quality:bulkQuality,['video_'+bulkQuality+'_url']:url,sort_order:100000+index,is_published:bulkPublish},session.access_token)
       }catch(e){failures.push(file.name+': '+(e instanceof Error?e.message:'Upload failed'))}
       completed++
       setBulkProgress({done:completed,total:bulkFiles.length,current:file.name})
@@ -73,7 +74,7 @@ export default function MediaPanel({ session }: { session: Session }) {
     <section className="media-bulk-uploader">
       <div><h3>Bulk video upload</h3><p>Select up to 1,000+ MP4/WebM files at once. Each file becomes its own video project. Uploads run in a safe queue, one at a time.</p></div>
       <label className="media-bulk-picker">＋ Select multiple videos<input type="file" accept="video/mp4,video/webm,.mp4,.webm" multiple disabled={bulkRunning} onChange={e=>setBulkFiles(Array.from(e.target.files||[]))}/></label>
-      {bulkFiles.length>0&&<><p className="media-bulk-count">{bulkFiles.length.toLocaleString()} videos selected</p><label className="editor-toggle"><input type="checkbox" checked={bulkPublish} disabled={bulkRunning} onChange={e=>setBulkPublish(e.target.checked)}/> <small>Publish each video immediately after upload</small></label><button className="admin-primary" disabled={bulkRunning} onClick={()=>void uploadBulkVideos()}>{bulkRunning?'UPLOADING…':'UPLOAD '+bulkFiles.length.toLocaleString()+' VIDEOS →'}</button></>}
+      {bulkFiles.length>0&&<><p className="media-bulk-count">{bulkFiles.length.toLocaleString()} videos selected</p><label className="editor-field"><span>Quality label for this batch</span><select value={bulkQuality} disabled={bulkRunning} onChange={e=>setBulkQuality(e.target.value as typeof qualities[number])}>{qualities.map(q=><option value={q} key={q}>{q}p</option>)}</select><small>Choose the matching quality of the selected files.</small></label><label className="editor-toggle"><input type="checkbox" checked={bulkPublish} disabled={bulkRunning} onChange={e=>setBulkPublish(e.target.checked)}/> <small>Publish each video immediately after upload</small></label><button className="admin-primary" disabled={bulkRunning} onClick={()=>void uploadBulkVideos()}>{bulkRunning?'UPLOADING…':'UPLOAD '+bulkFiles.length.toLocaleString()+' VIDEOS →'}</button></>}
       {bulkRunning&&<div className="media-bulk-progress"><div><strong>{bulkProgress.done.toLocaleString()} / {bulkProgress.total.toLocaleString()}</strong><span>{Math.round(bulkProgress.done/Math.max(1,bulkProgress.total)*100)}%</span></div><progress max={bulkProgress.total||1} value={bulkProgress.done}/><small>Now uploading: {bulkProgress.current}</small></div>}
       {bulkFailures.length>0&&<details className="media-bulk-errors"><summary>{bulkFailures.length} files could not be uploaded</summary>{bulkFailures.map((failure,i)=><p key={i}>{failure}</p>)}</details>}
     </section>
