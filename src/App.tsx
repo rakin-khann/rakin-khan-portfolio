@@ -30,7 +30,7 @@ export default function App() {
     root.style.setProperty('--red-rgb', toRgb(primary)); root.style.setProperty('--red-deep-rgb', toRgb(secondary)); root.style.setProperty('--red', primary); root.style.setProperty('--red-deep', secondary)
     root.style.setProperty('--bg', theme.background || '#050505'); root.style.setProperty('--white', theme.text || '#ffffff'); root.style.setProperty('--gray', theme.muted || '#c0c0c0'); root.style.setProperty('--border-red', primary + '47'); root.style.setProperty('--glow-red', '0 0 22px ' + primary + '73')
   }, [settings])
-  const path = window.location.pathname.replace(/\\/$/, '')
+  const path = window.location.pathname.replace(/\/+$/, '')
   if (path === '/admin') return <AdminApp />
   if (path === '/videos') return <VideoGallery />
   if (path.startsWith('/projects/')) return <ProjectDetail slug={decodeURIComponent(path.slice('/projects/'.length))} />
