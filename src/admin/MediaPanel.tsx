@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { deletePortfolioMedia, savePortfolioMedia, selectPortfolioMedia, uploadPortfolioVideo, uploadPublicAsset, type Session } from '../lib/supabase'
+import { deletePortfolioMedia, detectVideoQuality, savePortfolioMedia, selectPortfolioMedia, uploadPortfolioVideo, uploadPublicAsset, type Session } from '../lib/supabase'
 
 type Media = Record<string, unknown> & { id?: string }
 const qualities = ['360','480','720','1080','2160'] as const
@@ -14,7 +14,6 @@ export default function MediaPanel({ session }: { session: Session }) {
   const [bulkFiles,setBulkFiles] = useState<File[]>([])
   const [bulkRunning,setBulkRunning] = useState(false)
   const [bulkPublish,setBulkPublish] = useState(true)
-  const [bulkQuality,setBulkQuality] = useState<typeof qualities[number]>('1080')
   const [bulkProgress,setBulkProgress] = useState({done:0,total:0,current:''})
   const [bulkFailures,setBulkFailures] = useState<string[]>([])
   async function load(){ setBusy(true); try{setItems(await selectPortfolioMedia(session.access_token))}catch(e){setError(e instanceof Error?e.message:'Could not load media')}finally{setBusy(false)} }
@@ -31,9 +30,10 @@ export default function MediaPanel({ session }: { session: Session }) {
       setBulkProgress({done:completed,total:bulkFiles.length,current:file.name})
       try{
         if(!['mp4','webm'].includes(file.name.split('.').pop()?.toLowerCase()||''))throw new Error('Unsupported format (MP4/WebM only)')
-        const url=await uploadPortfolioVideo(file,session.access_token,bulkQuality)
+        const detected=await detectVideoQuality(file)
+        const url=await uploadPortfolioVideo(file,session.access_token,detected.quality)
         const title=file.name.replace(/\\.[^.]+$/,'').replace(/[_-]+/g,' ').trim()||'Untitled video'
-        await savePortfolioMedia({title,category:'Videography',description:'',poster_url:null,default_quality:bulkQuality,['video_'+bulkQuality+'_url']:url,sort_order:100000+index,is_published:bulkPublish},session.access_token)
+        await savePortfolioMedia({title,category:'Videography',description:'',poster_url:null,default_quality:detected.quality,['video_'+detected.quality+'_url']:url,sort_order:100000+index,is_published:bulkPublish},session.access_token)
       }catch(e){failures.push(file.name+': '+(e instanceof Error?e.message:'Upload failed'))}
       completed++
       setBulkProgress({done:completed,total:bulkFiles.length,current:file.name})
@@ -42,10 +42,10 @@ export default function MediaPanel({ session }: { session: Session }) {
     setNotice((completed-failures.length)+' of '+completed+' videos uploaded'+(bulkPublish?' and published.':' as drafts.'))
     await load()
   }
-  async function uploadVideo(quality:typeof qualities[number],file?:File){
+  async function uploadVideo(file?:File){
     if(!file||!draft)return
-    setUploading(quality);setError('')
-    try{const url=await uploadPortfolioVideo(file,session.access_token,quality);update('video_'+quality+'_url',url);setNotice(quality+'p version uploaded. Save the project to publish it.')}
+    setUploading('video');setError('')
+    try{const detected=await detectVideoQuality(file);const url=await uploadPortfolioVideo(file,session.access_token,detected.quality);update('video_'+detected.quality+'_url',url);setNotice('Detected '+detected.quality+'p ('+detected.width+' × '+detected.height+'). Uploaded automatically to the matching quality slot. Save the project to apply it.')}
     catch(e){setError(e instanceof Error?e.message:'Video upload failed')}
     finally{setUploading(null)}
   }
@@ -74,7 +74,7 @@ export default function MediaPanel({ session }: { session: Session }) {
     <section className="media-bulk-uploader">
       <div><h3>Bulk video upload</h3><p>Select up to 1,000+ MP4/WebM files at once. Each file becomes its own video project. Uploads run in a safe queue, one at a time.</p></div>
       <label className="media-bulk-picker">＋ Select multiple videos<input type="file" accept="video/mp4,video/webm,.mp4,.webm" multiple disabled={bulkRunning} onChange={e=>setBulkFiles(Array.from(e.target.files||[]))}/></label>
-      {bulkFiles.length>0&&<><p className="media-bulk-count">{bulkFiles.length.toLocaleString()} videos selected</p><label className="editor-field"><span>Quality label for this batch</span><select value={bulkQuality} disabled={bulkRunning} onChange={e=>setBulkQuality(e.target.value as typeof qualities[number])}>{qualities.map(q=><option value={q} key={q}>{q}p</option>)}</select><small>Choose the matching quality of the selected files.</small></label><label className="editor-toggle"><input type="checkbox" checked={bulkPublish} disabled={bulkRunning} onChange={e=>setBulkPublish(e.target.checked)}/> <small>Publish each video immediately after upload</small></label><button className="admin-primary" disabled={bulkRunning} onClick={()=>void uploadBulkVideos()}>{bulkRunning?'UPLOADING…':'UPLOAD '+bulkFiles.length.toLocaleString()+' VIDEOS →'}</button></>}
+      {bulkFiles.length>0&&<><p className="media-bulk-count">{bulkFiles.length.toLocaleString()} videos selected</p><p className="media-bulk-hint">Each file's actual resolution will be detected automatically and saved under its matching quality.</p><label className="editor-toggle"><input type="checkbox" checked={bulkPublish} disabled={bulkRunning} onChange={e=>setBulkPublish(e.target.checked)}/> <small>Publish each video immediately after upload</small></label><button className="admin-primary" disabled={bulkRunning} onClick={()=>void uploadBulkVideos()}>{bulkRunning?'UPLOADING…':'UPLOAD '+bulkFiles.length.toLocaleString()+' VIDEOS →'}</button></>}
       {bulkRunning&&<div className="media-bulk-progress"><div><strong>{bulkProgress.done.toLocaleString()} / {bulkProgress.total.toLocaleString()}</strong><span>{Math.round(bulkProgress.done/Math.max(1,bulkProgress.total)*100)}%</span></div><progress max={bulkProgress.total||1} value={bulkProgress.done}/><small>Now uploading: {bulkProgress.current}</small></div>}
       {bulkFailures.length>0&&<details className="media-bulk-errors"><summary>{bulkFailures.length} files could not be uploaded</summary>{bulkFailures.map((failure,i)=><p key={i}>{failure}</p>)}</details>}
     </section>
@@ -87,7 +87,7 @@ export default function MediaPanel({ session }: { session: Session }) {
         <label className="editor-field full"><span>Description</span><textarea rows={3} value={String(draft.description||'')} onChange={e=>update('description',e.target.value)}/></label>
         <label className="editor-field"><span>Poster / Thumbnail</span><input type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={e=>void uploadPoster(e.target.files?.[0])}/><small>{uploading==='poster'?'Uploading poster…':'JPG, PNG, WebP or AVIF'}</small>{Boolean(draft.poster_url)&&<img className="editor-image-preview" src={String(draft.poster_url)} alt="Video poster"/>}</label>
         <label className="editor-field"><span>Default quality</span><select value={String(draft.default_quality||'auto')} onChange={e=>update('default_quality',e.target.value)}><option value="auto">Auto (recommended)</option>{qualities.map(q=><option key={q} value={q}>{q}p</option>)}</select></label>
-        {qualities.map(q=><label className="editor-field" key={q}><span>{q}p video version</span><input type="file" accept="video/mp4,video/webm,.mp4,.webm" onChange={e=>void uploadVideo(q,e.target.files?.[0])}/><small>{uploading===q?'Uploading '+q+'p…':draft['video_'+q+'_url']?'✓ Version uploaded':'Upload MP4 or WebM file for '+q+'p'}</small></label>)}
+        <label className="editor-field full"><span>Upload video — quality detects automatically</span><input type="file" accept="video/mp4,video/webm,.mp4,.webm" onChange={e=>{void uploadVideo(e.target.files?.[0]);e.currentTarget.value=''}}/><small>{uploading==='video'?'Reading resolution and uploading…':'Select any MP4/WebM video. We detect its actual resolution and place it in the correct quality slot.'}</small><div className="media-detected-qualities">{qualities.map(q=><span key={q} className={draft['video_'+q+'_url']?'is-uploaded':''}>{q}p {draft['video_'+q+'_url']?'✓':'—'}</span>)}</div></label>
         <label className="editor-field"><span>Display order</span><input type="number" value={String(draft.sort_order??0)} onChange={e=>update('sort_order',Number(e.target.value))}/></label>
         <label className="editor-field"><span>Publish on website</span><span className="editor-toggle"><input type="checkbox" checked={Boolean(draft.is_published)} onChange={e=>update('is_published',e.target.checked)}/> <small>{draft.is_published?'Published':'Draft'}</small></span></label>
       </div>
