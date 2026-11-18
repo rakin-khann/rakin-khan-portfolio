@@ -218,7 +218,8 @@ export const IconCode = (p: IconProps) => (
 /* ---------- Lookup helpers ---------- */
 
 const ICONS: Record<string, (p: IconProps) => ReactElement> = {
-  facebook: IconFacebook,\n  'google-drive': IconGoogleDrive,
+  facebook: IconFacebook,
+  'google-drive': IconGoogleDrive,
   linkedin: IconLinkedIn,
   youtube: IconYouTube,
   instagram: IconInstagram,
