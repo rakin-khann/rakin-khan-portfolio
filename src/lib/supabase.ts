@@ -177,8 +177,10 @@ export async function uploadPublicAsset(file: File, token: string): Promise<stri
 }
 
 export async function uploadPortfolioVideo(file: File, token: string, quality: string): Promise<string> {
+  const extension = file.name.split('.').pop()?.toLowerCase()
+  const mimeType = file.type || (extension === 'mp4' ? 'video/mp4' : extension === 'webm' ? 'video/webm' : '')
   const allowed = ['video/mp4', 'video/webm']
-  if (!allowed.includes(file.type)) throw new Error('Video format must be MP4 or WebM.')
+  if (!allowed.includes(mimeType)) throw new Error('Video format must be MP4 or WebM.')
   if (file.size > 500 * 1024 * 1024) throw new Error('Each video version must be 500 MB or smaller.')
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-')
   const path = 'videos/' + Date.now() + '-' + quality + 'p-' + safeName
@@ -195,7 +197,7 @@ export async function uploadPortfolioVideo(file: File, token: string, quality: s
       'Upload-Metadata': [
         metadata('bucketName', 'portfolio-media'),
         metadata('objectName', path),
-        metadata('contentType', file.type),
+        metadata('contentType', mimeType),
         metadata('cacheControl', '31536000'),
       ].join(','),
       'x-upsert': 'true',
