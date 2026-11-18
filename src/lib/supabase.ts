@@ -285,3 +285,17 @@ export async function updateAppointmentRequest(id: string, status: string, token
   if (!rows.length) throw new Error('Booking was not updated. Check admin permissions.')
   return rows[0]
 }
+
+/** Fetches every published video row in bounded pages so libraries can exceed 1,000 entries. */
+export async function selectPortfolioPublicRows() {
+  const all: Record<string, unknown>[] = []
+  const pageSize = 1000
+  for (let start = 0; ; start += pageSize) {
+    const rows = await request('/rest/v1/portfolio_media?select=*&is_published=eq.true&order=sort_order.asc,created_at.desc', {
+      headers: { Range: start + '-' + (start + pageSize - 1), 'Range-Unit': 'items' },
+    }) as Record<string, unknown>[]
+    all.push(...rows)
+    if (rows.length < pageSize) break
+  }
+  return all
+}
