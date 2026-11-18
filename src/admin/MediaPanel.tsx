@@ -35,7 +35,7 @@ export default function MediaPanel({ session }: { session: Session }) {
         const detected=await detectVideoQuality(file)
         const url=await uploadPortfolioVideo(file,session.access_token,detected.quality)
         const title=file.name.replace(/\\.[^.]+$/,'').replace(/[_-]+/g,' ').trim()||'Untitled video'
-        await savePortfolioMedia({title,category:'Videography',description:bulkDescription.trim(),category:bulkCategory.trim()||'Videography',poster_url:null,default_quality:detected.quality,['video_'+detected.quality+'_url']:url,sort_order:100000+index,is_published:bulkPublish},session.access_token)
+        await savePortfolioMedia({title,category:bulkCategory.trim()||'Videography',description:bulkDescription.trim(),poster_url:null,default_quality:detected.quality,['video_'+detected.quality+'_url']:url,sort_order:100000+index,is_published:bulkPublish},session.access_token)
       }catch(e){failures.push(file.name+': '+(e instanceof Error?e.message:'Upload failed'))}
       completed++
       setBulkProgress({done:completed,total:bulkFiles.length,current:file.name})
