@@ -111,6 +111,17 @@ export const IconX = (p: IconProps) => (
   </svg>
 )
 
+export const IconGoogleDrive = (p: IconProps) => (
+  <svg {...base({ ...p, viewBox: '0 0 87.3 78', fill: 'none', stroke: 'none' })}>
+    <path fill="#0066DA" d="M29.5 0h18.3L18.3 51.8H0z" />
+    <path fill="#00AC47" d="M29.5 0h18.3l29.5 51.8H59z" />
+    <path fill="#EA4335" d="M18.3 51.8H0l10.2 17.8a16.6 16.6 0 0 0 14.4 8.4h42.2L77 60.2H24.6z" />
+    <path fill="#00832D" d="M59 51.8h18.3L87.3 69.6H69z" />
+    <path fill="#2684FC" d="M59 51.8H18.3L8.1 69.6h50.8l10.2-17.8z" />
+    <path fill="#FFBA00" d="M77.3 51.8 87.3 69.6 77 78H66.8l-10.2-17.8z" />
+  </svg>
+)
+
 /* ---------- Stats ---------- */
 
 export const IconTrophy = (p: IconProps) => (
@@ -207,7 +218,7 @@ export const IconCode = (p: IconProps) => (
 /* ---------- Lookup helpers ---------- */
 
 const ICONS: Record<string, (p: IconProps) => ReactElement> = {
-  facebook: IconFacebook,
+  facebook: IconFacebook,\n  'google-drive': IconGoogleDrive,
   linkedin: IconLinkedIn,
   youtube: IconYouTube,
   instagram: IconInstagram,
