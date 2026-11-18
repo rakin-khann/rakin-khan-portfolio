@@ -176,6 +176,37 @@ export async function uploadPublicAsset(file: File, token: string): Promise<stri
   return SUPABASE_URL + '/storage/v1/object/public/portfolio-assets/' + path
 }
 
+export type DetectedVideoQuality = '360' | '480' | '720' | '1080' | '2160'
+
+/** Read the actual video dimensions in the browser and map them to the closest supported portfolio quality tier. */
+export async function detectVideoQuality(file: File): Promise<{ quality: DetectedVideoQuality; width: number; height: number }> {
+  if (typeof document === 'undefined' || typeof URL.createObjectURL !== 'function') throw new Error('This browser cannot inspect video resolution.')
+  const objectUrl = URL.createObjectURL(file)
+  const video = document.createElement('video')
+  video.preload = 'metadata'
+  try {
+    const dimensions = await new Promise<{ width: number; height: number }>((resolve, reject) => {
+      const timeout = window.setTimeout(() => reject(new Error('Could not read video resolution. Please try another MP4/WebM file.')), 15000)
+      const cleanup = () => { window.clearTimeout(timeout); video.onloadedmetadata = null; video.onerror = null }
+      video.onloadedmetadata = () => {
+        const width = video.videoWidth
+        const height = video.videoHeight
+        cleanup()
+        if (!width || !height) reject(new Error('Video resolution information is missing.'))
+        else resolve({ width, height })
+      }
+      video.onerror = () => { cleanup(); reject(new Error('Could not read video resolution. Please use a valid MP4/WebM file.')) }
+      video.src = objectUrl
+    })
+    const shortSide = Math.min(dimensions.width, dimensions.height)
+    const quality: DetectedVideoQuality = shortSide >= 1800 ? '2160' : shortSide >= 900 ? '1080' : shortSide >= 600 ? '720' : shortSide >= 400 ? '480' : '360'
+    return { quality, ...dimensions }
+  } finally {
+    video.removeAttribute('src')
+    URL.revokeObjectURL(objectUrl)
+  }
+}
+
 export async function uploadPortfolioVideo(file: File, token: string, quality: string): Promise<string> {
   const extension = file.name.split('.').pop()?.toLowerCase()
   const mimeType = file.type || (extension === 'mp4' ? 'video/mp4' : extension === 'webm' ? 'video/webm' : '')
