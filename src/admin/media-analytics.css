@@ -59,3 +59,5 @@
 .video-detail-player{width:100%;margin:30px 0;background:#000;border:1px solid #44252a;aspect-ratio:16/9}
 .video-detail-player video{display:block;width:100%;height:100%;object-fit:contain;background:#000}
 @media(max-width:600px){.media-bulk-uploader{padding:15px}.media-bulk-picker{width:100%}.portfolio-video-link .portfolio-video-meta{align-items:flex-start}.portfolio-video-link .work-project-link{white-space:normal}}
+
+.video-detail-quality{display:flex;align-items:center;gap:12px;color:#b88e92;font-size:11px;letter-spacing:.1em;margin:-12px 0 24px}.video-detail-quality select{background:#100e0f;border:1px solid #493034;color:#fff;padding:9px 12px;font:600 14px Rajdhani,sans-serif}
