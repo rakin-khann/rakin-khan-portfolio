@@ -32,7 +32,7 @@ export default function MediaPanel({ session }: { session: Session }) {
         if(!['video/mp4','video/webm'].includes(file.type))throw new Error('Unsupported format (MP4/WebM only)')
         const url=await uploadPortfolioVideo(file,session.access_token,'1080')
         const title=file.name.replace(/\\.[^.]+$/,'').replace(/[_-]+/g,' ').trim()||'Untitled video'
-        await savePortfolioMedia({title,category:'Videography',description:'',poster_url:null,default_quality:'1080',video_1080_url:url,sort_order:Date.now()+index,is_published:bulkPublish},session.access_token)
+        await savePortfolioMedia({title,category:'Videography',description:'',poster_url:null,default_quality:'1080',video_1080_url:url,sort_order:100000+index,is_published:bulkPublish},session.access_token)
       }catch(e){failures.push(file.name+': '+(e instanceof Error?e.message:'Upload failed'))}
       completed++
       setBulkProgress({done:completed,total:bulkFiles.length,current:file.name})
