@@ -14,6 +14,8 @@ export default function MediaPanel({ session }: { session: Session }) {
   const [bulkFiles,setBulkFiles] = useState<File[]>([])
   const [bulkRunning,setBulkRunning] = useState(false)
   const [bulkPublish,setBulkPublish] = useState(true)
+  const [bulkDescription,setBulkDescription] = useState('')
+  const [bulkCategory,setBulkCategory] = useState('Videography')
   const [bulkProgress,setBulkProgress] = useState({done:0,total:0,current:''})
   const [bulkFailures,setBulkFailures] = useState<string[]>([])
   async function load(){ setBusy(true); try{setItems(await selectPortfolioMedia(session.access_token))}catch(e){setError(e instanceof Error?e.message:'Could not load media')}finally{setBusy(false)} }
@@ -33,7 +35,7 @@ export default function MediaPanel({ session }: { session: Session }) {
         const detected=await detectVideoQuality(file)
         const url=await uploadPortfolioVideo(file,session.access_token,detected.quality)
         const title=file.name.replace(/\\.[^.]+$/,'').replace(/[_-]+/g,' ').trim()||'Untitled video'
-        await savePortfolioMedia({title,category:'Videography',description:'',poster_url:null,default_quality:detected.quality,['video_'+detected.quality+'_url']:url,sort_order:100000+index,is_published:bulkPublish},session.access_token)
+        await savePortfolioMedia({title,category:'Videography',description:bulkDescription.trim(),category:bulkCategory.trim()||'Videography',poster_url:null,default_quality:detected.quality,['video_'+detected.quality+'_url']:url,sort_order:100000+index,is_published:bulkPublish},session.access_token)
       }catch(e){failures.push(file.name+': '+(e instanceof Error?e.message:'Upload failed'))}
       completed++
       setBulkProgress({done:completed,total:bulkFiles.length,current:file.name})
@@ -80,9 +82,9 @@ export default function MediaPanel({ session }: { session: Session }) {
         <div className="media-bulk-picker">
           <label htmlFor="bulk-video-files">＋ Select multiple videos</label>
           <input id="bulk-video-files" type="file" accept=".mp4,.webm,video/mp4,video/webm" multiple disabled={bulkRunning} onChange={e=>{const selected=Array.from(e.currentTarget.files||[]);setBulkFiles(selected);e.currentTarget.value='';setBulkFailures([]);setError('');setNotice('')}}/>
-          <small>একবারে একাধিক MP4/WebM ফাইল নির্বাচন করা যাবে।</small>
+          <small>একবারে একাধিক MP4/WebM ফাইল নির্বাচন করা যাবে। প্রতিটি ফাইল আলাদা প্রজেক্ট হবে; নাম ফাইল থেকে তৈরি হবে, পরে Edit থেকে আলাদা Thumbnail ও তথ্য বদলাতে পারবে।</small>
         </div>
-        {bulkFiles.length>0&&<><p className="media-bulk-count">{bulkFiles.length.toLocaleString()} videos selected</p><ul className="media-bulk-file-list">{bulkFiles.map((file,index)=><li key={file.name+'-'+file.size+'-'+index}>{file.name} <small>({(file.size/1024/1024).toFixed(1)} MB)</small></li>)}</ul><p className="media-bulk-hint">প্রতিটি ভিডিওর জন্য আলাদা project তৈরি হবে। প্রতিটি ফাইল সর্বোচ্চ 500 MB হতে পারবে।</p><label className="editor-toggle"><input type="checkbox" checked={bulkPublish} disabled={bulkRunning} onChange={e=>setBulkPublish(e.target.checked)}/> <small>Publish each video immediately after upload</small></label><button className="admin-primary" disabled={bulkRunning} onClick={()=>void uploadBulkVideos()}>{bulkRunning?'UPLOADING…':'UPLOAD '+bulkFiles.length.toLocaleString()+' VIDEOS →'}</button><button className="admin-secondary" disabled={bulkRunning} onClick={()=>setBulkFiles([])}>Clear selection</button></>}
+        {bulkFiles.length>0&&<><label className="editor-field"><span>Category for this upload batch</span><input value={bulkCategory} onChange={e=>setBulkCategory(e.target.value)} placeholder="Videography"/></label><label className="editor-field"><span>Description for this upload batch (optional)</span><textarea rows={3} value={bulkDescription} onChange={e=>setBulkDescription(e.target.value)} placeholder="Write a short description shared by these videos…"/></label><p className="media-bulk-count">{bulkFiles.length.toLocaleString()} videos selected</p><ul className="media-bulk-file-list">{bulkFiles.map((file,index)=><li key={file.name+'-'+file.size+'-'+index}>{file.name} <small>({(file.size/1024/1024).toFixed(1)} MB)</small></li>)}</ul><p className="media-bulk-hint">প্রতিটি ভিডিওর জন্য আলাদা project তৈরি হবে। প্রতিটি ফাইল সর্বোচ্চ 500 MB হতে পারবে।</p><label className="editor-toggle"><input type="checkbox" checked={bulkPublish} disabled={bulkRunning} onChange={e=>setBulkPublish(e.target.checked)}/> <small>Publish each video immediately after upload</small></label><button className="admin-primary" disabled={bulkRunning} onClick={()=>void uploadBulkVideos()}>{bulkRunning?'UPLOADING…':'UPLOAD '+bulkFiles.length.toLocaleString()+' VIDEOS →'}</button><button className="admin-secondary" disabled={bulkRunning} onClick={()=>setBulkFiles([])}>Clear selection</button></>}
         {bulkRunning&&<div className="media-bulk-progress"><div><strong>{bulkProgress.done.toLocaleString()} / {bulkProgress.total.toLocaleString()}</strong><span>{Math.round(bulkProgress.done/Math.max(1,bulkProgress.total)*100)}%</span></div><progress max={bulkProgress.total||1} value={bulkProgress.done}/><small>Now uploading: {bulkProgress.current}</small></div>}
         {bulkFailures.length>0&&<details className="media-bulk-errors"><summary>{bulkFailures.length} files could not be uploaded</summary>{bulkFailures.map((failure,i)=><p key={i}>{failure}</p>)}</details>}
       </section>
