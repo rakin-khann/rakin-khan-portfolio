@@ -67,3 +67,23 @@
 .media-detected-qualities{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
 .media-detected-qualities span{padding:5px 9px;border:1px solid #493034;color:#8f7e81;font-size:11px;letter-spacing:.05em}
 .media-detected-qualities span.is-uploaded{border-color:#287a4a;color:#9be0b3;background:#102117}
+
+/* Unified single-entry portfolio and responsive video gallery */
+.video-portfolio-feature{display:block;max-width:850px;text-decoration:none;color:inherit;border:1px solid #493034;background:#100e0f;overflow:hidden;transition:border-color .2s,transform .2s}
+.video-portfolio-feature:hover{border-color:#bd3541;transform:translateY(-3px)}
+.video-portfolio-feature-poster{position:relative;aspect-ratio:16/9;display:grid;place-items:center;overflow:hidden;background:#080708}
+.video-portfolio-feature-poster>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.video-portfolio-count{position:absolute;right:16px;bottom:14px;padding:8px 11px;background:#090707d9;border:1px solid #ffffff44;color:#fff;font-size:10px;letter-spacing:.12em}
+.video-portfolio-feature-copy{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 20px}
+.video-portfolio-feature-copy h3{margin:0 0 5px;color:#fff;font:22px Anton,sans-serif}
+.video-portfolio-feature-copy p{margin:0;color:#a99598;font-size:13px}
+.video-portfolio-feature-copy>span{color:#ed6670;font-size:11px;letter-spacing:.08em;white-space:nowrap}
+.video-gallery-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:32px}
+.video-gallery-card{display:block;min-width:0;text-decoration:none;color:inherit;background:#100e0f;border:1px solid #302326;overflow:hidden;transition:transform .2s,border-color .2s}
+.video-gallery-card:hover{transform:translateY(-4px);border-color:#a52c36}
+.video-gallery-poster{position:relative;display:grid;place-items:center;aspect-ratio:16/9;overflow:hidden;background:#080708}
+.video-gallery-poster>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.video-gallery-copy{padding:17px}.video-gallery-copy h2{margin:0 0 8px;font:22px Anton,sans-serif;color:#fff}
+.video-gallery-copy p{margin:0 0 12px;color:#b6a5a7;font-size:14px;line-height:1.6}
+.video-gallery-copy small{color:#ed6670;font-size:10px;letter-spacing:.1em}
+@media(max-width:650px){.video-gallery-grid{grid-template-columns:1fr}.video-portfolio-feature-copy{align-items:flex-start;flex-direction:column}.video-portfolio-feature-copy>span{white-space:normal}}
