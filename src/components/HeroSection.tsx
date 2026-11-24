@@ -44,9 +44,6 @@ export default function HeroSection() {
     return match ? `${parseInt(match[1], 16)}, ${parseInt(match[2], 16)}, ${parseInt(match[3], 16)}` : '32, 217, 243'
   }
   const profile = { ...PROFILE, name: String(profileRow?.name || PROFILE.name), title: String(profileRow?.headline || PROFILE.title), tagline: String(profileRow?.tagline || PROFILE.tagline), about: String(profileRow?.bio || PROFILE.about), email: String(profileRow?.email || PROFILE.email), location: String(profileRow?.location || PROFILE.location) }
-  const nameParts = profile.name.trim().split(/\s+/)
-  const firstName = nameParts.shift() || 'Rakin'
-  const lastName = nameParts.join(' ') || 'Khan'
   const socials = socialRows.map(row => ({ label: String(row.platform || ''), icon: String(row.icon || ''), href: String(row.url || '') })).filter(item => item.label && item.icon && /^https?:\/\//i.test(item.href))
   const heroRef = useRef<HTMLElement>(null)
   const imageRef = useRef<HTMLDivElement>(null)
