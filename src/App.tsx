@@ -1,6 +1,7 @@
 import Header from './components/Header'
 import HeroSection from './components/HeroSection'
 import FeaturedWorkSlider from './components/FeaturedWorkSlider'
+import VideoGalleryFeature from './components/VideoGalleryFeature'
 import EdgeDivider from './components/EdgeDivider'
 import AboutSection from './components/AboutSection'
 import ServicesSection from './components/ServicesSection'
@@ -36,5 +37,5 @@ export default function App() {
   if (path === '/videos') return <VideoGallery />
   if (path.startsWith('/projects/')) return <ProjectDetail slug={decodeURIComponent(path.slice('/projects/'.length))} />
   if (path.startsWith('/videos/')) return <VideoDetail id={decodeURIComponent(path.slice('/videos/'.length))} />
-  return <><Header /><main><HeroSection /><EdgeDivider /><FeaturedWorkSlider /><AboutSection /><ServicesSection /><PortfolioSection /><SkillsSection /><JourneySection /><TestimonialsSection /><EdgeDivider flip /><ContactSection /></main><Footer /><BackToTop /></>
+  return <><Header /><main><HeroSection /><EdgeDivider /><FeaturedWorkSlider /><VideoGalleryFeature /><AboutSection /><ServicesSection /><PortfolioSection /><SkillsSection /><JourneySection /><TestimonialsSection /><EdgeDivider flip /><ContactSection /></main><Footer /><BackToTop /></>
 }
