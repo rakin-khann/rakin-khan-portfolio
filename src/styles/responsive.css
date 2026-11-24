@@ -18,14 +18,3 @@ html,body,#root{width:100%;min-width:0;max-width:100%}body{overflow-x:hidden;fon
 @media(max-width:560px){.header-cta{display:none}.header-logo img{height:34px}.hero{min-height:680px;height:max(680px,100svh)}.hero-title{font-size:clamp(4.2rem,18.5vw,6.2rem)}.hero-samurai{height:53%}.hero-intro{bottom:4.5%}.hero-role{font-size:.76rem}.hero-name{font-size:clamp(1.9rem,8vw,2.45rem)}.hero-tagline{font-size:.88rem}.service-card{padding:15px 12px}.service-name{font-size:.9rem}.service-desc{font-size:.8rem}.ring-wrap{width:min(38vw,128px);height:min(38vw,128px)}.ring-value{font-size:1.18rem}}
 @media(max-width:420px){.container{width:88vw}.hero-title{font-size:clamp(3.8rem,18vw,4.8rem)}.hero-social{right:8px}.hero-social a{width:30px;height:30px}.about-stats{gap:9px}.about-stats .stat-card{padding:13px 10px}.service-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.service-card{padding:13px 10px}.service-name{font-size:.86rem}.service-desc{font-size:.76rem}.work-grid{grid-template-columns:minmax(0,1fr);gap:14px}.work-card{aspect-ratio:1.22/1}.work-overlay{padding:16px}.work-title{font-size:1.02rem}.work-description{font-size:.82rem;-webkit-line-clamp:3}.work-project-link{font-size:.74rem}.ring-wrap{width:128px;height:128px}}
 @media(max-width:360px){.hero{min-height:660px}.hero-title{font-size:3.75rem}.hero-role{font-size:.7rem}.hero-tagline{font-size:.84rem}.contact-card{padding:14px 12px}}
-
-/* Keep the split hero portrait centered and correctly scaled on mobile */
-@media(max-width:768px) {
- .hero.hero-split .hero-split-inner { display:grid; }
- .hero.hero-split .hero-portrait { position:relative; left:auto; bottom:auto; height:94%; width:100%; max-width:100%; transform:none!important; }
- .hero.hero-split .hero-portrait-wrap { width:min(76vw,390px); margin-inline:auto; }
- .hero.hero-split .hero-split-footer { position:absolute; }
-}
-@media(max-width:420px) {
- .hero.hero-split .hero-portrait-wrap { width:min(82vw,340px); }
-}
