@@ -36,6 +36,9 @@ export default function FeaturedWorkSlider() {
           <div className="featured-slider-image-shade" />
           <span className="featured-slider-image-tag">RK // SELECTED WORK</span>
           <span className="featured-slider-crosshair" aria-hidden="true">＋</span>
+          <span className="featured-slider-orbit featured-slider-orbit-one" aria-hidden="true" />
+          <span className="featured-slider-orbit featured-slider-orbit-two" aria-hidden="true" />
+          <span className="featured-slider-stars" aria-hidden="true" />
           <span className="featured-slider-image-index">0{active + 1} / 0{projects.length}</span>
         </div>
         <div className="featured-slider-details">
