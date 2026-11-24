@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { gsap } from '../lib/gsap'
 import { PROFILE } from '../data/content'
@@ -23,17 +23,17 @@ export default function HeroSection() {
   const scenes = (Array.isArray(configuredScenes) ? configuredScenes : [legacyScene])
     .filter((scene: Record<string, unknown>) => scene.is_published !== false && Boolean(scene.character_url) && (scene.background_mode !== 'image' || Boolean(scene.background_url)))
     .slice(0, 10) as Record<string, unknown>[]
-  const sceneIndex = useRef(0)
+  const [sceneIndex, setSceneIndex] = useState(0)
   useEffect(() => {
     if (!scenes.length) return
     try {
       const key = 'rakin_hero_theme_rotation'
       const nextIndex = Math.abs(Number(window.localStorage.getItem(key) || 0)) % scenes.length
-      sceneIndex.current = nextIndex
+      setSceneIndex(nextIndex)
       window.localStorage.setItem(key, String((nextIndex + 1) % scenes.length))
-    } catch { sceneIndex.current = 0 }
+    } catch { setSceneIndex(0) }
   }, [settingsRows.length])
-  const heroScene = scenes[sceneIndex.current] || scenes[0] || (Array.isArray(configuredScenes) ? {} : legacyScene)
+  const heroScene = scenes[sceneIndex] || scenes[0] || (Array.isArray(configuredScenes) ? {} : legacyScene)
   const characterSrc = String(heroScene.character_url || '/assets/samurai.webp')
   const heroBackgroundUrl = String(heroScene.background_url || '')
   const heroBackgroundColor = String(heroScene.background_color || '#050505')
