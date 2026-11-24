@@ -29,3 +29,28 @@
 @keyframes featured-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes featured-image-zoom{from{transform:scale(1.015)}to{transform:scale(1.085)}}@keyframes featured-card-enter{from{opacity:.3;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:760px){.featured-slider-section{padding:55px 0 36px}.featured-slider-card{grid-template-columns:1fr}.featured-slider-visual{min-height:280px;height:58vw;max-height:400px}.featured-slider-image{min-height:100%;height:100%}.featured-slider-details{padding:26px 22px}.featured-slider-status{margin-bottom:18px}.featured-slider-details h3{font-size:clamp(2rem,8vw,3.2rem)}.featured-slider-description{margin-bottom:18px}.featured-slider-feature{margin-bottom:18px}.featured-slider-controls{margin-top:22px}.featured-slider-shell{width:92vw}.featured-slider-image-tag{top:14px;left:14px}.featured-slider-footnote-right{display:none}}
 @media(prefers-reduced-motion:reduce){.featured-slider-card,.featured-slider-image,.featured-slider-progress span{animation:none}}
+
+
+/* Reference-inspired refinements apply ONLY to the Featured Works section below the unchanged Samurai hero */
+.featured-slider-section{padding-top:68px;background:radial-gradient(ellipse at 20% 48%,rgba(35,190,220,.10),transparent 48%),radial-gradient(ellipse at 82% 50%,rgba(150,65,235,.09),transparent 50%),#050507}
+.featured-slider-shell{width:min(1280px,91vw)}
+.featured-slider-card{grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:clamp(34px,5vw,76px);min-height:430px;background:transparent;border:0;box-shadow:none;align-items:center}
+.featured-slider-card:before,.featured-slider-card:after{display:none}
+.featured-slider-visual{min-height:390px;height:clamp(340px,34vw,430px);border:1px solid rgba(83,218,238,.18);background:#080a11;box-shadow:0 18px 58px #000b,0 0 36px rgba(64,204,235,.08);isolation:isolate}
+.featured-slider-image{min-height:100%;height:100%;object-fit:contain;padding:8px;filter:saturate(.9) contrast(1.07)}
+.featured-slider-image-shade{background:linear-gradient(0deg,#07070b66,transparent 38%)}
+.featured-slider-visual:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,transparent 46%,rgba(4,5,12,.42) 100%);z-index:1}
+.featured-slider-details{padding:clamp(22px,3vw,42px) 0;max-width:610px}
+.featured-slider-details h3{font-size:clamp(2.25rem,4.1vw,4.1rem);background:linear-gradient(95deg,#f6fbff 0%,#72eaff 46%,#b66bff 100%);background-clip:text;-webkit-background-clip:text;color:transparent;text-shadow:0 0 24px rgba(100,180,255,.08)}
+.featured-slider-description{font-size:1rem;line-height:1.85;color:#aab1c1}
+.featured-slider-orbit{position:absolute;z-index:2;pointer-events:none;left:8%;right:8%;top:12%;bottom:12%;border:1px solid rgba(86,220,240,.24);border-radius:50%;mix-blend-mode:screen}
+.featured-slider-orbit-one{transform:rotate(-17deg);animation:featured-orbit-a 28s linear infinite}
+.featured-slider-orbit-two{left:3%;right:3%;top:7%;bottom:7%;border-color:rgba(172,91,255,.23);transform:rotate(21deg);animation:featured-orbit-b 36s linear infinite}
+.featured-slider-stars{position:absolute;z-index:3;inset:0;pointer-events:none;opacity:.82;background-image:radial-gradient(circle,#c8faff 1px,transparent 2px),radial-gradient(circle,#a875ff 1px,transparent 2px),radial-gradient(circle,#8cecff 1px,transparent 2px);background-size:79px 91px,113px 127px,151px 137px;background-position:12px 18px,48px 62px,22px 77px;animation:featured-stars-drift 12s linear infinite}
+.featured-slider-crosshair{z-index:4}
+.featured-slider-image-tag,.featured-slider-image-index{z-index:5}
+@keyframes featured-orbit-a{to{transform:rotate(343deg)}}
+@keyframes featured-orbit-b{to{transform:rotate(-339deg)}}
+@keyframes featured-stars-drift{0%{transform:translate3d(0,0,0);opacity:.45}50%{transform:translate3d(5px,-10px,0);opacity:1}100%{transform:translate3d(0,0,0);opacity:.45}}
+@media(max-width:760px){.featured-slider-card{grid-template-columns:1fr;gap:20px}.featured-slider-visual{height:62vw;min-height:260px;max-height:380px;width:min(100%,520px);margin-inline:auto}.featured-slider-details{padding:14px 4px 24px;max-width:none}.featured-slider-image{object-fit:contain}.featured-slider-orbit{left:9%;right:9%}}
+@media(prefers-reduced-motion:reduce){.featured-slider-orbit,.featured-slider-stars{animation:none!important}}
