@@ -7,10 +7,8 @@ import SectionBackground from './SectionBackground'
 
 export default function PortfolioSection() {
   const projectRows = usePublicRows('projects')
-  const videoRows = usePublicRows('portfolio_media')
   const projects = projectRows.length ? projectRows.map(row => ({ id: String(row.id || ''), slug: String(row.slug || ''), title: String(row.title || ''), category: String(row.category || ''), image: String(row.cover_image_url || '/assets/work-neon.webp'), description: String(row.description || ''), url: String(row.project_url || ''), gallery: Array.isArray(row.gallery) ? row.gallery.map(item => String(item)).filter(Boolean) : [], placeholder: false })) : PROJECTS.map((project, index) => ({ ...project, slug: '', id: String(index) }))
   const ref = useReveal<HTMLElement>()
-  const featuredVideo = videoRows[0]
   return <section ref={ref} id="portfolio" className="section portfolio" aria-label="Featured work">
     <SectionBackground section='portfolio' />
     <div className="container split">
@@ -22,8 +20,5 @@ export default function PortfolioSection() {
           {"slug" in project && project.slug && <a className="work-project-link" href={`/projects/${project.slug}`}>View project details ↗</a>}{"url" in project && project.url && <a className="work-project-link" href={project.url} target="_blank" rel="noreferrer">Live project ↗</a>}
         </div></article>)}</div>
     </div>
-    {videoRows.length > 0 && <div className="container portfolio-video-section"><div className="portfolio-video-heading"><p className="section-label">// Videography</p><h2 className="section-title">Video <span className="text-red">Portfolio</span></h2><p className="section-sub">Selected films and motion work.</p></div>
-      <a className="video-portfolio-feature" href="/videos" onClick={()=>trackEvent('video_gallery_view','all-videos')} aria-label="Open complete video portfolio"><div className="video-portfolio-feature-poster">{featuredVideo?.poster_url?<img src={String(featuredVideo.poster_url)} alt="Video portfolio preview" loading="lazy"/>:<div className="portfolio-video-placeholder"/>}<span className="portfolio-video-play" aria-hidden="true">▶</span><span className="video-portfolio-count">{videoRows.length} SELECTED VIDEOS</span></div><div className="video-portfolio-feature-copy"><div><h3>Explore My Video Collection</h3><p>Watch all selected video projects in one place.</p></div><span>OPEN VIDEO GALLERY ↗</span></div></a>
-    </div>}
   </section>
 }
