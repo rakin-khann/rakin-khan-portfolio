@@ -12,7 +12,7 @@ export default function Header() {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<string>('#home')
   // Section links must return to the homepage when clicked from a project detail route.
-  const sectionHref = (href: string) => window.location.pathname === '/' ? href : `/${href}`
+  const sectionHref = (href: string) => href.startsWith('/') ? href : window.location.pathname === '/' ? href : `/${href}`
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
