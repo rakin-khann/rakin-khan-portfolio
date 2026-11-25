@@ -6,7 +6,7 @@ export default function VideoGalleryFeature() {
   const videos = usePublicRows('portfolio_media')
   const featured = videos[0]
   const poster = String(featured?.poster_url || '')
-  return <section className="video-feature-section" aria-labelledby="video-feature-title">
+  return <section id="video-portfolio" className="section video-feature-section" aria-labelledby="video-feature-title">
     <div className="video-feature-shell">
       <div className="video-feature-heading">
         <p className="section-label">// MOTION & VISUAL STORYTELLING</p>
