@@ -1,4 +1,4 @@
-.video-feature-section{position:relative;z-index:2;padding:34px 0 86px;background:radial-gradient(ellipse at 18% 50%,rgba(35,190,220,.10),transparent 46%),radial-gradient(ellipse at 84% 52%,rgba(150,65,235,.11),transparent 48%),#050507;overflow:hidden}
+.video-feature-section{display:block!important;visibility:visible!important;opacity:1!important;position:relative;z-index:2;min-height:480px;padding:84px 0 86px;scroll-margin-top:94px;background:radial-gradient(ellipse at 18% 50%,rgba(35,190,220,.10),transparent 46%),radial-gradient(ellipse at 84% 52%,rgba(150,65,235,.11),transparent 48%),#050507;overflow:hidden}
 .video-feature-shell{width:min(1280px,91vw);margin:0 auto}
 .video-feature-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 18px}
 .video-feature-heading .section-label,.video-feature-index,.video-feature-kicker,.video-feature-highlight,.video-feature-count,.video-feature-link,.video-feature-footnote,.video-feature-visual-label{font-family:Rajdhani,monospace;letter-spacing:.16em}
